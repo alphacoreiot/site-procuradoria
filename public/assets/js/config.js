@@ -9,6 +9,7 @@ window.PROGER_CONFIG = {
   sgpmcUrl: "",              // SGPM-C — ex.: "https://sgpmc.camacari.ba.gov.br"
   spgcUrl: "",               // SPG-C — Sistema de Procuradoria Geral - Camaçari
   scpcUrl: "",               // SCP-C — Sistema de Chamados da Procuradoria
+  seiUrl: "https://sei.camacari.ba.gov.br/", // SEI — Sistema SEI Camaçari
 
   // WhatsApp: só dígitos, com DDI e DDD (ex.: "5571999999999")
   whatsappNumero: "",

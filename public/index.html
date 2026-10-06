@@ -102,16 +102,20 @@
       <div class="container">
         <nav class="hero-bar reveal" aria-label="Acesso rápido">
           <a class="quick__item" data-config-href="spgcUrl" href="#" target="_blank" rel="noopener">
-            <span class="quick__icon quick__icon--laranja"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-layers"/></svg></span>
+            <span class="quick__icon quick__icon--vermelho"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-layers"/></svg></span>
             <span><strong>SPG-C</strong><small>Sistema de Procuradoria Geral - Camaçari</small></span>
           </a>
           <a class="quick__item" data-config-href="sgpmcUrl" href="#" target="_blank" rel="noopener">
-            <span class="quick__icon quick__icon--roxo"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-grid"/></svg></span>
+            <span class="quick__icon quick__icon--verde"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-grid"/></svg></span>
             <span><strong>SGPM-C</strong><small>Sistema de gestão da Procuradoria</small></span>
           </a>
           <a class="quick__item" data-config-href="scpcUrl" href="#" target="_blank" rel="noopener">
-            <span class="quick__icon quick__icon--verde"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-ticket"/></svg></span>
+            <span class="quick__icon quick__icon--laranja"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-ticket"/></svg></span>
             <span><strong>SCP-C</strong><small>Sistema de Chamados da Procuradoria</small></span>
+          </a>
+          <a class="quick__item" data-config-href="seiUrl" href="#" target="_blank" rel="noopener">
+            <span class="quick__icon quick__icon--roxo quick__icon--sei"><img src="assets/logos/sei-branco.png" alt="" width="59" height="40"></span>
+            <span><strong>SEI</strong><small>Sistema SEI Camaçari</small></span>
           </a>
         </nav>
       </div>
@@ -185,6 +189,12 @@
             <p>Sistema de Chamados da Procuradoria.</p>
             <span class="system__cta">Acessar sistema <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-arrow"/></svg></span>
           </a>
+          <a class="system reveal" data-config-href="seiUrl" href="#" target="_blank" rel="noopener">
+            <span class="system__tag">Processos</span>
+            <h3>SEI</h3>
+            <p>Sistema SEI Camaçari — Sistema Eletrônico de Informações.</p>
+            <span class="system__cta">Acessar sistema <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-arrow"/></svg></span>
+          </a>
         </div>
       </div>
     </section>
@@ -203,11 +213,54 @@
           <p class="about__note">Texto institucional provisório — substituir pelo texto oficial.</p>
         </div>
         <ul class="pillars reveal">
-          <li><span class="pillar__n c-vermelho">01</span><div><strong>Representação</strong><p>Atuação judicial e extrajudicial em defesa do Município.</p></div></li>
-          <li><span class="pillar__n c-verde">02</span><div><strong>Consultoria</strong><p>Assessoramento jurídico aos órgãos da Administração.</p></div></li>
-          <li><span class="pillar__n c-laranja">03</span><div><strong>Dívida Ativa</strong><p>Cobrança e negociação dos créditos do Município.</p></div></li>
-          <li><span class="pillar__n c-roxo">04</span><div><strong>Atendimento</strong><p>Canal direto com o contribuinte.</p></div></li>
+          <li>
+            <button type="button" class="pillar" style="--pillar: var(--brand-vermelho)" aria-haspopup="dialog" aria-controls="pillar-dialog"
+              data-role="Procurador Geral" data-photo="assets/img/carrossel/foto_procurador_geral.png"
+              data-bio="Funcionário concursado desde xxxx, o atual Procurador-Geral tem notório saber nos processos administrativos da Procuradoria Geral do Município de Camaçari. Já atuou como Superintendente do Instituto de Seguridade do Servidor Municipal, entre xxxx e xxxx… bla bla bla">
+              <span class="pillar__n c-vermelho">01</span>
+              <strong>Representação</strong>
+            </button>
+          </li>
+          <li>
+            <button type="button" class="pillar" style="--pillar: var(--brand-verde)" aria-haspopup="dialog" aria-controls="pillar-dialog"
+              data-role="Organograma Institucional" data-photo="assets/img/carrossel/organograma.png"
+              data-photo-shape="wide" data-photo-alt="Organograma institucional da Procuradoria Geral do Município">
+              <span class="pillar__n c-verde">02</span>
+              <strong>Consultoria</strong>
+            </button>
+          </li>
+          <li>
+            <button type="button" class="pillar" style="--pillar: var(--brand-laranja)" aria-haspopup="dialog" aria-controls="pillar-dialog"
+              data-role="Dívida Ativa">
+              <span class="pillar__n c-laranja">03</span>
+              <strong>Dívida Ativa</strong>
+            </button>
+          </li>
+          <li>
+            <button type="button" class="pillar" style="--pillar: var(--brand-roxo)" aria-haspopup="dialog" aria-controls="pillar-dialog"
+              data-role="Diretoria de Tecnologia">
+              <span class="pillar__n c-roxo">04</span>
+              <strong>Atendimento</strong>
+            </button>
+          </li>
         </ul>
+      </div>
+      <div class="pillar-layer" id="pillar-layer" hidden>
+        <button type="button" class="pillar-layer__backdrop" data-pillar-close aria-label="Fechar"></button>
+        <div class="pillar-dialog" id="pillar-dialog" role="dialog" aria-modal="true" aria-labelledby="pillar-dialog-title">
+          <button type="button" class="pillar-dialog__close" data-pillar-close aria-label="Fechar">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M6 6l12 12M18 6 6 18"/></svg>
+          </button>
+          <p class="pillar-dialog__n" id="pillar-dialog-n"></p>
+          <h3 id="pillar-dialog-title"></h3>
+          <p class="pillar-dialog__role" hidden></p>
+          <a class="pillar-dialog__media" target="_blank" rel="noopener">
+            <img class="pillar-dialog__photo" alt="" width="240" height="240" hidden>
+          </a>
+          <p class="pillar-dialog__hint" hidden>Clique na imagem para ver em tamanho real.</p>
+          <p class="pillar-dialog__bio" hidden></p>
+          <p class="pillar-dialog__text"></p>
+        </div>
       </div>
     </section>
 
@@ -287,6 +340,7 @@
             <li><a data-config-href="spgcUrl" href="#" target="_blank" rel="noopener">SPG-C</a></li>
             <li><a data-config-href="sgpmcUrl" href="#" target="_blank" rel="noopener">SGPM-C</a></li>
             <li><a data-config-href="scpcUrl" href="#" target="_blank" rel="noopener">SCP-C</a></li>
+            <li><a data-config-href="seiUrl" href="#" target="_blank" rel="noopener">SEI</a></li>
           </ul>
         </div>
       </div>

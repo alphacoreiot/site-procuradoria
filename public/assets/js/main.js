@@ -366,6 +366,93 @@
     }
   }
 
+  // --- Popups dos pilares, presos à seção "A Procuradoria" -------------------
+  var pillarLayer = document.getElementById("pillar-layer");
+  var pillarDialog = document.getElementById("pillar-dialog");
+  if (pillarLayer && pillarDialog) {
+    var pillarN = document.getElementById("pillar-dialog-n");
+    var pillarTitle = document.getElementById("pillar-dialog-title");
+    var pillarText = pillarDialog.querySelector(".pillar-dialog__text");
+    var pillarRole = pillarDialog.querySelector(".pillar-dialog__role");
+    var pillarPhoto = pillarDialog.querySelector(".pillar-dialog__photo");
+    var pillarBio = pillarDialog.querySelector(".pillar-dialog__bio");
+    var pillarMedia = pillarDialog.querySelector(".pillar-dialog__media");
+    var pillarHint = pillarDialog.querySelector(".pillar-dialog__hint");
+    var pillarClose = pillarDialog.querySelector(".pillar-dialog__close");
+    var pillarSection = pillarLayer.parentElement;
+    var pillarOpener = null;
+
+    function fitPillarSection() {
+      if (pillarLayer.hidden) return;
+      pillarSection.style.minHeight = "";
+      var border = pillarDialog.offsetHeight - pillarDialog.clientHeight;
+      var needed = pillarDialog.scrollHeight + border + 48;
+      if (needed > pillarSection.offsetHeight) pillarSection.style.minHeight = needed + "px";
+    }
+    pillarPhoto.addEventListener("load", fitPillarSection);
+    window.addEventListener("resize", fitPillarSection);
+
+    function openPillar(btn) {
+      var n = btn.querySelector(".pillar__n");
+      var title = btn.querySelector("strong");
+      var text = btn.querySelector("p");
+      pillarDialog.style.setProperty("--pillar", btn.style.getPropertyValue("--pillar"));
+      pillarN.textContent = n ? n.textContent : "";
+      pillarTitle.textContent = title ? title.textContent : "";
+      pillarText.textContent = text ? text.textContent : "";
+
+      var role = btn.getAttribute("data-role");
+      var photo = btn.getAttribute("data-photo");
+      var bio = btn.getAttribute("data-bio");
+      var perfil = !!(role || photo);
+      pillarBio.hidden = !bio;
+      pillarBio.textContent = bio || "";
+      pillarDialog.classList.toggle("pillar-dialog--perfil", perfil);
+      pillarText.hidden = perfil;
+      pillarRole.hidden = !role;
+      pillarRole.textContent = role || "";
+      var wide = btn.getAttribute("data-photo-shape") === "wide";
+      pillarDialog.classList.toggle("pillar-dialog--wide", wide);
+      pillarPhoto.hidden = !photo;
+      pillarHint.hidden = !(photo && wide);
+      if (photo) {
+        pillarPhoto.src = photo;
+        pillarPhoto.alt = btn.getAttribute("data-photo-alt") || (role ? "Foto do " + role : "");
+      } else {
+        pillarPhoto.removeAttribute("src");
+        pillarPhoto.alt = "";
+      }
+      if (photo && wide) {
+        pillarMedia.href = photo;
+        pillarMedia.setAttribute("aria-label", "Abrir " + pillarPhoto.alt + " em tamanho real");
+      } else {
+        pillarMedia.removeAttribute("href");
+        pillarMedia.removeAttribute("aria-label");
+      }
+
+      pillarOpener = btn;
+      pillarLayer.hidden = false;
+      fitPillarSection();
+      pillarClose.focus();
+    }
+    function closePillar() {
+      if (pillarLayer.hidden) return;
+      pillarLayer.hidden = true;
+      pillarSection.style.minHeight = "";
+      if (pillarOpener) pillarOpener.focus();
+    }
+
+    document.querySelectorAll(".pillar").forEach(function (btn) {
+      btn.addEventListener("click", function () { openPillar(btn); });
+    });
+    pillarLayer.querySelectorAll("[data-pillar-close]").forEach(function (el) {
+      el.addEventListener("click", closePillar);
+    });
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") closePillar();
+    });
+  }
+
   // --- Ano no rodapé ----------------------------------------------------------
   document.querySelectorAll("[data-year]").forEach(function (el) { el.textContent = new Date().getFullYear(); });
 
