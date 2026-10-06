@@ -1,0 +1,175 @@
+/* ==========================================================================
+   Design System — Prefeitura de Camaçari
+   Fonte da verdade: BRANDBOOK_CAMACARI 2025 (cores, tipografia, marca).
+   Componentes de interface inspirados em https://sefaz.camacari.ba.gov.br/
+   ========================================================================== */
+
+/* Brandbook: Montserrat (Light/Regular/Medium) + Black. Code Black e Averta Black
+   (títulos de campanha) não são web fonts livres: usamos Montserrat 900. */
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&display=swap");
+
+:root {
+  /* --- Padrão cromático da versão chapada (Brandbook 2025, p. 7) --------- */
+  --brand-preto:          #000000; /* Pantone Black 7C */
+  --brand-vermelho:       #C20E1A; /* Pantone 485C  */
+  --brand-vermelho-escuro:#9C1614; /* Pantone 1797C */
+  --brand-verde:          #A2C037; /* Pantone 375C  */
+  --brand-verde-medio:    #849D2F; /* Pantone 377C  */
+  --brand-verde-escuro:   #6B7F27; /* Pantone 370C  */
+  --brand-laranja:        #D67C1C; /* Pantone 151C  */
+  --brand-laranja-escuro: #B56C18; /* Pantone 153C  */
+  --brand-roxo:           #84329B; /* Pantone 2593C */
+  --brand-roxo-escuro:    #59226C; /* Pantone 2623C */
+
+  /* --- Cores de interface usadas no site ---------------------------------- */
+  --color-primary:        var(--brand-roxo);         /* menu, botões, faixa do topo */
+  --color-primary-dark:   var(--brand-roxo-escuro);  /* fim do gradiente, rodapé    */
+  --color-secondary:      var(--brand-laranja);      /* hover, destaques            */
+  --color-tertiary:       var(--brand-verde);        /* foco do menu, faixas        */
+  --color-highlight:      var(--brand-laranja-escuro); /* sobretítulos (h6)         */
+  --color-ink:            #000000;                   /* palavras-chave em Black     */
+
+  --color-text:           #414141; /* texto base e links                  */
+  --color-heading:        #54595F; /* h2                                  */
+  --color-muted:          #7A7A7A; /* h3/h4, placeholders, texto rodapé   */
+  --color-disabled:       #AEACAC; /* item de menu ativo                  */
+  --color-slate:          #37474F;
+
+  --color-bg:             #FFFFFF;
+  --color-bg-soft:        #F6F6F6;
+  --color-bg-muted:       #F0F0F0;
+  --color-input-bg:       #E6F0EF;
+
+  /* Verdes legados do kit (ainda presentes nas variáveis globais) */
+  --color-green-dark:     #046A38;
+  --color-green:          #00B140;
+
+  --gradient-primary: linear-gradient(180deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+
+  /* --- Tipografia --------------------------------------------------------- */
+  --font-base:    "Montserrat", system-ui, sans-serif; /* corpo: Regular/Medium   */
+  --font-display: "Montserrat", system-ui, sans-serif; /* títulos: Black (900)     */
+
+  --fs-body: 15px;   /* 14px no mobile */
+  --lh-body: 1.75;
+  --fs-h1: 72px;  --fs-h2: 35px;  --fs-h3: 30px;
+  --fs-h4: 20px;  --fs-h5: 16px;  --fs-h6: 14px;
+
+  /* --- Formas, sombras, espaçamento -------------------------------------- */
+  --radius-sm: 5px;
+  --radius-md: 10px;
+  --radius-pill: 50px;
+  --shadow-dropdown: 0 20px 20px 0 rgba(0, 0, 0, .05);
+  --shadow-card:     0 20px 40px 0 rgba(0, 0, 0, .06);
+  --shadow-footer:   0 -20px 20px 0 rgba(0, 0, 0, .10);
+  --shadow-tile:     0 1px 2px 1px rgba(0, 0, 0, .32);
+  --container: 1140px;
+  --transition: .3s;
+}
+
+@media (max-width: 1024px) {
+  :root { --fs-h1: 50px; --fs-h2: 38px; --fs-h3: 28px; --fs-h5: 15px; --fs-h6: 13px; }
+}
+@media (max-width: 767px) {
+  :root { --fs-body: 14px; --fs-h1: 38px; --fs-h2: 28px; --fs-h3: 21px; --fs-h4: 18px; --fs-h5: 14px; --fs-h6: 12px; }
+}
+
+/* --- Base ----------------------------------------------------------------- */
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: var(--font-base);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  color: var(--color-text);
+  background: var(--color-bg);
+}
+a { color: var(--color-text); text-decoration: none; transition: color var(--transition); }
+a:hover { color: var(--color-secondary); }
+
+h1, h2, h3, h4, h5, h6 { margin: 0 0 .5em; line-height: 1.2; }
+h1 { font-family: var(--font-display); font-size: var(--fs-h1); font-weight: 900; color: var(--color-ink); }
+h2 { font-family: var(--font-display); font-size: var(--fs-h2); font-weight: 900; color: var(--color-ink); letter-spacing: -.5px; }
+h3 { font-size: var(--fs-h3); font-weight: 700; color: var(--color-text); }
+h4 { font-size: var(--fs-h4); font-weight: 600; color: var(--color-heading); }
+h5 { font-family: var(--font-display); font-size: var(--fs-h5); font-weight: 800; color: var(--color-text); }
+h6 { font-family: var(--font-display); font-size: var(--fs-h6); font-weight: 600; color: var(--color-highlight);
+     text-transform: uppercase; letter-spacing: 2px; }
+
+.container { max-width: var(--container); margin: 0 auto; padding: 0 16px; }
+
+/* --- Barra superior (faixa roxa com contatos/redes) ----------------------- */
+.topbar { background: var(--color-primary); color: #fff; font-size: 15px; }
+.topbar a { color: #fff; }
+.topbar .container { display: flex; justify-content: space-between; align-items: center; min-height: 40px; gap: 16px; }
+
+/* --- Header (sticky, branco) --------------------------------------------- */
+.header { position: sticky; top: 0; z-index: 100; background: #fff; box-shadow: var(--shadow-dropdown); }
+.header .container { display: flex; align-items: center; justify-content: space-between; min-height: 84px; gap: 24px; }
+.header__logo img { height: 60px; width: auto; display: block; }
+
+.nav { display: flex; gap: 28px; list-style: none; margin: 0; padding: 0; }
+.nav a {
+  font-family: var(--font-base); font-size: 15px; font-weight: 400;
+  text-transform: uppercase; color: var(--color-primary);
+}
+.nav a:hover, .nav a:focus-visible { color: var(--color-tertiary); }
+.nav a[aria-current="page"] { color: var(--color-disabled); }
+
+.nav__dropdown {
+  background: #fff; border-radius: 0 0 var(--radius-md) var(--radius-md);
+  box-shadow: var(--shadow-dropdown);
+}
+.nav__dropdown a { font-size: 14px; font-weight: 600; text-transform: none; }
+
+/* --- Botões --------------------------------------------------------------- */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  font-family: var(--font-base); font-size: 14px; font-weight: 400; line-height: 1;
+  color: #fff; background: var(--color-primary);
+  border: 0; border-radius: var(--radius-sm); padding: 10px 20px; cursor: pointer;
+  transition: background var(--transition), color var(--transition);
+}
+.btn:hover { color: #fff; background: var(--color-secondary); }
+.btn--pill  { border-radius: var(--radius-pill); background: var(--gradient-primary); padding: 14px 28px; }
+.btn--pill:hover { background: var(--color-secondary); }
+.btn--ghost { background: transparent; color: var(--color-primary); padding: 0; }
+.btn--ghost:hover { background: transparent; color: var(--color-secondary); }
+
+/* --- Formulários / busca -------------------------------------------------- */
+.input, input:not([type="button"]):not([type="submit"]), textarea {
+  font-family: var(--font-base); font-size: 15px; font-weight: 300; color: var(--color-heading);
+  background: var(--color-input-bg); border: 0; border-radius: var(--radius-md); padding: 10px 14px;
+}
+.input:focus, input:focus, textarea:focus { background: #fff; outline: 2px solid var(--color-primary); }
+::placeholder { color: var(--color-muted); }
+label { font-family: var(--font-base); font-size: 18px; font-weight: 700; line-height: 1.9; }
+
+/* --- Cards / atalhos de serviço ------------------------------------------- */
+.card { background: #fff; border-radius: var(--radius-md); box-shadow: var(--shadow-card); padding: 24px; }
+.tile {
+  display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center;
+  color: var(--color-primary); background: #fff; border-radius: var(--radius-md);
+  box-shadow: var(--shadow-tile); padding: 20px 12px;
+  transition: background var(--transition), color var(--transition);
+}
+.tile:hover { background: var(--color-primary); color: #fff; }
+.tile i, .tile svg { font-size: 30px; fill: currentColor; }
+
+/* Faixa de destaque verde translúcida */
+.band-green { background: color-mix(in srgb, var(--color-tertiary) 60%, transparent); }
+.band-purple { background: var(--color-primary); color: #fff; }
+
+/* Paginação de carrossel */
+.dots span { width: 10px; height: 10px; border-radius: 50%; background: var(--color-bg-muted); display: inline-block; }
+.dots span.is-active { background: var(--color-secondary); }
+
+/* --- Rodapé (laranja, com cartão branco sobreposto) ----------------------- */
+.footer { background: var(--color-secondary); color: #fff; margin-top: 160px; padding-bottom: 3em; }
+.footer__card {
+  background: #fff; color: var(--color-muted); box-shadow: var(--shadow-footer);
+  margin-top: -7em; padding: 3em; font-size: 14px; line-height: 25px; letter-spacing: .2px;
+}
+.footer a, .footer__bottom { color: #fff; font-weight: 300; font-size: 14px; }
+.footer__card a { color: var(--color-text); }
+.footer__logo img { height: 50px; width: auto; }

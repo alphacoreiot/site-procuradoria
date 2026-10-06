@@ -1,0 +1,9 @@
+.git
+.gitignore
+.vscode
+.idea
+*.md
+docker-compose*.yml
+config/
+**/.DS_Store
+**/Thumbs.db

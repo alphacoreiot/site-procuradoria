@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="420 60 720 600">
+  
+  <circle cx="770" cy="340" r="300" fill="#fff" opacity=".07"/>
+  <!-- livros -->
+  <rect x="560" y="200" width="80" height="360" rx="10" fill="#fff"/>
+  <rect x="650" y="160" width="96" height="400" rx="10" fill="#59226C"/>
+  <rect x="756" y="230" width="72" height="330" rx="10" fill="#D67C1C"/>
+  <rect x="842" y="215" width="80" height="345" rx="10" fill="#fff" transform="rotate(12 882 560)"/>
+  <g stroke="#849D2F" stroke-width="8"><path d="M560 250h80M560 510h80"/></g>
+  <g stroke="#fff" stroke-width="8" opacity=".8"><path d="M650 210h96M650 510h96M756 280h72M756 510h72"/></g>
+  <rect x="520" y="560" width="480" height="26" rx="8" fill="#fff" opacity=".9"/>
+  <!-- martelo -->
+  <g transform="rotate(-35 640 470)">
+    <rect x="890" y="430" width="160" height="70" rx="16" fill="#C20E1A"/>
+    <rect x="958" y="500" width="24" height="170" rx="10" fill="#fff"/>
+  </g>
+</svg>

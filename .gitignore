@@ -1,0 +1,15 @@
+# Documentos internos de referência (não fazem parte do site)
+*.pdf
+*.pptx
+*.docx
+
+# Configuração de produção montada no container
+config/
+
+# Sistema / editor
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+*.log

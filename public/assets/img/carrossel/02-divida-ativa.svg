@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="420 60 720 600">
+  
+  <circle cx="780" cy="330" r="300" fill="#fff" opacity=".07"/>
+  <!-- documentos -->
+  <rect x="610" y="150" width="280" height="360" rx="22" fill="#fff" opacity=".35" transform="rotate(-8 750 330)"/>
+  <rect x="640" y="140" width="280" height="370" rx="22" fill="#fff"/>
+  <g stroke="#D67C1C" stroke-width="14" stroke-linecap="round">
+    <path d="M690 210h120"/>
+    <path d="M690 260h180M690 300h180M690 340h140"/>
+  </g>
+  <path d="M690 420h80" stroke="#59226C" stroke-width="14" stroke-linecap="round"/>
+  <!-- selo / moedas -->
+  <g transform="translate(900 470)">
+    <ellipse cx="0" cy="70" rx="110" ry="30" fill="#59226C"/>
+    <rect x="-110" y="30" width="220" height="40" fill="#59226C"/>
+    <ellipse cx="0" cy="30" rx="110" ry="30" fill="#84329B"/>
+    <rect x="-110" y="-10" width="220" height="40" fill="#84329B"/>
+    <ellipse cx="0" cy="-10" rx="110" ry="30" fill="#A65BBD"/>
+    <text x="0" y="5" font-family="Montserrat, Arial, sans-serif" font-weight="900" font-size="44" fill="#fff" text-anchor="middle">R$</text>
+  </g>
+  <circle cx="860" cy="200" r="46" fill="#A2C037"/>
+  <path d="M838 200l16 16 30-32" fill="none" stroke="#fff" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

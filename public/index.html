@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PROGER — Procuradoria-Geral do Município de Camaçari</title>
+  <meta name="description" content="Portal da Procuradoria-Geral do Município de Camaçari (PROGER): serviços ao contribuinte, sistemas e atendimento.">
+  <meta name="theme-color" content="#84329B">
+  <!-- Verificação do domínio no Google Workspace (Search Console / Admin):
+       substitua o content pelo código fornecido pelo Google e descomente.
+  <meta name="google-site-verification" content="COLE_AQUI_O_CODIGO">
+  -->
+  <link rel="icon" href="assets/logos/favicon-192.png">
+  <link rel="apple-touch-icon" href="assets/logos/favicon-192.png">
+  <link rel="stylesheet" href="assets/vendor/leaflet/leaflet.css">
+  <link rel="stylesheet" href="assets/css/design-system.css">
+  <link rel="stylesheet" href="assets/css/portal.css">
+  <script src="assets/js/config.js" defer></script>
+  <script src="assets/js/main.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+
+  <!-- Barra superior -->
+  <div class="topbar">
+    <div class="container topbar__inner">
+      <ul class="topbar__links">
+        <li><button class="topbar__btn" type="button" data-font="up" aria-label="Aumentar fonte">A+</button></li>
+        <li><button class="topbar__btn" type="button" data-font="down" aria-label="Diminuir fonte">A−</button></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Cabeçalho -->
+  <header class="site-header" id="topo">
+    <div class="container site-header__inner">
+      <a class="brand" href="#topo" aria-label="PROGER — Procuradoria-Geral do Município de Camaçari, página inicial">
+        <img class="brand__sign" src="assets/logos/assinatura-proger.png" alt="Prefeitura de Camaçari — Procuradoria Geral do Município" width="2968" height="609">
+      </a>
+
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="menu" aria-label="Abrir menu">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="site-nav" id="menu" aria-label="Principal">
+        <ul>
+          <li><a href="#servicos">Serviços</a></li>
+          <li><a href="#sistemas">Sistemas</a></li>
+          <li><a href="#sobre">A Procuradoria</a></li>
+          <li><a href="#localizacao">Localização</a></li>
+          <li><a href="#contato">Contato</a></li>
+        </ul>
+        <a class="btn btn--pill btn--sm" data-whatsapp href="#">
+          <svg aria-hidden="true" viewBox="0 0 24 24"><use href="#i-whatsapp"/></svg>
+          Atendimento
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="conteudo">
+
+    <!-- Hero -->
+    <section class="hero">
+      <h1 class="sr-only">PROGER — Procuradoria-Geral do Município de Camaçari</h1>
+
+        <section class="carousel" aria-roledescription="carrossel" aria-label="Destaques da Procuradoria">
+          <div class="carousel__viewport">
+            <div class="carousel__bg" aria-hidden="true">
+              <img src="assets/img/carrossel/images.jpg" alt="" width="678" height="452">
+            </div>
+            <ul class="carousel__track" aria-live="off">
+              <li class="carousel__slide carousel__slide--roxo is-active" role="group" aria-roledescription="slide" aria-label="1 de 4">
+                <img class="carousel__art" src="assets/img/carrossel/01-defesa.svg" alt="" width="720" height="600">
+                <div class="carousel__caption"><strong>Defesa do Município</strong><span>Representação judicial e extrajudicial em defesa do interesse público.</span></div>
+              </li>
+              <li class="carousel__slide carousel__slide--laranja" role="group" aria-roledescription="slide" aria-label="2 de 4">
+                <img class="carousel__art" src="assets/img/carrossel/02-divida-ativa.svg" alt="" width="720" height="600">
+                <div class="carousel__caption"><strong>Dívida Ativa</strong><span>Cobrança e negociação dos créditos do Município.</span></div>
+              </li>
+              <li class="carousel__slide carousel__slide--verde" role="group" aria-roledescription="slide" aria-label="3 de 4">
+                <img class="carousel__art" src="assets/img/carrossel/03-consultoria.svg" alt="" width="720" height="600">
+                <div class="carousel__caption"><strong>Consultoria Jurídica</strong><span>Assessoramento jurídico aos órgãos da Administração.</span></div>
+              </li>
+              <li class="carousel__slide carousel__slide--vermelho" role="group" aria-roledescription="slide" aria-label="4 de 4">
+                <img class="carousel__art" src="assets/img/carrossel/04-atendimento.svg" alt="" width="720" height="600">
+                <div class="carousel__caption"><strong>Atendimento ao Cidadão</strong><span>Canais diretos para dúvidas e solicitações do contribuinte.</span></div>
+              </li>
+            </ul>
+            <div class="carousel__wipe" aria-hidden="true">
+              <span class="s-vermelho"></span><span class="s-verde"></span><span class="s-laranja"></span><span class="s-roxo"></span>
+            </div>
+          </div>
+          <div class="carousel__controls container">
+            <button class="carousel__btn" type="button" data-carousel="prev" aria-label="Slide anterior"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+            <div class="carousel__dots" role="group" aria-label="Escolher slide"></div>
+            <button class="carousel__btn" type="button" data-carousel="pause" aria-label="Pausar carrossel"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-pause"/></svg></button>
+            <button class="carousel__btn" type="button" data-carousel="next" aria-label="Próximo slide"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+          </div>
+        </section>
+
+      <div class="container">
+        <nav class="hero-bar reveal" aria-label="Acesso rápido">
+          <a class="quick__item" data-config-href="spgcUrl" href="#" target="_blank" rel="noopener">
+            <span class="quick__icon quick__icon--laranja"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-layers"/></svg></span>
+            <span><strong>SPG-C</strong><small>Sistema de Procuradoria Geral - Camaçari</small></span>
+          </a>
+          <a class="quick__item" data-config-href="sgpmcUrl" href="#" target="_blank" rel="noopener">
+            <span class="quick__icon quick__icon--roxo"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-grid"/></svg></span>
+            <span><strong>SGPM-C</strong><small>Sistema de gestão da Procuradoria</small></span>
+          </a>
+          <a class="quick__item" data-config-href="scpcUrl" href="#" target="_blank" rel="noopener">
+            <span class="quick__icon quick__icon--verde"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-ticket"/></svg></span>
+            <span><strong>SCP-C</strong><small>Sistema de Chamados da Procuradoria</small></span>
+          </a>
+        </nav>
+      </div>
+      <div class="brand-stripe" aria-hidden="true"></div>
+    </section>
+
+    <!-- Serviços -->
+    <section class="section" id="servicos">
+      <div class="container">
+        <header class="section__head reveal">
+          <h6>Para o contribuinte</h6>
+          <h2>Serviços</h2>
+          <p>Os principais atendimentos da Procuradoria. Em caso de dúvida, fale com a gente pelo WhatsApp.</p>
+        </header>
+
+        <div class="services">
+          <article class="service reveal">
+            <span class="service__icon service__icon--roxo"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-search"/></svg></span>
+            <h3>Consulta de Dívida Ativa</h3>
+            <p>Saiba se há débitos inscritos em Dívida Ativa do Município em seu nome ou do seu imóvel.</p>
+            <a class="btn btn--ghost" data-whatsapp data-msg="Olá! Gostaria de consultar débitos em Dívida Ativa." href="#">Solicitar consulta →</a>
+          </article>
+          <article class="service reveal">
+            <span class="service__icon service__icon--laranja"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-handshake"/></svg></span>
+            <h3>Negociação e parcelamento</h3>
+            <p>Regularize sua situação com as condições de negociação vigentes para débitos inscritos.</p>
+            <a class="btn btn--ghost" data-whatsapp data-msg="Olá! Gostaria de informações sobre negociação/parcelamento de débitos." href="#">Quero negociar →</a>
+          </article>
+          <article class="service reveal">
+            <span class="service__icon service__icon--verde"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-doc"/></svg></span>
+            <h3>Certidões</h3>
+            <p>Orientações sobre emissão de certidões relacionadas a débitos inscritos em Dívida Ativa.</p>
+            <a class="btn btn--ghost" data-whatsapp data-msg="Olá! Preciso de orientação sobre emissão de certidão." href="#">Pedir orientação →</a>
+          </article>
+          <article class="service reveal">
+            <span class="service__icon service__icon--vermelho"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-inbox"/></svg></span>
+            <h3>Solicitações e requerimentos</h3>
+            <p>Envie pedidos, documentos e requerimentos à Procuradoria e acompanhe o andamento.</p>
+            <a class="btn btn--ghost" data-whatsapp data-msg="Olá! Gostaria de fazer uma solicitação à Procuradoria." href="#">Fazer solicitação →</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sistemas -->
+    <section class="section section--dark" id="sistemas">
+      <div class="slants" aria-hidden="true"><span class="s-vermelho"></span><span class="s-verde"></span><span class="s-laranja"></span><span class="s-roxo"></span></div>
+      <div class="container">
+        <header class="section__head section__head--light reveal">
+          <h6>Plataformas</h6>
+          <h2>Nossos sistemas</h2>
+          <p>Ferramentas desenvolvidas para tornar o trabalho da Procuradoria mais ágil e transparente.</p>
+        </header>
+
+        <div class="systems">
+          <a class="system reveal" data-config-href="spgcUrl" href="#" target="_blank" rel="noopener">
+            <span class="system__tag system__tag--laranja">Novo</span>
+            <h3>SPG-C</h3>
+            <p>Sistema de Procuradoria Geral - Camaçari.</p>
+            <span class="system__cta">Conhecer <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-arrow"/></svg></span>
+          </a>
+          <a class="system reveal" data-config-href="sgpmcUrl" href="#" target="_blank" rel="noopener">
+            <span class="system__tag">Uso interno</span>
+            <h3>SGPM-C</h3>
+            <p>Sistema de gestão da Procuradoria: processos, prazos e acompanhamento das demandas.</p>
+            <span class="system__cta">Acessar sistema <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-arrow"/></svg></span>
+          </a>
+          <a class="system reveal" data-config-href="scpcUrl" href="#" target="_blank" rel="noopener">
+            <span class="system__tag system__tag--branco">Chamados</span>
+            <h3>SCP-C</h3>
+            <p>Sistema de Chamados da Procuradoria.</p>
+            <span class="system__cta">Acessar sistema <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-arrow"/></svg></span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sobre -->
+    <section class="section" id="sobre">
+      <div class="container about">
+        <div class="about__copy reveal">
+          <h6>Quem somos</h6>
+          <h2>A Procuradoria</h2>
+          <p>
+            A Procuradoria-Geral do Município de Camaçari — <strong>PROGER</strong> — é o órgão responsável
+            pela representação judicial e extrajudicial do Município, pela consultoria e assessoramento
+            jurídico da Administração e pela cobrança da Dívida Ativa.
+          </p>
+          <p class="about__note">Texto institucional provisório — substituir pelo texto oficial.</p>
+        </div>
+        <ul class="pillars reveal">
+          <li><span class="pillar__n c-vermelho">01</span><div><strong>Representação</strong><p>Atuação judicial e extrajudicial em defesa do Município.</p></div></li>
+          <li><span class="pillar__n c-verde">02</span><div><strong>Consultoria</strong><p>Assessoramento jurídico aos órgãos da Administração.</p></div></li>
+          <li><span class="pillar__n c-laranja">03</span><div><strong>Dívida Ativa</strong><p>Cobrança e negociação dos créditos do Município.</p></div></li>
+          <li><span class="pillar__n c-roxo">04</span><div><strong>Atendimento</strong><p>Canal direto com o contribuinte.</p></div></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Localização -->
+    <section class="section section--soft" id="localizacao">
+      <div class="container">
+        <header class="section__head reveal">
+          <h6>Onde estamos</h6>
+          <h2>Localização</h2>
+          <p>Atendimento presencial no Anexo da Prefeitura, junto à Controladoria Geral do Município.</p>
+        </header>
+
+        <div class="location reveal">
+          <div class="location__card">
+            <span class="location__badge"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-pin"/></svg></span>
+            <h3 data-config-text="localNome">Anexo PMC — Procuradoria Geral do Município</h3>
+            <ul class="location__info">
+              <li><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-pin"/></svg><span data-config-text="endereco">Endereço</span></li>
+              <li><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-clock"/></svg><span data-config-text="horario">Horário de atendimento</span></li>
+            </ul>
+            <button class="btn btn--pill btn--lg location__cta" type="button" data-open-maps>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-route"/></svg>
+              Como chegar
+            </button>
+            <p class="location__hint">Abre no aplicativo de mapas do seu dispositivo.</p>
+          </div>
+
+          <div class="location__map">
+            <div id="mapa" class="map" role="region" aria-label="Mapa com a localização da Procuradoria">
+              <button class="map__fallback" type="button" data-open-maps>Ver no mapa</button>
+            </div>
+            <p class="map__tip"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-pin"/></svg> Clique no pin para abrir o trajeto no seu aplicativo de mapas</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA WhatsApp -->
+    <section class="cta-band">
+      <div class="container"><div class="cta-band__inner reveal">
+        <div class="slants" aria-hidden="true"><span class="s-vermelho"></span><span class="s-verde"></span><span class="s-laranja"></span><span class="s-roxo"></span></div>
+        <div>
+          <h2>Ficou com alguma dúvida?</h2>
+          <p>Nosso atendimento pelo WhatsApp tira dúvidas e recebe solicitações do contribuinte.</p>
+        </div>
+        <a class="btn btn--white btn--lg" data-whatsapp href="#" target="_blank" rel="noopener">
+          <svg aria-hidden="true" viewBox="0 0 24 24"><use href="#i-whatsapp"/></svg>
+          Iniciar conversa
+        </a>
+      </div></div>
+    </section>
+  </main>
+
+  <!-- Rodapé -->
+  <footer class="site-footer" id="contato">
+    <div class="brand-stripe" aria-hidden="true"></div>
+    <div class="container">
+      <div class="footer-card">
+        <div class="footer-card__brand">
+          <img src="assets/logos/assinatura-proger.png" alt="Prefeitura de Camaçari — Procuradoria Geral do Município" width="2968" height="609">
+          <p><strong>PROGER</strong> — Procuradoria Geral do Município de Camaçari</p>
+        </div>
+        <div>
+          <h5>Contato</h5>
+          <ul class="footer-list">
+            <li data-config-text="endereco">Endereço</li>
+            <li><a data-config-href="telefoneLink" data-config-text="telefone" href="#">Telefone</a></li>
+            <li><a data-config-href="emailLink" data-config-text="email" href="#">E-mail</a></li>
+            <li data-config-text="horario">Horário de atendimento</li>
+          </ul>
+        </div>
+        <div>
+          <h5>Links</h5>
+          <ul class="footer-list">
+            <li><a href="https://www.camacari.ba.gov.br/" target="_blank" rel="noopener">Prefeitura de Camaçari</a></li>
+            <li><a href="https://sefaz.camacari.ba.gov.br/" target="_blank" rel="noopener">SEFAZ Camaçari</a></li>
+            <li><a data-config-href="spgcUrl" href="#" target="_blank" rel="noopener">SPG-C</a></li>
+            <li><a data-config-href="sgpmcUrl" href="#" target="_blank" rel="noopener">SGPM-C</a></li>
+            <li><a data-config-href="scpcUrl" href="#" target="_blank" rel="noopener">SCP-C</a></li>
+          </ul>
+        </div>
+      </div>
+      <p class="footer-bottom">
+        © <span data-year></span> Prefeitura Municipal de Camaçari · Procuradoria Geral do Município<br>
+        Rua Francisco Drumond, S/N - Centro, Camaçari - BA · CEP 42.800-000 · 55 71 3621-6666 ·
+        <a href="https://www.camacari.ba.gov.br/" target="_blank" rel="noopener">www.camacari.ba.gov.br</a> · @prefcamacari
+      </p>
+      <div class="footer-credit">
+        <span>Desenvolvido por</span>
+        <img src="assets/logos/pgm-ditec-branco.png" alt="PGM-DITEC — Procuradoria-Geral, Diretoria de Tecnologia" width="241" height="116">
+      </div>
+    </div>
+  </footer>
+
+  <!-- WhatsApp flutuante -->
+  <a class="wa-float" data-whatsapp href="#" target="_blank" rel="noopener" aria-label="Atendimento pelo WhatsApp">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-whatsapp"/></svg>
+  </a>
+
+  <!-- Ícones -->
+  <svg class="sprite" aria-hidden="true">
+    <symbol id="i-whatsapp" viewBox="0 0 24 24"><path fill="currentColor" d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.9 9.9 0 0 0 4.74 1.21c5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2Zm0 18.15c-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.25-8.24 4.54 0 8.24 3.7 8.24 8.24 0 4.55-3.7 8.24-8.24 8.24Zm4.52-6.16c-.25-.12-1.47-.72-1.7-.81-.23-.08-.39-.12-.56.13-.17.24-.64.8-.78.97-.15.17-.29.18-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.02-.38.11-.5.11-.11.25-.29.37-.43.13-.15.17-.25.25-.42.08-.17.04-.31-.02-.43-.06-.13-.56-1.35-.77-1.84-.2-.48-.4-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.22.25-.86.85-.86 2.07s.89 2.4 1.01 2.56c.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.15-1.18-.07-.1-.23-.16-.48-.28Z"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M13 6l6 6-6 6"/></symbol>
+    <symbol id="i-grid" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></g></symbol>
+    <symbol id="i-layers" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 3 2 8l10 5 10-5-10-5Z"/><path d="m2 13 10 5 10-5"/><path d="m2 18 10 5 10-5" opacity=".5"/></g></symbol>
+    <symbol id="i-ticket" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"><path d="M3 8a2 2 0 0 0 2-2h14a2 2 0 0 0 2 2v2a2 2 0 0 0 0 4v2a2 2 0 0 0-2 2H5a2 2 0 0 0-2-2v-2a2 2 0 0 0 0-4V8Z"/><path d="M9 6v12" stroke-dasharray="2 2"/><path d="M13 10h4M13 14h3"/></g></symbol>
+    <symbol id="i-pause" viewBox="0 0 24 24"><g fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></g></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24"><path fill="currentColor" d="M8 5.5v13a1 1 0 0 0 1.5.86l11-6.5a1 1 0 0 0 0-1.72l-11-6.5A1 1 0 0 0 8 5.5Z"/></symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12Z"/><circle cx="12" cy="10" r="2.6"/></g></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></g></symbol>
+    <symbol id="i-route" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="19" r="2.5"/><path d="M18 9.5s3.5-3.1 3.5-5.5a3.5 3.5 0 0 0-7 0c0 2.4 3.5 5.5 3.5 5.5Z"/><path d="M8.5 19H17a3 3 0 0 0 0-6H8a3 3 0 0 1 0-6h4"/></g></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></g></symbol>
+    <symbol id="i-handshake" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m11 17 2 2a1.4 1.4 0 0 0 2-2"/><path d="m14 14 2.5 2.5a1.4 1.4 0 0 0 2-2l-3.9-3.9a3 3 0 0 0-4.2 0l-.9.9a1.4 1.4 0 0 1-2-2l2.8-2.8a5 5 0 0 1 6.1-.8l.5.3a3 3 0 0 0 2.1.4L21 6"/><path d="m21 3 1 11h-2"/><path d="M3 3 2 14l6.5 6.5a1.4 1.4 0 0 0 2-2"/><path d="M3 4h8"/></g></symbol>
+    <symbol id="i-doc" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9l-6-6Z"/><path d="M14 3v6h6M8 13h8M8 17h5"/></g></symbol>
+    <symbol id="i-inbox" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.5 5h13L22 12v6a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-6l3.5-7Z"/></g></symbol>
+  </svg>
+</body>
+</html>

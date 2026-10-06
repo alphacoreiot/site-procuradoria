@@ -1,0 +1,26 @@
+services:
+  proger-portal:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: proger-portal:latest
+    container_name: proger-portal
+    restart: unless-stopped
+    ports:
+      - "${PORTAL_PORT:-8080}:8080"
+    # Para trocar links/contatos sem rebuild, monte um config.js do ambiente:
+    # volumes:
+    #   - ./config/config.prod.js:/usr/share/nginx/html/assets/js/config.js:ro
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1:8080/healthz"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
