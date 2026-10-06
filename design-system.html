@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Design System — Prefeitura de Camaçari</title>
+  <link rel="icon" href="assets/logos/favicon-192.png">
+  <link rel="stylesheet" href="assets/css/design-system.css">
+  <style>
+    .ds-section { padding: 48px 0; border-bottom: 1px solid var(--color-bg-muted); }
+    .swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 16px; }
+    .swatch { border-radius: var(--radius-md); overflow: hidden; box-shadow: var(--shadow-tile); font-size: 13px; line-height: 1.4; }
+    .swatch div { height: 70px; }
+    .swatch p { margin: 0; padding: 8px 10px; }
+    .logos { display: flex; flex-wrap: wrap; gap: 24px; align-items: center; }
+    .logos figure { margin: 0; padding: 16px; border-radius: var(--radius-md); background: var(--color-bg-soft); text-align: center; font-size: 12px; }
+    .logos figure.dark { background: var(--color-primary); color: #fff; }
+    .logos img { max-height: 90px; max-width: 280px; display: block; margin: 0 auto 8px; }
+    .row { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; }
+    .tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 16px; }
+  </style>
+</head>
+<body>
+  <div class="topbar"><div class="container"><span>(00) 0000-0000 · contato@exemplo.gov.br</span><span>Acessibilidade</span></div></div>
+  <header class="header">
+    <div class="container">
+      <a class="header__logo" href="#"><img src="assets/logos/assinatura-proger.png" alt="Prefeitura de Camaçari — Procuradoria Geral do Município"></a>
+      <ul class="nav">
+        <li><a href="#" aria-current="page">Início</a></li>
+        <li><a href="#">A Procuradoria</a></li>
+        <li><a href="#">Serviços</a></li>
+        <li><a href="#">Legislação</a></li>
+        <li><a href="#">Contato</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="ds-section">
+      <h6>Marca</h6>
+      <h2>Logomarcas</h2>
+      <div class="logos">
+        <figure><img src="assets/logos/assinatura-proger.png" alt="">assinatura-proger.png</figure>
+        <figure><img src="assets/logos/logo-pmc-slogan.png" alt="">logo-pmc-slogan.png</figure>
+        <figure><img src="assets/logos/logo-pmc.png" alt="">logo-pmc.png</figure>
+        <figure><img src="assets/logos/logo-pmc-rodape.png" alt="">logo-pmc-rodape.png</figure>
+        <figure><img src="assets/logos/logo-pmc-sefaz-cor.png" alt="">logo-pmc-sefaz-cor.png</figure>
+        <figure class="dark"><img src="assets/logos/logo-pmc-branco.png" alt="">logo-pmc-branco.png</figure>
+        <figure class="dark"><img src="assets/logos/logo-pmc-sefaz-branco.png" alt="">logo-pmc-sefaz-branco.png</figure>
+        <figure><img src="assets/logos/brasao-pmc.png" alt="">brasao-pmc.png</figure>
+        <figure><img src="assets/logos/brasao-pmc-circular.png" alt="">brasao-pmc-circular.png</figure>
+      </div>
+    </section>
+
+    <section class="ds-section">
+      <h6>Cores</h6>
+      <h2>Padrão cromático (Brandbook 2025)</h2>
+      <div class="swatches">
+        <div class="swatch"><div style="background:var(--brand-preto)"></div><p>--brand-preto<br>#000000 · Pantone Black 7C</p></div>
+        <div class="swatch"><div style="background:var(--brand-vermelho-escuro)"></div><p>--brand-vermelho-escuro<br>#9C1614 · Pantone 1797C</p></div>
+        <div class="swatch"><div style="background:var(--brand-vermelho)"></div><p>--brand-vermelho<br>#C20E1A · Pantone 485C</p></div>
+        <div class="swatch"><div style="background:var(--brand-verde-escuro)"></div><p>--brand-verde-escuro<br>#6B7F27 · Pantone 370C</p></div>
+        <div class="swatch"><div style="background:var(--brand-verde-medio)"></div><p>--brand-verde-medio<br>#849D2F · Pantone 377C</p></div>
+        <div class="swatch"><div style="background:var(--brand-verde)"></div><p>--brand-verde<br>#A2C037 · Pantone 375C</p></div>
+        <div class="swatch"><div style="background:var(--brand-laranja-escuro)"></div><p>--brand-laranja-escuro<br>#B56C18 · Pantone 153C</p></div>
+        <div class="swatch"><div style="background:var(--brand-laranja)"></div><p>--brand-laranja<br>#D67C1C · Pantone 151C</p></div>
+        <div class="swatch"><div style="background:var(--brand-roxo-escuro)"></div><p>--brand-roxo-escuro<br>#59226C · Pantone 2623C</p></div>
+        <div class="swatch"><div style="background:var(--brand-roxo)"></div><p>--brand-roxo<br>#84329B · Pantone 2593C</p></div>
+      </div>
+    </section>
+
+    <section class="ds-section">
+      <h6>Tipografia</h6>
+      <h1>H1 Montserrat Black</h1>
+      <h2>H2 Montserrat Black — Procuradoria-Geral do Município</h2>
+      <h3>H3 Montserrat Bold — Serviços ao cidadão</h3>
+      <h4>H4 Montserrat SemiBold — Subtítulo de seção</h4>
+      <h5>H5 Montserrat ExtraBold — Rótulo</h5>
+      <h6>H6 sobretítulo</h6>
+      <p>Corpo em Montserrat Regular 15px / 1.75, cor #414141. <a href="#">Link com hover laranja</a>.</p>
+    </section>
+
+    <section class="ds-section">
+      <h6>Componentes</h6>
+      <h2>Botões e campos</h2>
+      <div class="row">
+        <button class="btn">Botão padrão</button>
+        <button class="btn btn--pill">Botão pill (gradiente)</button>
+        <a class="btn btn--ghost" href="#">Leia mais →</a>
+        <input class="input" placeholder="Pesquisar…">
+      </div>
+      <h2 style="margin-top:32px">Atalhos de serviço</h2>
+      <div class="tiles">
+        <a class="tile" href="#"><strong>Dívida Ativa</strong></a>
+        <a class="tile" href="#"><strong>Certidões</strong></a>
+        <a class="tile" href="#"><strong>Processos</strong></a>
+        <a class="tile" href="#"><strong>Legislação</strong></a>
+      </div>
+      <div class="card" style="margin-top:32px"><h4>Card</h4><p>Raio 10px, sombra suave.</p></div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__card">
+        <div class="footer__logo"><img src="assets/logos/logo-pmc-rodape.png" alt="Prefeitura de Camaçari"></div>
+        <p>Endereço da Procuradoria (texto de exemplo)</p>
+      </div>
+      <p class="footer__bottom">© Prefeitura Municipal de Camaçari</p>
+    </div>
+  </footer>
+</body>
+</html>

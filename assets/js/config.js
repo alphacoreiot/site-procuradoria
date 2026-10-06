@@ -1,0 +1,32 @@
+/*
+ * Configuração do portal PROGER.
+ * Edite os valores abaixo (ou monte outro config.js por cima deste arquivo
+ * no container — veja o docker-compose.yml) sem mexer no HTML.
+ * Campos vazios mantêm o texto/link padrão da página.
+ */
+window.PROGER_CONFIG = {
+  // Sistemas
+  sgpmcUrl: "",              // SGPM-C — ex.: "https://sgpmc.camacari.ba.gov.br"
+  spgcUrl: "",               // SPG-C — Sistema de Procuradoria Geral - Camaçari
+  scpcUrl: "",               // SCP-C — Sistema de Chamados da Procuradoria
+
+  // WhatsApp: só dígitos, com DDI e DDD (ex.: "5571999999999")
+  whatsappNumero: "",
+  whatsappMensagem: "Olá! Vim pelo portal da Procuradoria e gostaria de atendimento.",
+
+  // Contato
+  telefone: "",              // ex.: "(71) 0000-0000"
+  email: "",                 // ex.: "proger@camacari.ba.gov.br"
+  endereco: "Rua Contorno do Centro Administrativo, Dois de Julho, Camaçari - BA, 42801-200",
+  horario: "Segunda a sexta, das 8h às 14h",
+
+  // Localização (seção "Localização")
+  localNome: "Anexo PMC — Procuradoria Geral do Município",
+  mapa: {
+    lat: -12.7068191,
+    lng: -38.3190499,
+    zoom: 17,
+    // link do Google Maps usado no computador (no celular abre o app padrão)
+    link: "https://maps.app.goo.gl/Hhuh3YWWdZXVPY858"
+  }
+};
