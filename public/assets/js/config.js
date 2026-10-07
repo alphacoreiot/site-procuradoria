@@ -6,7 +6,7 @@
  */
 window.PROGER_CONFIG = {
   // Sistemas
-  sgpmcUrl: "",              // SGPM-C — ex.: "https://sgpmc.camacari.ba.gov.br"
+  sgpmcUrl: "https://sgpmc.camacari.ba.gov.br/", // SGPM-C — Sistema de gestão da Procuradoria
   spgcUrl: "",               // SPG-C — Sistema de Procuradoria Geral - Camaçari
   scpcUrl: "",               // SCP-C — Sistema de Chamados da Procuradoria
   seiUrl: "https://sei.camacari.ba.gov.br/", // SEI — Sistema SEI Camaçari
@@ -21,7 +21,7 @@ window.PROGER_CONFIG = {
   endereco: "Rua Contorno do Centro Administrativo, Dois de Julho, Camaçari - BA, 42801-200",
   horario: "Segunda a sexta, das 8h às 14h",
 
-  // Localização (seção "Localização")
+  // Localização (mapa da seção "Contato")
   localNome: "Anexo PMC — Procuradoria Geral do Município",
   mapa: {
     lat: -12.7068191,

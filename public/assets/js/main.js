@@ -381,7 +381,7 @@
     var pillarContact = pillarDialog.querySelector(".pillar-dialog__contact");
     var pillarClose = pillarDialog.querySelector(".pillar-dialog__close");
     var pillarOrg = document.getElementById("organograma");
-    var pillarActions = pillarDialog.querySelector(".pillar-dialog__actions");
+    var pillarPanels = pillarDialog.querySelectorAll("[data-pillar-panel]");
     var pillarSection = pillarLayer.parentElement;
     var pillarOpener = null;
 
@@ -406,6 +406,7 @@
     }
     pillarPhoto.addEventListener("load", fitPillarSection);
     window.addEventListener("resize", fitPillarSection);
+    pillarDialog.addEventListener("toggle", fitPillarSection, true); // "toggle" dos <details> não borbulha
 
     function openPillar(btn) {
       var n = btn.querySelector(".pillar__n");
@@ -413,7 +414,7 @@
       var text = btn.querySelector("p");
       pillarDialog.style.setProperty("--pillar", btn.style.getPropertyValue("--pillar"));
       pillarN.textContent = n ? n.textContent : "";
-      pillarTitle.textContent = title ? title.textContent : "";
+      pillarTitle.textContent = btn.getAttribute("data-title") || (title ? title.textContent : "");
       pillarText.textContent = text ? text.textContent : "";
 
       var role = btn.getAttribute("data-role");
@@ -429,13 +430,19 @@
       if (tel) addContactLine("Tel.:", tel, "tel:+55" + tel.replace(/\D/g, ""));
       pillarContact.hidden = !(email || tel);
       pillarDialog.classList.toggle("pillar-dialog--perfil", perfil);
-      pillarText.hidden = perfil;
+      pillarText.hidden = perfil || !pillarText.textContent;
       pillarRole.hidden = !role;
       pillarRole.textContent = role || "";
       var isOrg = btn.hasAttribute("data-org") && !!pillarOrg && !!window.PGMOrg;
       if (pillarOrg) pillarOrg.hidden = !isOrg;
       pillarDialog.classList.toggle("pillar-dialog--org", isOrg);
       if (isOrg) { perfil = false; pillarDialog.classList.remove("pillar-dialog--perfil"); pillarText.hidden = true; }
+      var panelId = btn.getAttribute("data-panel");
+      pillarPanels.forEach(function (p) {
+        p.hidden = p.id !== panelId;
+        p.querySelectorAll("details[open]").forEach(function (d) { d.open = false; });
+      });
+      pillarDialog.classList.toggle("pillar-dialog--panel", !!panelId);
       var wide = isOrg || btn.getAttribute("data-photo-shape") === "wide";
       pillarDialog.classList.toggle("pillar-dialog--wide", wide);
       pillarPhoto.hidden = !photo;
@@ -462,7 +469,6 @@
         pillarRole.textContent = "Procuradoria Geral do Município de Camaçari";
         pillarRole.hidden = false;
       }
-      if (pillarActions) pillarActions.hidden = !bioCard;
       pillarDialog.classList.remove("is-opening");
       void pillarDialog.offsetWidth; // reinicia as animações de abertura
       pillarDialog.classList.add("is-opening");
@@ -483,10 +489,6 @@
 
     document.querySelectorAll(".pillar").forEach(function (btn) {
       btn.addEventListener("click", function () { openPillar(btn); });
-    });
-    var orgBtn = document.querySelector(".pillar[data-org]");
-    pillarDialog.querySelectorAll("[data-open-org]").forEach(function (b) {
-      b.addEventListener("click", function () { if (orgBtn) openPillar(orgBtn); });
     });
     pillarLayer.querySelectorAll("[data-pillar-close]").forEach(function (el) {
       el.addEventListener("click", closePillar);
@@ -552,14 +554,36 @@
       checkCpf();
     });
 
+    // Cards da direita: acompanham a altura do formulário só com o Aviso de Privacidade fechado
+    var privacy = contactForm.querySelector(".privacy");
+    var contactInfo = document.querySelector(".contact-info");
+    if (privacy && contactInfo) {
+      privacy.querySelector("summary").addEventListener("click", function () {
+        if (privacy.open) return;
+        contactInfo.style.height = contactInfo.offsetHeight + "px";
+        contactInfo.classList.add("is-locked");
+      });
+      privacy.addEventListener("toggle", function () {
+        if (privacy.open) return;
+        contactInfo.style.height = "";
+        contactInfo.classList.remove("is-locked");
+      });
+    }
+
     contactForm.addEventListener("invalid", function () { contactForm.classList.add("was-validated"); }, true);
 
     contactForm.addEventListener("submit", function (e) {
       e.preventDefault();
       if (!cfg.email) { toast("Canal de e-mail disponível em breve."); return; }
-      var linhas = ["Nome: " + cf.nome.value.trim(), "CPF: " + cf.cpf.value, "E-mail: " + cf.email.value.trim()];
-      if (cf.telefone.value.trim()) linhas.push("Telefone: " + cf.telefone.value.trim());
-      linhas.push("", cf.mensagem.value.trim(), "", "Enviado pelo portal da PROGER");
+      var linhas = [
+        "Nome: " + cf.nome.value.trim(),
+        "CPF: " + cf.cpf.value,
+        "E-mail: " + cf.email.value.trim(),
+        "Telefone: " + cf.telefone.value.trim()
+      ];
+      linhas.push("", cf.mensagem.value.trim(), "",
+        "Aviso de Privacidade aceito em " + new Date().toLocaleString("pt-BR"),
+        "Enviado pelo portal da PROGER");
       window.location.href = "mailto:" + cfg.email +
         "?subject=" + encodeURIComponent("[Portal PROGER] " + cf.assunto.value) +
         "&body=" + encodeURIComponent(linhas.join("\r\n"));
