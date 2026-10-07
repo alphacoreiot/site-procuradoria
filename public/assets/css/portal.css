@@ -469,7 +469,7 @@ svg { width: 1em; height: 1em; flex: none; }
 @media (max-width: 560px) { .contact-form__row { grid-template-columns: 1fr; } }
 
 /* CTA WhatsApp */
-.cta-band { padding: 0 0 clamp(64px, 9vw, 112px); }
+.cta-band { position: relative; padding: clamp(64px, 9vw, 112px) 0; }
 .cta-band__inner {
   position: relative; overflow: hidden;
   display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap;

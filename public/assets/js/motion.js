@@ -54,7 +54,7 @@
   }
 
   // --- 2. Varredura das faixas da marca no topo de cada seção ----------------
-  document.querySelectorAll("main > .section").forEach(function (sec) {
+  document.querySelectorAll("main > .section, main > .cta-band").forEach(function (sec) {
     var sw = document.createElement("div");
     sw.className = "sweep";
     sw.setAttribute("aria-hidden", "true");
