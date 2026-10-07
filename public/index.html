@@ -48,7 +48,7 @@
           <li><a href="#sistemas">Sistemas</a></li>
           <li><a href="#sobre">A Procuradoria</a></li>
           <li><a href="#localizacao">Localização</a></li>
-          <li><a href="#contato">Contato</a></li>
+          <li><a href="#fale-conosco">Contato</a></li>
         </ul>
         <a class="btn btn--pill btn--sm" data-whatsapp href="#">
           <svg aria-hidden="true" viewBox="0 0 24 24"><use href="#i-whatsapp"/></svg>
@@ -231,7 +231,7 @@
           </li>
           <li>
             <button type="button" class="pillar" style="--pillar: var(--brand-laranja)" aria-haspopup="dialog" aria-controls="pillar-dialog"
-              data-role="">
+              data-role="" data-email="atendimento.dividaativa@camacari.ba.gov.br" data-tel="(71) 3674-8530">
               <span class="pillar__n c-laranja">03</span>
               <strong>Dívida Ativa</strong>
             </button>
@@ -259,6 +259,7 @@
           </a>
           <p class="pillar-dialog__hint" hidden>Clique na imagem para ver em tamanho real.</p>
           <p class="pillar-dialog__bio" hidden></p>
+          <p class="pillar-dialog__contact" hidden></p>
           <p class="pillar-dialog__text"></p>
         </div>
       </div>
@@ -298,6 +299,101 @@
       </div>
     </section>
 
+    <!-- Fale Conosco -->
+    <section class="section" id="fale-conosco">
+      <div class="container">
+        <header class="section__head reveal">
+          <h6>Fale com a gente</h6>
+          <h2>Fale Conosco</h2>
+          <p>Envie sua dúvida, sugestão ou solicitação à Procuradoria-Geral do Município.</p>
+        </header>
+
+        <div class="contact reveal">
+          <form class="contact-form" id="contact-form">
+            <div class="contact-form__row contact-form__row--nome">
+              <div class="field">
+                <label for="cf-nome"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-user"/></svg>Nome completo <span class="field__req" aria-hidden="true">*</span></label>
+                <input class="field__control" id="cf-nome" name="nome" type="text" autocomplete="name" maxlength="120" required placeholder="Digite seu nome completo">
+              </div>
+              <div class="field">
+                <label for="cf-cpf"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-id"/></svg>CPF <span class="field__req" aria-hidden="true">*</span></label>
+                <input class="field__control" id="cf-cpf" name="cpf" type="text" inputmode="numeric" autocomplete="off" maxlength="14" required
+                  pattern="\d{3}\.\d{3}\.\d{3}-\d{2}" title="Informe o CPF no formato 000.000.000-00" placeholder="000.000.000-00">
+              </div>
+            </div>
+            <div class="contact-form__row">
+              <div class="field">
+                <label for="cf-email"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-mail"/></svg>E-mail <span class="field__req" aria-hidden="true">*</span></label>
+                <input class="field__control" id="cf-email" name="email" type="email" autocomplete="email" maxlength="120" required placeholder="seu@email.com">
+              </div>
+              <div class="field">
+                <label for="cf-telefone"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-phone"/></svg>Telefone</label>
+                <input class="field__control" id="cf-telefone" name="telefone" type="tel" autocomplete="tel" inputmode="numeric" maxlength="15"
+                  pattern="\(\d{2}\) \d{4,5}-\d{4}" title="Informe o telefone com DDD, ex.: (71) 99999-9999" placeholder="(00) 00000-0000">
+              </div>
+            </div>
+            <div class="field">
+              <label for="cf-assunto"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-chat"/></svg>Assunto <span class="field__req" aria-hidden="true">*</span></label>
+              <select class="field__control" id="cf-assunto" name="assunto" required>
+                <option value="">Selecione o assunto</option>
+                <option>Consulta de Dívida Ativa</option>
+                <option>Negociação e parcelamento</option>
+                <option>Certidões</option>
+                <option>Solicitações e requerimentos</option>
+                <option>Sugestão ou elogio</option>
+                <option>Outro assunto</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="cf-mensagem"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-edit"/></svg>Mensagem <span class="field__req" aria-hidden="true">*</span></label>
+              <textarea class="field__control" id="cf-mensagem" name="mensagem" rows="6" maxlength="2000" required aria-describedby="cf-contador"
+                placeholder="Descreva em detalhes sua dúvida, sugestão ou solicitação..."></textarea>
+              <small class="field__count" id="cf-contador">0 / 2000 caracteres</small>
+            </div>
+            <div class="contact-form__actions">
+              <button class="btn btn--pill btn--lg" type="submit">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-send"/></svg>
+                Enviar mensagem
+              </button>
+              <p class="contact-form__note">Ao enviar, seu aplicativo de e-mail abre com a mensagem pronta. Campos com <span class="field__req">*</span> são obrigatórios.</p>
+            </div>
+          </form>
+
+          <ul class="contact-info">
+            <li class="contact-info__item">
+              <span class="quick__icon quick__icon--roxo"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-pin"/></svg></span>
+              <div>
+                <h3>Endereço</h3>
+                <p data-config-text="endereco">Endereço</p>
+                <a class="contact-info__link" href="#localizacao">Ver no mapa →</a>
+              </div>
+            </li>
+            <li class="contact-info__item">
+              <span class="quick__icon quick__icon--verde"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-phone"/></svg></span>
+              <div>
+                <h3>Telefone</h3>
+                <p><a data-config-href="telefoneLink" data-config-text="telefone" href="#">(71) 3674-8544</a></p>
+              </div>
+            </li>
+            <li class="contact-info__item">
+              <span class="quick__icon quick__icon--laranja"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-mail"/></svg></span>
+              <div>
+                <h3>E-mail</h3>
+                <p><a data-config-href="emailLink" data-config-text="email" href="#">proger@camacari.ba.gov.br</a></p>
+              </div>
+            </li>
+            <li class="contact-info__item">
+              <span class="quick__icon quick__icon--vermelho"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-clock"/></svg></span>
+              <div>
+                <h3>Horário de Atendimento</h3>
+                <p data-config-text="horario">Segunda a sexta, das 8h às 14h</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
     <!-- CTA WhatsApp -->
     <section class="cta-band">
       <div class="container"><div class="cta-band__inner reveal">
@@ -322,15 +418,6 @@
         <div class="footer-card__brand">
           <img src="assets/logos/assinatura-proger.png" alt="Prefeitura de Camaçari — Procuradoria Geral do Município" width="2968" height="609">
           <p><strong>PROGER</strong> — Procuradoria Geral do Município de Camaçari</p>
-        </div>
-        <div>
-          <h5>Contato</h5>
-          <ul class="footer-list">
-            <li data-config-text="endereco">Endereço</li>
-            <li><strong class="footer-label">Telefone</strong><a data-config-href="telefoneLink" data-config-text="telefone" href="#">(71) 3674-8530</a></li>
-            <li><strong class="footer-label">E-mail</strong><a data-config-href="emailLink" data-config-text="email" href="#">atendimento.dividaativa@camacari.ba.gov.br</a></li>
-            <li><strong class="footer-label">Horário de Atendimento</strong><span data-config-text="horario">Segunda a sexta, das 8h às 14h</span></li>
-          </ul>
         </div>
         <div>
           <h5>Links</h5>
@@ -376,6 +463,13 @@
     <symbol id="i-search" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></g></symbol>
     <symbol id="i-handshake" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m11 17 2 2a1.4 1.4 0 0 0 2-2"/><path d="m14 14 2.5 2.5a1.4 1.4 0 0 0 2-2l-3.9-3.9a3 3 0 0 0-4.2 0l-.9.9a1.4 1.4 0 0 1-2-2l2.8-2.8a5 5 0 0 1 6.1-.8l.5.3a3 3 0 0 0 2.1.4L21 6"/><path d="m21 3 1 11h-2"/><path d="M3 3 2 14l6.5 6.5a1.4 1.4 0 0 0 2-2"/><path d="M3 4h8"/></g></symbol>
     <symbol id="i-doc" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9l-6-6Z"/><path d="M14 3v6h6M8 13h8M8 17h5"/></g></symbol>
+    <symbol id="i-phone" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" d="M5 3h3.5l1.8 4.5-2.3 1.4a11 11 0 0 0 7.1 7.1l1.4-2.3L21 15.5V19a2 2 0 0 1-2 2A16 16 0 0 1 3 5a2 2 0 0 1 2-2Z"/></symbol>
+    <symbol id="i-mail" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></g></symbol>
+    <symbol id="i-id" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="11" r="2"/><path d="M6 16a3 3 0 0 1 6 0M14 10h4M14 14h3"/></g></symbol>
+    <symbol id="i-user" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></g></symbol>
+    <symbol id="i-chat" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" d="M5 4h14a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-9l-5 4v-4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z"/></symbol>
+    <symbol id="i-edit" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></g></symbol>
+    <symbol id="i-send" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4 20-7Z"/></g></symbol>
     <symbol id="i-inbox" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.5 5h13L22 12v6a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-6l3.5-7Z"/></g></symbol>
   </svg>
 </body>

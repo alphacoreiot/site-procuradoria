@@ -298,7 +298,12 @@ svg { width: 1em; height: 1em; flex: none; }
 .pillar-dialog__n { margin: 0; font-size: 32px; font-weight: 900; line-height: 1; color: var(--pillar, var(--brand-roxo)); }
 .pillar-dialog h3 { margin: 8px 0 0; font-size: 28px; font-weight: 900; color: var(--color-ink); }
 .pillar-dialog__text { margin: 12px 0 0; font-size: 16px; line-height: 1.7; }
-.pillar-dialog__text[hidden], .pillar-dialog__role[hidden], .pillar-dialog__photo[hidden], .pillar-dialog__bio[hidden], .pillar-dialog__hint[hidden] { display: none; }
+.pillar-dialog__text[hidden], .pillar-dialog__role[hidden], .pillar-dialog__photo[hidden], .pillar-dialog__bio[hidden], .pillar-dialog__hint[hidden], .pillar-dialog__contact[hidden] { display: none; }
+.pillar-dialog__contact { margin: 16px 0 0; font-size: 16px; line-height: 1.8; color: var(--color-text); overflow-wrap: anywhere; }
+.pillar-dialog__line { display: block; }
+.pillar-dialog__line strong { color: var(--color-ink); }
+.pillar-dialog__line a { color: var(--color-text); }
+.pillar-dialog__line a:hover { color: var(--pillar, var(--brand-roxo)); }
 .pillar-dialog__media { display: block; }
 .pillar-dialog__media[href] { cursor: zoom-in; }
 .pillar-dialog__hint { margin: 8px 0 0; font-size: 13px; color: var(--color-muted); }
@@ -328,6 +333,48 @@ svg { width: 1em; height: 1em; flex: none; }
 @media (max-width: 900px) { .about { grid-template-columns: 1fr; gap: 40px; } }
 @media (max-width: 520px) { .pillars { grid-template-columns: 1fr; } }
 
+/* Fale Conosco */
+.contact { display: grid; grid-template-columns: 1fr minmax(280px, 360px); gap: 24px; align-items: start; }
+.contact-form {
+  display: grid; gap: 18px; padding: clamp(24px, 4vw, 36px);
+  background: #fff; border: 1px solid var(--color-bg-muted); border-radius: var(--radius-xl); box-shadow: var(--shadow-soft);
+}
+.contact-form__row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.contact-form__row--nome { grid-template-columns: 2fr minmax(180px, 1fr); }
+.field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.field label { display: flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 700; line-height: 1.4; color: var(--color-ink); }
+.field label svg { font-size: 16px; color: var(--color-primary); }
+.field__req { color: var(--brand-vermelho); }
+/* especificidade acima do input/textarea global do design-system.css */
+.contact-form .field .field__control {
+  width: 100%; margin: 0; padding: 12px 14px;
+  font-family: var(--font-base); font-size: 15px; font-weight: 400; color: var(--color-text);
+  background: var(--color-bg-soft); border: 1px solid var(--color-bg-muted); border-radius: var(--radius-md);
+  transition: border-color .2s, background .2s;
+}
+.contact-form .field .field__control:focus {
+  background: #fff; border-color: var(--color-primary); outline: 3px solid rgba(132, 50, 155, .15); outline-offset: 0;
+}
+.contact-form .field textarea.field__control { min-height: 150px; resize: vertical; line-height: 1.6; }
+.contact-form.was-validated .field .field__control:invalid { border-color: var(--brand-vermelho); background: #fff8f8; }
+.field__count { align-self: flex-end; font-size: 12px; color: var(--color-muted); }
+.contact-form__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; margin-top: 4px; }
+.contact-form__note { flex: 1; min-width: 220px; margin: 0; font-size: 13px; line-height: 1.5; color: var(--color-muted); }
+
+.contact-info { list-style: none; margin: 0; padding: 0; display: grid; gap: 16px; }
+.contact-info__item {
+  display: flex; flex-direction: column; align-items: flex-start; gap: 12px; padding: 20px;
+  background: #fff; border: 1px solid var(--color-bg-muted); border-radius: var(--radius-lg); box-shadow: var(--shadow-soft);
+}
+.contact-info__item > div { min-width: 0; max-width: 100%; }
+.contact-info__item .quick__icon { flex: none; width: 42px; height: 42px; border-radius: 12px; font-size: 20px; }
+.contact-info__item h3 { margin: 0 0 4px; font-size: 15px; font-weight: 800; color: var(--color-primary); }
+.contact-info__item p { margin: 0; font-size: 14px; line-height: 1.6; color: var(--color-text); overflow-wrap: break-word; }
+.contact-info__item a:hover { color: var(--color-primary); }
+.contact-info__link { display: inline-block; margin-top: 6px; font-size: 13px; font-weight: 700; color: var(--color-primary); }
+@media (max-width: 900px) { .contact { grid-template-columns: 1fr; } }
+@media (max-width: 560px) { .contact-form__row { grid-template-columns: 1fr; } }
+
 /* CTA WhatsApp */
 .cta-band { padding: 0 0 clamp(64px, 9vw, 112px); }
 .cta-band__inner {
@@ -349,15 +396,13 @@ svg { width: 1em; height: 1em; flex: none; }
 /* --- Rodapé --------------------------------------------------------------- */
 .site-footer { background: var(--color-primary-dark); color: rgba(255,255,255,.75); padding-bottom: 32px; }
 .footer-card {
-  display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 40px;
+  display: grid; grid-template-columns: 2fr 1fr; gap: 40px;
   background: #fff; color: var(--color-muted); border-radius: 0 0 var(--radius-xl) var(--radius-xl);
   padding: 40px; font-size: 14px; line-height: 1.7; box-shadow: var(--shadow-lift);
 }
 .footer-card__brand img { height: 70px; width: auto; margin-bottom: 14px; }
 .footer-card__brand p { margin: 0; max-width: 300px; }
-.footer-card h5,
-.footer-label { color: var(--color-primary); text-transform: uppercase; letter-spacing: 1.5px; font-size: 13px; font-weight: 900; }
-.footer-label { display: block; margin-top: 6px; }
+.footer-card h5 { color: var(--color-primary); text-transform: uppercase; letter-spacing: 1.5px; font-size: 13px; font-weight: 900; }
 .footer-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
 .footer-list a { color: var(--color-text); }
 .footer-list a:hover { color: var(--color-primary); }

@@ -378,6 +378,7 @@
     var pillarBio = pillarDialog.querySelector(".pillar-dialog__bio");
     var pillarMedia = pillarDialog.querySelector(".pillar-dialog__media");
     var pillarHint = pillarDialog.querySelector(".pillar-dialog__hint");
+    var pillarContact = pillarDialog.querySelector(".pillar-dialog__contact");
     var pillarClose = pillarDialog.querySelector(".pillar-dialog__close");
     var pillarSection = pillarLayer.parentElement;
     var pillarOpener = null;
@@ -388,6 +389,18 @@
       var border = pillarDialog.offsetHeight - pillarDialog.clientHeight;
       var needed = pillarDialog.scrollHeight + border + 48;
       if (needed > pillarSection.offsetHeight) pillarSection.style.minHeight = needed + "px";
+    }
+    function addContactLine(label, value, href) {
+      var line = document.createElement("span");
+      var strong = document.createElement("strong");
+      var link = document.createElement("a");
+      strong.textContent = label + " ";
+      link.href = href;
+      link.textContent = value;
+      line.className = "pillar-dialog__line";
+      line.appendChild(strong);
+      line.appendChild(link);
+      pillarContact.appendChild(line);
     }
     pillarPhoto.addEventListener("load", fitPillarSection);
     window.addEventListener("resize", fitPillarSection);
@@ -404,9 +417,15 @@
       var role = btn.getAttribute("data-role");
       var photo = btn.getAttribute("data-photo");
       var bio = btn.getAttribute("data-bio");
-      var perfil = !!(role || photo);
+      var email = btn.getAttribute("data-email");
+      var tel = btn.getAttribute("data-tel");
+      var perfil = !!(role || photo || email || tel);
       pillarBio.hidden = !bio;
       pillarBio.textContent = bio || "";
+      pillarContact.textContent = "";
+      if (email) addContactLine("E-mail:", email, "mailto:" + email);
+      if (tel) addContactLine("Tel.:", tel, "tel:+55" + tel.replace(/\D/g, ""));
+      pillarContact.hidden = !(email || tel);
       pillarDialog.classList.toggle("pillar-dialog--perfil", perfil);
       pillarText.hidden = perfil;
       pillarRole.hidden = !role;
@@ -450,6 +469,77 @@
     });
     document.addEventListener("keydown", function (e) {
       if (e.key === "Escape") closePillar();
+    });
+  }
+
+  // --- Fale Conosco -----------------------------------------------------------
+  // Site estático: a mensagem segue pelo aplicativo de e-mail do usuário (mailto).
+  var contactForm = document.getElementById("contact-form");
+  if (contactForm) {
+    var cf = contactForm.elements;
+    var cfCount = document.getElementById("cf-contador");
+
+    function updateCount() {
+      cfCount.textContent = cf.mensagem.value.length + " / " + cf.mensagem.maxLength + " caracteres";
+    }
+    cf.mensagem.addEventListener("input", updateCount);
+
+    function maskPhone(d) {
+      if (!d) return "";
+      if (d.length <= 2) return "(" + d;
+      var ddd = "(" + d.slice(0, 2) + ") ", n = d.slice(2);
+      if (n.length <= 4) return ddd + n;
+      var cut = n.length === 9 ? 5 : 4;
+      return ddd + n.slice(0, cut) + "-" + n.slice(cut);
+    }
+    function applyPhoneMask() { cf.telefone.value = maskPhone(cf.telefone.value.replace(/\D/g, "").slice(0, 11)); }
+    cf.telefone.addEventListener("input", function (e) {
+      if (e.inputType && e.inputType.indexOf("delete") === 0) return;
+      applyPhoneMask();
+    });
+    cf.telefone.addEventListener("blur", applyPhoneMask);
+
+    function maskCpf(d) {
+      return d.replace(/^(\d{3})(\d)/, "$1.$2")
+        .replace(/^(\d{3})\.(\d{3})(\d)/, "$1.$2.$3")
+        .replace(/\.(\d{3})(\d{1,2})$/, ".$1-$2");
+    }
+    function cpfValido(d) {
+      if (d.length !== 11 || /^(\d)\1{10}$/.test(d)) return false;
+      for (var t = 9; t < 11; t++) {
+        var soma = 0;
+        for (var i = 0; i < t; i++) soma += +d[i] * (t + 1 - i);
+        if ((soma * 10) % 11 % 10 !== +d[t]) return false;
+      }
+      return true;
+    }
+    function checkCpf() {
+      var d = cf.cpf.value.replace(/\D/g, "");
+      cf.cpf.setCustomValidity(d.length === 11 && !cpfValido(d) ? "CPF inválido. Confira os números digitados." : "");
+    }
+    cf.cpf.addEventListener("input", function (e) {
+      if (!(e.inputType && e.inputType.indexOf("delete") === 0)) {
+        cf.cpf.value = maskCpf(cf.cpf.value.replace(/\D/g, "").slice(0, 11));
+      }
+      checkCpf();
+    });
+    cf.cpf.addEventListener("blur", function () {
+      cf.cpf.value = maskCpf(cf.cpf.value.replace(/\D/g, "").slice(0, 11));
+      checkCpf();
+    });
+
+    contactForm.addEventListener("invalid", function () { contactForm.classList.add("was-validated"); }, true);
+
+    contactForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+      if (!cfg.email) { toast("Canal de e-mail disponível em breve."); return; }
+      var linhas = ["Nome: " + cf.nome.value.trim(), "CPF: " + cf.cpf.value, "E-mail: " + cf.email.value.trim()];
+      if (cf.telefone.value.trim()) linhas.push("Telefone: " + cf.telefone.value.trim());
+      linhas.push("", cf.mensagem.value.trim(), "", "Enviado pelo portal da PROGER");
+      window.location.href = "mailto:" + cfg.email +
+        "?subject=" + encodeURIComponent("[Portal PROGER] " + cf.assunto.value) +
+        "&body=" + encodeURIComponent(linhas.join("\r\n"));
+      toast("Abrindo seu aplicativo de e-mail…");
     });
   }
 
