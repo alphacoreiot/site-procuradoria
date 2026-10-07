@@ -16,3 +16,9 @@ desktop.ini
 
 # Pacotes gerados localmente
 *.zip
+
+# Pacotes de publicação
+dist/
+
+# Guias de deploy (contêm dados do servidor; o repositório é público)
+GUIA-DEPLOY*.md

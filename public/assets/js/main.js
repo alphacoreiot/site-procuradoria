@@ -380,6 +380,7 @@
     var pillarHint = pillarDialog.querySelector(".pillar-dialog__hint");
     var pillarContact = pillarDialog.querySelector(".pillar-dialog__contact");
     var pillarClose = pillarDialog.querySelector(".pillar-dialog__close");
+    var pillarOrg = document.getElementById("organograma");
     var pillarSection = pillarLayer.parentElement;
     var pillarOpener = null;
 
@@ -430,7 +431,11 @@
       pillarText.hidden = perfil;
       pillarRole.hidden = !role;
       pillarRole.textContent = role || "";
-      var wide = btn.getAttribute("data-photo-shape") === "wide";
+      var isOrg = btn.hasAttribute("data-org") && !!pillarOrg && !!window.PGMOrg;
+      if (pillarOrg) pillarOrg.hidden = !isOrg;
+      pillarDialog.classList.toggle("pillar-dialog--org", isOrg);
+      if (isOrg) { perfil = false; pillarDialog.classList.remove("pillar-dialog--perfil"); pillarText.hidden = true; }
+      var wide = isOrg || btn.getAttribute("data-photo-shape") === "wide";
       pillarDialog.classList.toggle("pillar-dialog--wide", wide);
       pillarPhoto.hidden = !photo;
       pillarHint.hidden = !(photo && wide);
@@ -451,6 +456,7 @@
 
       pillarOpener = btn;
       pillarLayer.hidden = false;
+      if (isOrg) { window.PGMOrg.mount(pillarOrg); window.PGMOrg.play(); }
       fitPillarSection();
       pillarClose.focus();
     }
@@ -458,6 +464,7 @@
       if (pillarLayer.hidden) return;
       pillarLayer.hidden = true;
       pillarSection.style.minHeight = "";
+      if (window.PGMOrg) window.PGMOrg.stop();
       if (pillarOpener) pillarOpener.focus();
     }
 

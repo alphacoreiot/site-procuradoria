@@ -16,7 +16,9 @@
   <link rel="stylesheet" href="assets/css/design-system.css">
   <link rel="stylesheet" href="assets/css/portal.css">
   <script src="assets/js/config.js" defer></script>
+  <script src="assets/js/organograma.js" defer></script>
   <script src="assets/js/main.js" defer></script>
+  <script src="assets/js/motion.js" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
@@ -242,8 +244,7 @@
           </li>
           <li>
             <button type="button" class="pillar" style="--pillar: var(--brand-verde)" aria-haspopup="dialog" aria-controls="pillar-dialog"
-              data-role="" data-photo="assets/img/carrossel/organograma.png"
-              data-photo-shape="wide" data-photo-alt="Organograma institucional da Procuradoria Geral do Município">
+              data-role="" data-org>
               <span class="pillar__n c-verde">02</span>
               <strong>Organograma Institucional</strong>
             </button>
@@ -277,6 +278,7 @@
             <img class="pillar-dialog__photo" alt="" width="240" height="240" hidden>
           </a>
           <p class="pillar-dialog__hint" hidden>Clique na imagem para ver em tamanho real.</p>
+          <div class="org" id="organograma" role="group" aria-label="Organograma da Procuradoria Geral do Município" hidden></div>
           <p class="pillar-dialog__bio" hidden></p>
           <p class="pillar-dialog__contact" hidden></p>
           <p class="pillar-dialog__text"></p>
