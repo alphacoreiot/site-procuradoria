@@ -853,3 +853,73 @@ svg { width: 1em; height: 1em; flex: none; }
 }
 .motion .pillar:hover::after { opacity: 1; }
 .motion .pillar { position: relative; }
+
+/* --- Popup de perfil (foto + biografia) ---------------------------------- */
+.pillar-dialog__actions[hidden] { display: none; }
+.pillar-dialog--bio {
+  width: min(900px, 100%); padding: 0; overflow: auto; text-align: left;
+  display: grid; grid-template-columns: minmax(240px, 330px) 1fr; align-content: start;
+}
+.pillar-dialog--bio > :not(.pillar-dialog__media):not(.pillar-dialog__close) { grid-column: 2; margin-left: 40px; margin-right: 40px; }
+.pillar-dialog--bio .pillar-dialog__media {
+  grid-column: 1; grid-row: 1 / span 20; position: relative; overflow: hidden; min-height: 400px;
+  background: linear-gradient(160deg, var(--brand-roxo), var(--brand-roxo-escuro));
+}
+.pillar-dialog--bio .pillar-dialog__photo {
+  position: absolute; inset: 0; width: 100%; height: 100%; margin: 0;
+  border: 0; border-radius: 0; object-fit: cover; object-position: center 18%;
+}
+.pillar-dialog--bio .pillar-dialog__media::before { /* leve tom da marca sobre a foto */
+  content: ""; position: absolute; inset: 0; z-index: 1;
+  background: linear-gradient(180deg, transparent 55%, rgba(89, 34, 108, .55));
+}
+.pillar-dialog--bio .pillar-dialog__media::after { /* faixas da marca na base */
+  content: ""; position: absolute; left: -12px; right: -12px; bottom: 0; height: 10px; z-index: 2;
+  background: linear-gradient(100deg, var(--brand-vermelho) 0 25%, var(--brand-verde) 25% 50%, var(--brand-laranja) 50% 75%, var(--brand-roxo) 75%);
+  transform-origin: left;
+}
+.pillar-dialog--bio .pillar-dialog__n {
+  justify-self: start; margin-top: 44px; font-size: 13px; letter-spacing: 1.5px;
+  padding: 5px 12px; border-radius: 99px; color: #fff; background: var(--pillar, var(--brand-roxo));
+}
+.pillar-dialog--bio .pillar-dialog__n::after { content: " · Gabinete"; font-weight: 700; }
+.pillar-dialog--bio h3 { margin-top: 14px; font-size: clamp(28px, 3.2vw, 38px); line-height: 1.1; letter-spacing: -.5px; }
+.pillar-dialog--bio h3::after {
+  content: ""; display: block; width: 64px; height: 5px; margin-top: 14px; border-radius: 5px;
+  background: linear-gradient(90deg, var(--pillar, var(--brand-roxo)), var(--brand-laranja));
+}
+.pillar-dialog--bio .pillar-dialog__role { margin-top: 14px; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--color-muted); }
+.pillar-dialog--bio .pillar-dialog__bio {
+  position: relative; margin-top: 22px; padding-left: 22px; font-size: 16px; line-height: 1.8; color: var(--color-text);
+  border-left: 3px solid color-mix(in srgb, var(--pillar, var(--brand-roxo)) 30%, transparent);
+}
+.pillar-dialog--bio .pillar-dialog__bio::before {
+  content: "\201C"; position: absolute; left: 10px; top: -34px; font-size: 64px; font-weight: 900; line-height: 1;
+  color: var(--pillar, var(--brand-roxo)); opacity: .18;
+}
+.pillar-dialog--bio .pillar-dialog__actions { margin-top: 26px; margin-bottom: 40px; }
+.pillar-dialog--bio .pillar-dialog__close { z-index: 3; background: rgba(255, 255, 255, .9); }
+
+/* abertura animada */
+.pillar-dialog.is-opening { animation: dlgIn .5s cubic-bezier(.2, .8, .2, 1) both; }
+@keyframes dlgIn { from { opacity: 0; transform: translate3d(0, 24px, 0) scale(.97); } }
+.pillar-dialog--bio.is-opening .pillar-dialog__photo { animation: photoIn 1s .1s cubic-bezier(.2, .8, .2, 1) both; }
+@keyframes photoIn { from { clip-path: inset(100% 0 0 0); transform: scale(1.15); } to { clip-path: inset(0 0 0 0); transform: scale(1); } }
+.pillar-dialog--bio.is-opening .pillar-dialog__media::after { animation: stripeIn .8s .55s cubic-bezier(.2, .8, .2, 1) both; }
+@keyframes stripeIn { from { transform: scaleX(0); } }
+.pillar-dialog--bio.is-opening > :not(.pillar-dialog__media):not(.pillar-dialog__close) { animation: textIn .7s cubic-bezier(.2, .8, .2, 1) both; }
+.pillar-dialog--bio.is-opening .pillar-dialog__n { animation-delay: .25s; }
+.pillar-dialog--bio.is-opening h3 { animation-delay: .33s; }
+.pillar-dialog--bio.is-opening .pillar-dialog__role { animation-delay: .41s; }
+.pillar-dialog--bio.is-opening .pillar-dialog__bio { animation-delay: .5s; }
+.pillar-dialog--bio.is-opening .pillar-dialog__actions { animation-delay: .6s; }
+@keyframes textIn { from { opacity: 0; transform: translate3d(28px, 0, 0); } }
+
+@media (max-width: 680px) {
+  .pillar-dialog--bio { grid-template-columns: 1fr; }
+  .pillar-dialog--bio > :not(.pillar-dialog__media):not(.pillar-dialog__close) { grid-column: 1; margin-left: 24px; margin-right: 24px; }
+  .pillar-dialog--bio .pillar-dialog__media { grid-row: auto; order: -1; min-height: 280px; }
+  .pillar-dialog--bio .pillar-dialog__n { margin-top: 24px; }
+  .pillar-dialog--bio .pillar-dialog__actions { margin-bottom: 28px; }
+  .pillar-dialog--bio .pillar-dialog__actions .btn { width: 100%; justify-content: center; }
+}

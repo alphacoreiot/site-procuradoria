@@ -381,6 +381,7 @@
     var pillarContact = pillarDialog.querySelector(".pillar-dialog__contact");
     var pillarClose = pillarDialog.querySelector(".pillar-dialog__close");
     var pillarOrg = document.getElementById("organograma");
+    var pillarActions = pillarDialog.querySelector(".pillar-dialog__actions");
     var pillarSection = pillarLayer.parentElement;
     var pillarOpener = null;
 
@@ -454,6 +455,18 @@
         pillarMedia.removeAttribute("aria-label");
       }
 
+      // cartão de perfil (foto + biografia): layout em duas colunas e abertura animada
+      var bioCard = !!(photo && bio && !wide);
+      pillarDialog.classList.toggle("pillar-dialog--bio", bioCard);
+      if (bioCard && !role) {
+        pillarRole.textContent = "Procuradoria Geral do Município de Camaçari";
+        pillarRole.hidden = false;
+      }
+      if (pillarActions) pillarActions.hidden = !bioCard;
+      pillarDialog.classList.remove("is-opening");
+      void pillarDialog.offsetWidth; // reinicia as animações de abertura
+      pillarDialog.classList.add("is-opening");
+
       pillarOpener = btn;
       pillarLayer.hidden = false;
       if (isOrg) { window.PGMOrg.mount(pillarOrg); window.PGMOrg.play(); }
@@ -470,6 +483,10 @@
 
     document.querySelectorAll(".pillar").forEach(function (btn) {
       btn.addEventListener("click", function () { openPillar(btn); });
+    });
+    var orgBtn = document.querySelector(".pillar[data-org]");
+    pillarDialog.querySelectorAll("[data-open-org]").forEach(function (b) {
+      b.addEventListener("click", function () { if (orgBtn) openPillar(orgBtn); });
     });
     pillarLayer.querySelectorAll("[data-pillar-close]").forEach(function (el) {
       el.addEventListener("click", closePillar);
