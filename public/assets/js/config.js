@@ -16,8 +16,8 @@ window.PROGER_CONFIG = {
   whatsappMensagem: "Olá! Vim pelo portal da Procuradoria e gostaria de atendimento.",
 
   // Contato
-  telefone: "",              // ex.: "(71) 0000-0000"
-  email: "",                 // ex.: "proger@camacari.ba.gov.br"
+  telefone: "(71) 3674-8530",
+  email: "atendimento.dividaativa@camacari.ba.gov.br",
   endereco: "Rua Contorno do Centro Administrativo, Dois de Julho, Camaçari - BA, 42801-200",
   horario: "Segunda a sexta, das 8h às 14h",
 

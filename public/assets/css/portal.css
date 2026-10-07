@@ -355,7 +355,9 @@ svg { width: 1em; height: 1em; flex: none; }
 }
 .footer-card__brand img { height: 70px; width: auto; margin-bottom: 14px; }
 .footer-card__brand p { margin: 0; max-width: 300px; }
-.footer-card h5 { color: var(--color-primary); text-transform: uppercase; letter-spacing: 1.5px; font-size: 13px; font-weight: 900; }
+.footer-card h5,
+.footer-label { color: var(--color-primary); text-transform: uppercase; letter-spacing: 1.5px; font-size: 13px; font-weight: 900; }
+.footer-label { display: block; margin-top: 6px; }
 .footer-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
 .footer-list a { color: var(--color-text); }
 .footer-list a:hover { color: var(--color-primary); }
