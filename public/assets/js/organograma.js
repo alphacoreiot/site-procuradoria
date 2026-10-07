@@ -123,7 +123,7 @@
     replay.type = "button";
     replay.addEventListener("click", function () { play(true); });
     var link = el("a", "org__img", "Ver organograma em imagem");
-    link.href = "assets/img/carrossel/organograma.png";
+    link.href = "assets/img/organograma-pgm.png"; // gerada a partir desta animação (3x)
     link.target = "_blank"; link.rel = "noopener";
     foot.appendChild(replay); foot.appendChild(link);
     root.appendChild(foot);
