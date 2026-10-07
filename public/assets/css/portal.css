@@ -266,7 +266,22 @@ svg { width: 1em; height: 1em; flex: none; }
 #sobre { position: relative; }
 .about { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
 .about__copy p { font-size: 17px; line-height: 1.8; }
-.about__note { font-size: 13px !important; color: var(--color-muted); font-style: italic; }
+.mvv { display: grid; gap: 22px; margin: 8px 0 0; }
+.mvv__item { position: relative; padding-left: 20px; }
+.mvv__item::before {
+  content: ""; position: absolute; left: 0; top: 2px; bottom: 2px; width: 4px; border-radius: 4px;
+  background: var(--mvv);
+}
+.mvv__item--missao  { --mvv: var(--brand-vermelho); --mvv-ink: var(--brand-vermelho); }
+.mvv__item--visao   { --mvv: var(--brand-verde);    --mvv-ink: var(--brand-verde-escuro); }
+.mvv__item--valores { --mvv: var(--brand-roxo);     --mvv-ink: var(--brand-roxo); }
+.mvv dt { margin: 0 0 4px; font-size: 13px; font-weight: 900; text-transform: uppercase; letter-spacing: 1.5px; color: var(--mvv-ink); }
+.mvv dd { margin: 0; font-size: 16px; line-height: 1.75; color: var(--color-text); }
+.mvv__values { list-style: none; margin: 6px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.mvv__values li {
+  padding: 5px 12px; border-radius: var(--radius-pill); line-height: 1.4;
+  font-size: 13px; font-weight: 600; color: var(--brand-roxo); background: rgba(132, 50, 155, .08);
+}
 .pillars { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 .pillar {
   display: flex; align-items: center; justify-content: center; gap: 14px; width: 100%; height: 100%;
