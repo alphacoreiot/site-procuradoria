@@ -472,6 +472,7 @@
       pillarDialog.classList.remove("is-opening");
       void pillarDialog.offsetWidth; // reinicia as animações de abertura
       pillarDialog.classList.add("is-opening");
+      if (window.PGMSobre) window.PGMSobre.onOpen(btn, pillarDialog); // motion de Estrutura e Diretoria de TI
 
       pillarOpener = btn;
       pillarLayer.hidden = false;
