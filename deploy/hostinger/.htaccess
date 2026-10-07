@@ -26,6 +26,11 @@ ErrorDocument 404 /procuradoria/index.html
   <FilesMatch "\.(css|png|jpe?g|svg|webp|woff2?)$">
     Header set Cache-Control "public, max-age=604800"
   </FilesMatch>
+
+  # Organograma em alta resolução: a CDN não pode reduzir (no-transform)
+  <Files "organograma-pgm.png">
+    Header set Cache-Control "public, max-age=604800, no-transform"
+  </Files>
 </IfModule>
 
 <IfModule mod_deflate.c>
