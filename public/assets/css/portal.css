@@ -493,9 +493,8 @@ svg { width: 1em; height: 1em; flex: none; }
   background: #fff; color: var(--color-muted); border-radius: 0 0 var(--radius-xl) var(--radius-xl);
   padding: 40px; font-size: 14px; line-height: 1.7; box-shadow: var(--shadow-lift);
 }
-.footer-card__brand img { height: 70px; width: auto; margin-bottom: 14px; }
-.footer-card__brand p { margin: 0; }
-@media (min-width: 801px) { .footer-card__brand p { white-space: nowrap; } }
+.footer-card__brand { display: flex; align-items: center; }
+.footer-card__brand img { height: 70px; width: auto; }
 .footer-card h5 { color: var(--color-primary); text-transform: uppercase; letter-spacing: 1.5px; font-size: 13px; font-weight: 900; }
 .footer-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
 .footer-list a { color: var(--color-text); }
@@ -969,12 +968,8 @@ svg { width: 1em; height: 1em; flex: none; }
   background: linear-gradient(100deg, var(--brand-vermelho) 0 25%, var(--brand-verde) 25% 50%, var(--brand-laranja) 50% 75%, var(--brand-roxo) 75%);
   transform-origin: left;
 }
-.pillar-dialog--bio .pillar-dialog__n {
-  justify-self: start; margin-top: 44px; font-size: 13px; letter-spacing: 1.5px;
-  padding: 5px 12px; border-radius: 99px; color: #fff; background: var(--pillar, var(--brand-roxo));
-}
-.pillar-dialog--bio .pillar-dialog__n::after { content: " · Gabinete"; font-weight: 700; }
-.pillar-dialog--bio h3 { margin-top: 14px; font-size: clamp(28px, 3.2vw, 38px); line-height: 1.1; letter-spacing: -.5px; }
+.pillar-dialog--bio .pillar-dialog__n { display: none; }
+.pillar-dialog--bio h3 { margin-top: 44px; font-size: clamp(28px, 3.2vw, 38px); line-height: 1.1; letter-spacing: -.5px; }
 .pillar-dialog--bio h3::after {
   content: ""; display: block; width: 64px; height: 5px; margin-top: 14px; border-radius: 5px;
   background: linear-gradient(90deg, var(--pillar, var(--brand-roxo)), var(--brand-laranja));
@@ -1002,7 +997,6 @@ svg { width: 1em; height: 1em; flex: none; }
 .pillar-dialog--bio.is-opening .pillar-dialog__media::after { animation: stripeIn .8s .55s cubic-bezier(.2, .8, .2, 1) both; }
 @keyframes stripeIn { from { transform: scaleX(0); } }
 .pillar-dialog--bio.is-opening > :not(.pillar-dialog__media):not(.pillar-dialog__close) { animation: textIn .7s cubic-bezier(.2, .8, .2, 1) both; }
-.pillar-dialog--bio.is-opening .pillar-dialog__n { animation-delay: .25s; }
 .pillar-dialog--bio.is-opening h3 { animation-delay: .33s; }
 .pillar-dialog--bio.is-opening .pillar-dialog__role { animation-delay: .41s; }
 .pillar-dialog--bio.is-opening .pillar-dialog__bio { animation-delay: .5s; }
@@ -1012,7 +1006,7 @@ svg { width: 1em; height: 1em; flex: none; }
   .pillar-dialog--bio { grid-template-columns: 1fr; }
   .pillar-dialog--bio > :not(.pillar-dialog__media):not(.pillar-dialog__close) { grid-column: 1; margin-left: 24px; margin-right: 24px; }
   .pillar-dialog--bio .pillar-dialog__media { grid-row: auto; order: -1; min-height: 280px; }
-  .pillar-dialog--bio .pillar-dialog__n { margin-top: 24px; }
+  .pillar-dialog--bio h3 { margin-top: 24px; }
   .pillar-dialog--bio .pillar-dialog__bio { margin-bottom: 28px; }
 }
 
