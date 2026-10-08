@@ -1011,36 +1011,44 @@ svg { width: 1em; height: 1em; flex: none; }
 }
 
 /* --- Motion: Estrutura Organizacional (assets/js/quemsomos.js) ----------- */
-.pillar-dialog--panel.is-opening .acc__item { animation: accItemIn .6s cubic-bezier(.2, .8, .2, 1) both; animation-delay: calc(.15s + var(--i, 0) * 75ms); }
-@keyframes accItemIn { from { opacity: 0; transform: translate3d(0, 22px, 0) scale(.97); } }
-.acc__head { position: relative; overflow: hidden; }
-.acc__head::before { /* gradiente verde aparece por cima, com transição (gradientes não animam) */
-  content: ""; position: absolute; inset: 0; z-index: 0; opacity: 0; transition: opacity .45s;
+/* Um movimento só: altura, conteúdo e cor transitam juntos, mesma curva. */
+.acc--smooth { --acc-t: .55s; --acc-ease: cubic-bezier(.4, 0, .2, 1); }
+.pillar-dialog--panel.is-opening .acc--smooth .acc__item { animation: accItemIn .7s var(--acc-ease) both; animation-delay: calc(.1s + var(--i, 0) * 45ms); }
+@keyframes accItemIn { from { opacity: 0; transform: translate3d(0, 10px, 0); } }
+
+.acc--smooth .acc__head { position: relative; overflow: hidden; }
+.acc--smooth .acc__head::before {
+  content: ""; position: absolute; inset: 0; z-index: 0; opacity: 0;
   background: linear-gradient(110deg, var(--brand-verde), var(--brand-verde-escuro));
+  transition: opacity var(--acc-t) var(--acc-ease);
 }
-.acc__head > * { position: relative; z-index: 1; }
-.acc__item[open] .acc__head { background: linear-gradient(110deg, var(--brand-roxo), var(--brand-roxo-escuro)); }
-.acc__item[open] .acc__head::before { opacity: 1; }
-.acc__head::after { /* brilho que cruza a faixa ao passar o mouse */
-  content: ""; position: absolute; top: 0; bottom: 0; left: -40%; width: 30%; z-index: 0; pointer-events: none;
-  background: linear-gradient(100deg, transparent, rgba(255, 255, 255, .22), transparent);
-  transform: skewX(-18deg) translateX(0); transition: transform .7s ease;
+.acc--smooth .acc__head > * { position: relative; z-index: 1; }
+.acc--smooth .acc__item[open] .acc__head { background: linear-gradient(110deg, var(--brand-roxo), var(--brand-roxo-escuro)); }
+.acc--smooth .acc__item.is-open .acc__head::before { opacity: 1; }
+.acc--smooth .acc__item .acc__chev { transition: transform var(--acc-t) var(--acc-ease); transform: none; }
+.acc--smooth .acc__item.is-open .acc__chev { transform: rotate(180deg); }
+.acc--smooth .acc__icon { transition: background var(--acc-t) var(--acc-ease); }
+
+.acc--smooth .acc__panel {
+  display: grid; grid-template-rows: 0fr; overflow: hidden;
+  transition: grid-template-rows var(--acc-t) var(--acc-ease);
 }
-.acc__head:hover::after { transform: skewX(-18deg) translateX(560%); }
-.acc__icon { transition: transform .4s cubic-bezier(.3, 1.6, .5, 1); }
-.acc__item[open] .acc__icon { transform: rotate(-8deg) scale(1.08); }
-.acc__chev { transition: transform .45s cubic-bezier(.3, 1.4, .5, 1); }
-.acc__item[open] .acc__body { animation: none; }
-.acc__card { position: relative; border-left-color: transparent; }
-.acc__card::before { /* faixa lateral que cresce */
-  content: ""; position: absolute; left: -3px; top: 0; bottom: 0; width: 3px; border-radius: 3px;
-  background: var(--brand-verde); transform-origin: top;
+.acc--smooth .acc__item.is-open .acc__panel { grid-template-rows: 1fr; }
+.acc--smooth .acc__body {
+  min-height: 0; overflow: hidden; animation: none !important;
+  padding-top: 0; padding-bottom: 0; opacity: 0;
+  transition: opacity var(--acc-t) var(--acc-ease), padding var(--acc-t) var(--acc-ease);
 }
-.acc__item.is-expanding .acc__card { animation: accCardIn .55s cubic-bezier(.2, .8, .2, 1) both; animation-delay: calc(.08s + var(--i, 0) * 90ms); }
-.acc__item.is-expanding .acc__card::before { animation: accBar .6s cubic-bezier(.2, .8, .2, 1) both; animation-delay: calc(.2s + var(--i, 0) * 90ms); }
-.acc__item.is-expanding .acc__desc { animation: accCardIn .5s both; }
-@keyframes accCardIn { from { opacity: 0; transform: translate3d(-18px, 0, 0); } }
-@keyframes accBar { from { transform: scaleY(0); } }
+.acc--smooth .acc__item.is-open .acc__body { opacity: 1; padding-top: 18px; padding-bottom: 20px; }
+.acc--smooth .acc__card, .acc--smooth .acc__desc {
+  opacity: 0; transform: translate3d(0, 8px, 0);
+  transition: opacity .35s var(--acc-ease), transform .35s var(--acc-ease);
+}
+.acc--smooth .acc__item.is-open .acc__card, .acc--smooth .acc__item.is-open .acc__desc {
+  opacity: 1; transform: none;
+  transition-duration: var(--acc-t); transition-delay: calc(.08s + var(--j, 0) * 40ms);
+}
+.acc--smooth .acc__card { border-left: 3px solid var(--brand-verde); }
 
 /* --- Motion: Diretoria de Tecnologia ------------------------------------- */
 .tech[hidden] { display: none; }

@@ -14,52 +14,47 @@
   var SVGNS = "http://www.w3.org/2000/svg";
 
   // ---------------------------------------------------------------- acordeão
-  function easeInOut(t) { return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; }
-
-  function tweenHeight(el, from, to, ms, done) {
-    if (reduce) { el.style.height = ""; done && done(); return; }
-    var t0 = performance.now();
-    el.style.overflow = "hidden";
-    el.style.height = from + "px";
-    function step(now) {
-      var k = Math.min(1, (now - t0) / ms);
-      el.style.height = (from + (to - from) * easeInOut(k)).toFixed(1) + "px";
-      if (k < 1) requestAnimationFrame(step);
-      else { el.style.height = ""; el.style.overflow = ""; done && done(); window.dispatchEvent(new Event("resize")); }
-    }
-    requestAnimationFrame(step);
-  }
-
+  // Movimento único e contínuo: altura (grid 0fr -> 1fr), conteúdo e cor da
+  // faixa transitam juntos, com a mesma curva. Os <details> ficam sempre
+  // abertos e o estado visual é a classe .is-open (permite animar o fechamento
+  // e inverter a animação no meio, sem travar o clique).
   function setupAccordion(acc) {
     if (acc.dataset.motion) return;
     acc.dataset.motion = "1";
+    acc.classList.add("acc--smooth");
     var items = Array.prototype.slice.call(acc.querySelectorAll(".acc__item"));
+
+    function setState(d, on) {
+      d.classList.toggle("is-open", on);
+      d.querySelector(".acc__head").setAttribute("aria-expanded", String(on));
+      var panel = d.querySelector(".acc__panel");
+      if (on) panel.removeAttribute("inert"); else panel.setAttribute("inert", "");
+    }
+
     items.forEach(function (d, i) {
       d.style.setProperty("--i", i);
-      d.removeAttribute("name");                 // exclusividade feita aqui, com animação
-      d.querySelectorAll(".acc__card").forEach(function (c, j) { c.style.setProperty("--i", j); });
-      var head = d.querySelector(".acc__head"), body = d.querySelector(".acc__body");
-      head.addEventListener("click", function (e) {
-        e.preventDefault();
-        if (d.dataset.busy) return;
-        if (d.open) close(d); else {
-          items.forEach(function (o) { if (o !== d && o.open) close(o); });
-          open(d);
-        }
+      d.removeAttribute("name");
+      var body = d.querySelector(".acc__body");
+      var panel = document.createElement("div");
+      panel.className = "acc__panel";
+      body.parentNode.insertBefore(panel, body);
+      panel.appendChild(body);
+      body.querySelectorAll(".acc__card, .acc__desc").forEach(function (c, j) { c.style.setProperty("--j", j); });
+      d.open = true;
+      setState(d, false);
+      panel.addEventListener("transitionend", function (e) {
+        if (e.target === panel) window.dispatchEvent(new Event("resize"));
       });
-      function open(x) {
-        x.dataset.busy = "1";
-        x.open = true;
-        x.classList.remove("is-expanding"); void x.offsetWidth; x.classList.add("is-expanding");
-        tweenHeight(body, 0, body.scrollHeight, 420, function () { delete x.dataset.busy; });
-      }
-      function close(x) {
-        var b = x.querySelector(".acc__body");
-        x.dataset.busy = "1";
-        x.classList.remove("is-expanding");
-        tweenHeight(b, b.offsetHeight, 0, 320, function () { x.open = false; delete x.dataset.busy; });
-      }
+      d.querySelector(".acc__head").addEventListener("click", function (e) {
+        e.preventDefault();
+        var on = !d.classList.contains("is-open");
+        items.forEach(function (o) { if (o !== d && o.classList.contains("is-open")) setState(o, false); });
+        setState(d, on);
+        window.dispatchEvent(new Event("resize"));
+      });
     });
+
+    acc.pgmReset = function () { items.forEach(function (d) { d.open = true; setState(d, false); }); };
   }
 
   // ------------------------------------------------------ Diretoria de Tecnologia
@@ -146,7 +141,10 @@
     } else if (box) {
       box.hidden = true;
     }
-    dialog.querySelectorAll(".acc").forEach(setupAccordion);
+    dialog.querySelectorAll(".acc").forEach(function (acc) {
+      setupAccordion(acc);
+      acc.pgmReset();          // reabre o popup sempre com tudo recolhido
+    });
   }
 
   window.PGMSobre = { onOpen: onOpen };
