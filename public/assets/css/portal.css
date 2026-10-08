@@ -529,6 +529,26 @@ svg { width: 1em; height: 1em; flex: none; }
 }
 @keyframes pulse { 0% { transform: scale(1); opacity: .5; } 100% { transform: scale(1.6); opacity: 0; } }
 
+/* --- Voltar ao topo ------------------------------------------------------- */
+/* Empilhado sobre o WhatsApp, no mesmo eixo: right = 20 + (60 - 44) / 2.
+   bottom deixa folga para o pulso do WhatsApp, que cresce até 1,6x (≈ 98px). */
+.to-top {
+  position: fixed; right: 28px; bottom: 104px; z-index: 89;
+  display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%;
+  background: #fff; color: var(--color-primary); border: 1px solid rgba(132, 50, 155, .18);
+  box-shadow: 0 10px 24px -8px rgba(89, 34, 108, .45);
+  opacity: 0; visibility: hidden; transform: translateY(12px) scale(.85);
+  transition: opacity .25s var(--ease), transform .25s var(--ease), visibility 0s linear .25s,
+              background-color .2s, color .2s;
+}
+.to-top svg { width: 22px; height: 22px; transform: rotate(180deg); }
+.to-top.is-visible {
+  opacity: 1; visibility: visible; transform: none;
+  transition: opacity .25s var(--ease), transform .25s var(--ease), visibility 0s,
+              background-color .2s, color .2s;
+}
+.to-top:hover, .to-top:focus-visible { background: var(--color-primary); color: #fff; }
+
 /* --- Animação de entrada -------------------------------------------------- */
 .js .reveal { opacity: 0; transform: translateY(24px); transition: opacity .7s var(--ease), transform .7s var(--ease); }
 .js .reveal.is-visible { opacity: 1; transform: none; }

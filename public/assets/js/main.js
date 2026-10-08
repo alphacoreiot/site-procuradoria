@@ -52,11 +52,26 @@
     document.addEventListener("keydown", function (e) { if (e.key === "Escape") setMenu(false); });
   }
 
-  // --- Sombra do header ao rolar ---------------------------------------------
+  // --- Sombra do header e botão "voltar ao topo" ao rolar -------------------
   var header = document.querySelector(".site-header");
-  function onScroll() { header.classList.toggle("is-scrolled", window.scrollY > 8); }
+  var toTop = document.querySelector(".to-top");
+  function onScroll() {
+    header.classList.toggle("is-scrolled", window.scrollY > 8);
+    if (toTop) toTop.classList.toggle("is-visible", window.scrollY > window.innerHeight * 0.8);
+  }
   window.addEventListener("scroll", onScroll, { passive: true });
   onScroll();
+
+  // #topo é o header sticky: a âncora nativa quase não rola, então sobe até o início
+  var brand = document.querySelector(".site-header .brand");
+  document.querySelectorAll("a[href='#topo']").forEach(function (a) {
+    a.addEventListener("click", function (e) {
+      e.preventDefault();
+      var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      window.scrollTo({ top: 0, behavior: reduce ? "auto" : "smooth" });
+      if (a !== brand && brand) brand.focus({ preventScroll: true });
+    });
+  });
 
   // --- Item de menu ativo + animação de entrada -------------------------------
   if ("IntersectionObserver" in window) {

@@ -18,8 +18,8 @@ window.PROGER_CONFIG = {
   // Contato
   telefone: "(71) 3674-8544",
   email: "proger@camacari.ba.gov.br",
-  endereco: "Rua Contorno do Centro Administrativo, Dois de Julho, Camaçari - BA, 42801-200",
-  horario: "Segunda a sexta, das 8h às 14h",
+  endereco: "Rua do Contorno do Centro Administrativo, s/n, Centro, Camaçari - BA, 42800-918",
+  horario: "Segunda a sexta, das 8h às 17h",
 
   // Localização (mapa da seção "Contato")
   localNome: "Anexo PMC — Procuradoria Geral do Município",
