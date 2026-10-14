@@ -4,6 +4,7 @@ Sistema de gestão de conteúdo (Next.js 15 + Prisma) para os sites dos órgãos
 
 > A versão estática (HTML/CSS/JS) continua em `../public` e não depende deste CMS.
 > O planejamento está em [`../PLANO-CMS.md`](../PLANO-CMS.md).
+> **Instalação passo a passo (testes e produção com PostgreSQL, HTTPS, backup): [`MANUAL-INSTALACAO.md`](MANUAL-INSTALACAO.md).**
 
 ## Rodar localmente
 
