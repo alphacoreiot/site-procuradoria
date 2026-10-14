@@ -1,0 +1,167 @@
+// CMS da Prefeitura de Camaçari
+//
+// Portável: para trocar SQLite por PostgreSQL basta mudar o `provider` abaixo
+// e a DATABASE_URL no .env (veja PLANO-CMS.md, seção 5). Enums e JSON são
+// guardados como String e validados pela aplicação, para o mesmo schema
+// funcionar nos dois bancos.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite" // "postgresql" em produção
+  url      = env("DATABASE_URL")
+}
+
+/// Órgão / secretaria da Prefeitura (cada um tem o seu site)
+model Orgao {
+  id        String   @id @default(cuid())
+  slug      String   @unique // usado na URL: /procuradoria
+  nome      String
+  sigla     String
+  ativo     Boolean  @default(true)
+  criadoEm  DateTime @default(now())
+  alteradoEm DateTime @updatedAt
+
+  configuracao Configuracao?
+  paginas      Pagina[]
+  noticias     Noticia[]
+  midias       Midia[]
+  usuarios     Usuario[]
+  auditorias   Auditoria[]
+}
+
+/// Configurações globais do órgão (JSON validado: WhatsApp, SEO, favicon...)
+model Configuracao {
+  id         String   @id @default(cuid())
+  orgaoId    String   @unique
+  orgao      Orgao    @relation(fields: [orgaoId], references: [id], onDelete: Cascade)
+  dados      String   // JSON
+  alteradoEm DateTime @updatedAt
+}
+
+model Pagina {
+  id           String   @id @default(cuid())
+  orgaoId      String
+  orgao        Orgao    @relation(fields: [orgaoId], references: [id], onDelete: Cascade)
+  slug         String   // "inicio"
+  titulo       String
+  descricaoSeo String   @default("")
+  blocos       Bloco[]
+  alteradoEm   DateTime @updatedAt
+
+  @@unique([orgaoId, slug])
+}
+
+/// Componente da página (tudo que aparece no site é um bloco)
+model Bloco {
+  id          String   @id @default(cuid())
+  paginaId    String
+  pagina      Pagina   @relation(fields: [paginaId], references: [id], onDelete: Cascade)
+  tipo        String   // ver src/blocks/registry.ts
+  area        String   @default("principal") // cabecalho | principal | rodape
+  ordem       Int
+  visivel     Boolean  @default(true)
+  dados       String   // JSON validado pelo esquema do tipo
+  alteradoEm  DateTime @updatedAt
+  alteradoPor String?
+
+  @@index([paginaId, area, ordem])
+}
+
+model Noticia {
+  id          String    @id @default(cuid())
+  orgaoId     String
+  orgao       Orgao     @relation(fields: [orgaoId], references: [id], onDelete: Cascade)
+  slug        String
+  titulo      String
+  resumo      String
+  conteudo    String    // Markdown sem HTML
+  capaId      String?
+  capa        Midia?    @relation(fields: [capaId], references: [id], onDelete: SetNull)
+  capaAlt     String    @default("")
+  categoria   String    @default("")
+  destaque    Boolean   @default(false)
+  status      String    @default("RASCUNHO") // RASCUNHO | PUBLICADA
+  publicadaEm DateTime?
+  criadaEm    DateTime  @default(now())
+  alteradaEm  DateTime  @updatedAt
+  autorId     String?
+  autor       Usuario?  @relation(fields: [autorId], references: [id], onDelete: SetNull)
+
+  @@unique([orgaoId, slug])
+  @@index([orgaoId, status, publicadaEm])
+}
+
+/// Imagem enviada (reprocessada para WebP, guardada fora da pasta pública)
+model Midia {
+  id          String    @id @default(cuid())
+  orgaoId     String
+  orgao       Orgao     @relation(fields: [orgaoId], references: [id], onDelete: Cascade)
+  arquivo     String    @unique // nome aleatório em storage/uploads
+  nomeOriginal String
+  largura     Int
+  altura      Int
+  bytes       Int
+  alt         String    @default("")
+  focoX       Float     @default(0.5) // ponto focal para recortes (0..1)
+  focoY       Float     @default(0.5)
+  criadaEm    DateTime  @default(now())
+  enviadaPor  String?
+  noticias    Noticia[]
+}
+
+model Usuario {
+  id             String      @id @default(cuid())
+  email          String      @unique
+  nome           String
+  senhaHash      String
+  papel          String      // SUPERADMIN | ADMIN | EDITOR
+  orgaoId        String?     // null = SUPERADMIN (Prefeitura)
+  orgao          Orgao?      @relation(fields: [orgaoId], references: [id], onDelete: Cascade)
+  ativo          Boolean     @default(true)
+  falhasLogin    Int         @default(0)
+  bloqueadoAte   DateTime?
+  ultimoAcesso   DateTime?
+  senhaAlteradaEm DateTime   @default(now())
+  criadoEm       DateTime    @default(now())
+  sessoes        Sessao[]
+  noticias       Noticia[]
+}
+
+model Sessao {
+  id        String   @id @default(cuid())
+  tokenHash String   @unique // SHA-256 do token; o token em si só existe no cookie
+  usuarioId String
+  usuario   Usuario  @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  expiraEm  DateTime
+  criadaEm  DateTime @default(now())
+  ip        String   @default("")
+  navegador String   @default("")
+
+  @@index([usuarioId])
+}
+
+model Auditoria {
+  id        String   @id @default(cuid())
+  orgaoId   String?
+  orgao     Orgao?   @relation(fields: [orgaoId], references: [id], onDelete: SetNull)
+  usuarioId String?
+  email     String   @default("")
+  acao      String   // ex.: bloco.salvar, noticia.publicar, login.falha
+  entidade  String   @default("")
+  entidadeId String  @default("")
+  detalhes  String   @default("{}") // JSON (ex.: conteúdo anterior)
+  ip        String   @default("")
+  criadaEm  DateTime @default(now())
+
+  @@index([orgaoId, criadaEm])
+}
+
+/// Contador para limitar tentativas (ex.: login por IP)
+model LimiteTaxa {
+  chave    String   @id
+  contagem Int
+  reiniciaEm DateTime
+}

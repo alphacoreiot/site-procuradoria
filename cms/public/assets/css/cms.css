@@ -1,0 +1,61 @@
+/* ==========================================================================
+   Estilos exclusivos do CMS (notícias e portal central), no mesmo design
+   system da versão estática.
+   ========================================================================== */
+
+/* --- Notícias: grade de cartões ------------------------------------------- */
+.news-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; }
+.news-card {
+  display: flex; flex-direction: column; overflow: hidden;
+  background: #fff; border-radius: var(--radius-lg, 20px); box-shadow: var(--shadow-soft);
+  transition: transform .3s var(--ease, ease), box-shadow .3s;
+}
+.news-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lift); }
+.news-card__media { display: block; aspect-ratio: 16 / 9; overflow: hidden; background: var(--color-bg-muted); }
+.news-card__media img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .6s var(--ease, ease); }
+.news-card:hover .news-card__media img { transform: scale(1.04); }
+.news-card__placeholder { display: block; width: 100%; height: 100%; background: linear-gradient(120deg, var(--brand-roxo), var(--brand-roxo-escuro)); }
+.news-card__body { display: flex; flex-direction: column; gap: 8px; padding: 20px 22px 24px; }
+.news-card__meta { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin: 0; font-size: 12.5px; color: var(--color-muted); }
+.news-card__cat {
+  font-weight: 800; font-size: 11px; text-transform: uppercase; letter-spacing: 1px;
+  color: #fff; background: var(--brand-roxo); padding: 3px 10px; border-radius: 99px;
+}
+.news-card h3 { margin: 0; font-size: 18px; font-weight: 800; line-height: 1.3; }
+.news-card h3 a { color: var(--color-ink); }
+.news-card h3 a:hover { color: var(--brand-roxo); }
+.news-card p { margin: 0; font-size: 14.5px; line-height: 1.6; color: var(--color-text); }
+.news-empty { color: var(--color-muted); }
+.news-more { margin: 32px 0 0; text-align: center; }
+.news-pager { display: flex; align-items: center; justify-content: center; gap: 18px; margin-top: 40px; color: var(--color-muted); }
+
+/* --- Notícias: página ------------------------------------------------------ */
+.news-page__title { font-family: var(--font-display); font-weight: 900; font-size: clamp(32px, 4vw, 48px); margin: 0; color: var(--color-ink); }
+.news-article__inner { max-width: 860px; }
+.news-article__back { margin: 0 0 18px; font-size: 14px; }
+.news-article__back a { color: var(--brand-roxo); font-weight: 700; }
+.news-article__title { font-family: var(--font-display); font-weight: 900; font-size: clamp(28px, 4vw, 44px); line-height: 1.12; letter-spacing: -.5px; color: var(--color-ink); margin: 12px 0 14px; }
+.news-article__lead { font-size: 19px; line-height: 1.65; color: var(--color-heading); margin: 0 0 26px; }
+.news-article__cover { margin: 0 0 30px; border-radius: var(--radius-lg, 20px); overflow: hidden; aspect-ratio: 16 / 9; background: var(--color-bg-muted); }
+.news-article__cover img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.news-body { font-size: 17px; line-height: 1.85; color: var(--color-text); }
+.news-body h2, .news-body h3 { color: var(--color-ink); font-weight: 900; margin: 1.6em 0 .5em; line-height: 1.25; }
+.news-body h2 { font-size: 26px; } .news-body h3 { font-size: 21px; }
+.news-body a { color: var(--brand-roxo); text-decoration: underline; }
+.news-body blockquote { margin: 1.4em 0; padding: 6px 0 6px 20px; border-left: 4px solid var(--brand-roxo); color: var(--color-heading); font-style: italic; }
+
+/* --- Portal central --------------------------------------------------------- */
+.portal-home { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 80px 0 0; background: #fff; }
+.portal-home .container { flex: 1; }
+.portal-home__eyebrow { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; color: var(--brand-verde-escuro); margin: 0; }
+.portal-home h1 { font-family: var(--font-display); font-weight: 900; font-size: clamp(32px, 5vw, 56px); color: #000; margin: 8px 0 32px; }
+.portal-home__list { list-style: none; padding: 0; margin: 0 0 60px; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+.portal-home__list a {
+  display: flex; flex-direction: column; gap: 4px; padding: 22px 24px; border-radius: 18px; background: var(--color-bg-soft);
+  border-left: 5px solid var(--brand-roxo); color: var(--color-text); transition: transform .25s, box-shadow .25s;
+}
+.portal-home__list a:hover { transform: translateY(-3px); box-shadow: var(--shadow-soft); }
+.portal-home__list strong { font-size: 22px; font-weight: 900; color: var(--brand-roxo); }
+
+/* Cabeçalho sem logomarca cadastrada (órgão novo) */
+.brand__texto { font-family: var(--font-display); font-weight: 900; font-size: 20px; color: var(--brand-roxo); max-width: 340px; line-height: 1.15; }
