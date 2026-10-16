@@ -1,17 +1,44 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="420 60 720 600">
-  
-  <circle cx="770" cy="340" r="300" fill="#fff" opacity=".07"/>
-  <!-- livros -->
-  <rect x="560" y="200" width="80" height="360" rx="10" fill="#fff"/>
-  <rect x="650" y="160" width="96" height="400" rx="10" fill="#59226C"/>
-  <rect x="756" y="230" width="72" height="330" rx="10" fill="#D67C1C"/>
-  <rect x="842" y="215" width="80" height="345" rx="10" fill="#fff" transform="rotate(12 882 560)"/>
-  <g stroke="#849D2F" stroke-width="8"><path d="M560 250h80M560 510h80"/></g>
-  <g stroke="#fff" stroke-width="8" opacity=".8"><path d="M650 210h96M650 510h96M756 280h72M756 510h72"/></g>
-  <rect x="520" y="560" width="480" height="26" rx="8" fill="#fff" opacity=".9"/>
-  <!-- martelo -->
-  <g transform="rotate(-35 640 470)">
-    <rect x="890" y="430" width="160" height="70" rx="16" fill="#C20E1A"/>
-    <rect x="958" y="500" width="24" height="170" rx="10" fill="#fff"/>
+  <!-- Consultoria Jurídica: livro de leis aberto + caneta-tinteiro + selo de orientação -->
+  <circle cx="780" cy="350" r="300" fill="#fff" opacity=".07"/>
+  <circle cx="780" cy="350" r="210" fill="#fff" opacity=".05"/>
+
+  <!-- capa do livro -->
+  <path d="M520 318 L520 552 C612 530 716 532 780 566 C844 532 948 530 1040 552 L1040 318 C950 300 846 306 780 336 C714 306 610 300 520 318 Z" fill="#59226C"/>
+  <!-- páginas -->
+  <path d="M780 330 C716 296 616 292 540 308 L540 532 C616 516 716 520 780 552 Z" fill="#fff"/>
+  <path d="M780 330 C844 296 944 292 1020 308 L1020 532 C944 516 844 520 780 552 Z" fill="#F4ECF7"/>
+  <path d="M780 330 L780 552" stroke="#D9C6E0" stroke-width="4"/>
+
+  <!-- texto (linhas) da página esquerda -->
+  <g fill="none" stroke="#84329B" stroke-width="10" stroke-linecap="round" opacity=".55">
+    <path d="M580 352 C640 342 700 344 748 358"/>
+    <path d="M580 392 C640 382 700 384 748 398"/>
+    <path d="M580 432 C640 422 700 424 748 438"/>
+    <path d="M580 472 C630 463 680 464 720 474"/>
   </g>
+
+  <!-- linhas da página direita -->
+  <g fill="none" stroke="#84329B" stroke-width="10" stroke-linecap="round" opacity=".35">
+    <path d="M812 358 C860 344 920 342 980 352"/>
+    <path d="M812 398 C860 384 920 382 980 392"/>
+    <path d="M812 438 C850 426 890 424 930 430"/>
+  </g>
+
+  <!-- marcador -->
+  <path d="M792 548 L792 616 L808 602 L824 616 L824 540 Z" fill="#C20E1A"/>
+
+  <!-- caneta-tinteiro escrevendo na página direita -->
+  <g transform="rotate(38 905 330)">
+    <rect x="884" y="150" width="42" height="190" rx="14" fill="#D67C1C"/>
+    <rect x="884" y="292" width="42" height="14" fill="#fff" opacity=".85"/>
+    <rect x="897" y="168" width="8" height="96" rx="4" fill="#fff" opacity=".35"/>
+    <path d="M884 334 L926 334 L905 392 Z" fill="#59226C"/>
+    <path d="M905 352 L905 384" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+  </g>
+
+  <!-- selo de orientação (parecer) -->
+  <circle cx="596" cy="236" r="52" fill="#A2C037"/>
+  <circle cx="596" cy="236" r="52" fill="none" stroke="#fff" stroke-width="6" opacity=".5"/>
+  <path d="M572 237 l17 17 l33 -36" fill="none" stroke="#fff" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>

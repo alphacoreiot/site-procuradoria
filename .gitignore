@@ -22,3 +22,6 @@ dist/
 
 # Guias de deploy (contêm dados do servidor; o repositório é público)
 GUIA-DEPLOY*.md
+
+# Credenciais locais (nunca versionar; o repositório é público)
+CREDENCIAIS*.txt
