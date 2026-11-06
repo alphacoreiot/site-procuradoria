@@ -16,8 +16,8 @@ const nextConfig: NextConfig = {
   serverExternalPackages: ["@node-rs/argon2", "sharp"],
   experimental: {
     serverActions: {
-      // uploads de imagem (máx. 5 MB) + margem do formulário
-      bodySizeLimit: "6mb",
+      // uploads de documentos (máx. 40 MB) + margem do formulário
+      bodySizeLimit: "41mb",
     },
   },
   async headers() {

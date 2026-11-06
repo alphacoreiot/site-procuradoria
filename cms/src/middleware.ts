@@ -47,7 +47,7 @@ export function middleware(req: NextRequest) {
 
 export const config = {
   matcher: [
-    // tudo, menos arquivos estáticos do Next e imagens já processadas
-    { source: "/((?!_next/static|_next/image|favicon.ico|assets/).*)" },
+    // tudo, menos arquivos estáticos e documentos (a rota /doc define o próprio CSP)
+    { source: "/((?!_next/static|_next/image|favicon.ico|assets/|doc/).*)" },
   ],
 };

@@ -1,4 +1,5 @@
 import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { Img, type MapaMidias } from "./ui";
 
 export type NoticiaResumo = {
@@ -40,18 +41,23 @@ export function CardNoticia({ n, orgaoSlug, midias }: { n: NoticiaResumo; orgaoS
  * Conteúdo da notícia em Markdown SEM HTML: react-markdown não interpreta
  * HTML bruto (skipHtml) e só deixa passar os elementos da lista abaixo.
  * Links externos abrem em nova aba sem acesso à página de origem.
+ * Imagens só da própria biblioteca (/media/...); tabelas no formato GFM.
  */
-const PERMITIDOS = ["p", "strong", "em", "a", "ul", "ol", "li", "h2", "h3", "blockquote", "br", "hr"];
+const PERMITIDOS = ["p", "strong", "em", "a", "ul", "ol", "li", "h2", "h3", "blockquote", "br", "hr", "img", "table", "thead", "tbody", "tr", "th", "td"];
 
 export function CorpoNoticia({ markdown }: { markdown: string }) {
   return (
     <div className="news-body">
       <ReactMarkdown
         skipHtml
+        remarkPlugins={[remarkGfm]}
         allowedElements={PERMITIDOS}
         unwrapDisallowed
         urlTransform={(url) => (/^(https?:|mailto:|tel:|\/|#)/i.test(url) ? url : "")}
         components={{
+          // eslint-disable-next-line @next/next/no-img-element
+          img: ({ src, alt }) => (typeof src === "string" && /^\/media\/[a-z0-9]{10,40}\?/.test(src) ? <img src={src} alt={alt || ""} loading="lazy" decoding="async" /> : null),
+          table: ({ children }) => <div className="tabela-rolagem"><table>{children}</table></div>,
           a: ({ href, children }) => {
             const externo = /^https?:/i.test(href || "");
             return <a href={href} {...(externo ? { target: "_blank", rel: "noopener noreferrer" } : {})}>{children}</a>;

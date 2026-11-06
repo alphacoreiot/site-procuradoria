@@ -2,6 +2,8 @@
 import { useEffect } from "react";
 
 const SCRIPTS = ["/assets/js/organograma.js", "/assets/js/quemsomos.js", "/assets/js/main.js", "/assets/js/motion.js"];
+/** Scripts carregados só nas páginas que têm o componente correspondente. */
+const OPCIONAIS: [string, string][] = [["[data-banners]", "/assets/js/banners.js"], ["[data-orgr]", "/assets/js/organograma-ramos.js"]];
 
 /**
  * Carrega os scripts de animação DEPOIS da hidratação do React. Eles alteram
@@ -14,7 +16,8 @@ export function ScriptsSite({ nonce }: { nonce?: string }) {
   useEffect(() => {
     if ((window as unknown as { __pgmScripts?: boolean }).__pgmScripts) return;
     (window as unknown as { __pgmScripts?: boolean }).__pgmScripts = true;
-    for (const src of SCRIPTS) {
+    const lista = [...SCRIPTS, ...OPCIONAIS.filter(([sel]) => document.querySelector(sel)).map(([, src]) => src)];
+    for (const src of lista) {
       const s = document.createElement("script");
       s.src = src;
       s.async = false;

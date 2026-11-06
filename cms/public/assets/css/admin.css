@@ -129,3 +129,9 @@ html, body { margin: 0; }
 .login__corpo { padding: 30px 30px 26px; }
 .login__corpo h1 { font-size: 24px; }
 .login__nota { font-size: 12px; color: var(--suave); margin: 18px 0 0; }
+
+/* Documentos e processos */
+.filtro-adm { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 14px; }
+.filtro-adm .campo { flex: 1 1 180px; margin: 0; }
+.linha-exigencia { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-bottom: 8px; }
+.linha-exigencia input:not([type="checkbox"]) { flex: 1 1 260px; min-width: 0; }

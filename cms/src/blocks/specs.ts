@@ -21,6 +21,11 @@ const secao = (padraoTitulo: string): Campo[] => [
   { tipo: "texto", nome: "texto", rotulo: "Texto de apoio", max: 200, multilinha: true, linhas: 2 },
 ];
 
+const unidadeOrg: Campo[] = [
+  { tipo: "texto", nome: "nome", rotulo: "Nome", max: 90, obrigatorio: true },
+  { tipo: "texto", nome: "sigla", rotulo: "Sigla", max: 10 },
+];
+
 export const BLOCOS: DefBloco[] = [
   {
     tipo: "cabecalho",
@@ -39,6 +44,82 @@ export const BLOCOS: DefBloco[] = [
         ],
       },
       { tipo: "texto", nome: "botaoAtendimento", rotulo: "Botão de atendimento (WhatsApp)", max: 20, ajuda: "Deixe vazio para esconder." },
+    ],
+  },
+  {
+    tipo: "banners",
+    nome: "Banners",
+    descricao: "Faixa de banners em imagem, com versão para computador e para celular.",
+    area: "principal",
+    campos: [
+      { tipo: "texto", nome: "tituloAcessivel", rotulo: "Título (para leitores de tela)", max: 80, obrigatorio: true },
+      { tipo: "texto", nome: "sobretitulo", rotulo: "Sobretítulo", max: 40 },
+      { tipo: "texto", nome: "titulo", rotulo: "Título da abertura", max: 60, ajuda: "Vazio = só os banners." },
+      { tipo: "texto", nome: "texto", rotulo: "Texto de apoio", max: 180, multilinha: true, linhas: 2 },
+      { tipo: "texto", nome: "botao1Texto", rotulo: "Botão principal: texto", max: 30 },
+      { tipo: "url", nome: "botao1Url", rotulo: "Botão principal: link" },
+      { tipo: "texto", nome: "botao2Texto", rotulo: "Botão secundário: texto", max: 30 },
+      { tipo: "url", nome: "botao2Url", rotulo: "Botão secundário: link" },
+      { tipo: "numero", nome: "intervalo", rotulo: "Segundos em cada banner", min: 3, max: 15 },
+      {
+        tipo: "lista", nome: "slides", rotulo: "Banners", itemRotulo: "Banner", min: 1, max: 8, resumo: "descricao",
+        campos: [
+          { tipo: "texto", nome: "descricao", rotulo: "O que o banner diz", max: 120, obrigatorio: true, ajuda: "Lido por leitores de tela no lugar da imagem." },
+          { tipo: "imagem", nome: "imagem", rotulo: "Imagem para computador", proporcao: "livre", obrigatorio: true },
+          { tipo: "imagem", nome: "imagemMobile", rotulo: "Imagem para celular", proporcao: "livre", ajuda: "Vazio = usa a de computador." },
+          { tipo: "url", nome: "url", rotulo: "Link" },
+        ],
+      },
+    ],
+  },
+  {
+    tipo: "organograma",
+    nome: "Organograma animado",
+    descricao: "Estrutura do órgão com subordinação, assessoria e órgãos colegiados.",
+    area: "principal",
+    unico: true,
+    campos: [
+      ...secao("Estrutura organizacional"),
+      { tipo: "texto", nome: "titular", rotulo: "Titular", max: 40, obrigatorio: true },
+      { tipo: "lista", nome: "colegiados", rotulo: "Órgãos colegiados", itemRotulo: "Órgão", max: 3, resumo: "nome", campos: unidadeOrg },
+      { tipo: "lista", nome: "assessoriaEsquerda", rotulo: "Assessoria (esquerda)", itemRotulo: "Unidade", max: 3, resumo: "nome", ajuda: "A partir da segunda, cada unidade fica subordinada à anterior.", campos: unidadeOrg },
+      { tipo: "lista", nome: "assessoriaDireita", rotulo: "Assessoria (direita)", itemRotulo: "Unidade", max: 3, resumo: "nome", campos: unidadeOrg },
+      {
+        tipo: "lista", nome: "ramos", rotulo: "Ramos", itemRotulo: "Ramo", min: 1, max: 5, resumo: "nome",
+        ajuda: "Diretoria com suas unidades. Sem unidades, o ramo aparece como unidade ligada direto ao titular.",
+        campos: [
+          ...unidadeOrg,
+          { tipo: "selecao", nome: "cor", rotulo: "Cor", opcoes: CORES },
+          { tipo: "lista", nome: "unidades", rotulo: "Unidades", itemRotulo: "Unidade", max: 6, resumo: "nome", campos: unidadeOrg },
+        ],
+      },
+      {
+        tipo: "grupo", nome: "legenda", rotulo: "Legenda",
+        campos: [
+          { tipo: "texto", nome: "subordinacao", rotulo: "Linha contínua", max: 40, obrigatorio: true },
+          { tipo: "texto", nome: "assessoria", rotulo: "Linha pontilhada", max: 40, obrigatorio: true },
+          { tipo: "texto", nome: "colegiados", rotulo: "Linha tracejada", max: 40, obrigatorio: true },
+        ],
+      },
+    ],
+  },
+  {
+    tipo: "cartoes",
+    nome: "Cartões com imagem",
+    descricao: "Grade de cartões com foto, título, texto e link.",
+    area: "principal",
+    campos: [
+      ...secao("Atendimento"),
+      {
+        tipo: "lista", nome: "itens", rotulo: "Cartões", itemRotulo: "Cartão", max: 12, resumo: "titulo",
+        campos: [
+          { tipo: "imagem", nome: "imagem", rotulo: "Imagem", proporcao: "3x2" },
+          { tipo: "texto", nome: "titulo", rotulo: "Título", max: 60, obrigatorio: true },
+          { tipo: "texto", nome: "texto", rotulo: "Texto", max: 220, multilinha: true, linhas: 3 },
+          { tipo: "texto", nome: "botao", rotulo: "Texto do link", max: 30 },
+          { tipo: "url", nome: "url", rotulo: "Link" },
+        ],
+      },
     ],
   },
   {

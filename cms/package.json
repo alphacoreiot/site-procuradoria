@@ -10,7 +10,8 @@
     "seed": "tsx --env-file=.env prisma/seed.ts",
     "db:push": "prisma db push",
     "typecheck": "tsc --noEmit",
-    "admin": "tsx --env-file=.env scripts/admin.ts"
+    "admin": "tsx --env-file=.env scripts/admin.ts",
+    "importar:sefaz": "tsx --env-file=.env scripts/importar-sefaz.ts"
   },
   "dependencies": {
     "@node-rs/argon2": "^2.2.2",
@@ -20,6 +21,7 @@
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "react-markdown": "^10.1.0",
+    "remark-gfm": "^4.0.1",
     "server-only": "^0.0.1",
     "sharp": "^0.35.5",
     "zod": "^3.25.76"
@@ -29,10 +31,14 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/turndown": "^5.0.6",
+    "cheerio": "^1.2.0",
     "eslint": "^9",
     "eslint-config-next": "15.5.28",
     "prisma": "^6.19.3",
     "tsx": "^4.23.15",
+    "turndown": "^7.2.5",
+    "turndown-plugin-gfm": "^1.0.2",
     "typescript": "^5"
   },
   "overrides": {

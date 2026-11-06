@@ -22,7 +22,10 @@ export function MenuOrgao({ orgaos, podeAdministrar }: { orgaos: { slug: string;
           <nav aria-label={`Conteúdo de ${atual.sigla}`}>
             {item(`/admin/${atual.slug}`, "Visão geral")}
             {item(`/admin/${atual.slug}/pagina`, "Página e componentes")}
+            {item(`/admin/${atual.slug}/paginas`, "Páginas de conteúdo")}
             {item(`/admin/${atual.slug}/noticias`, "Notícias")}
+            {item(`/admin/${atual.slug}/documentos`, "Documentos")}
+            {item(`/admin/${atual.slug}/processos`, "Processos digitais")}
             {item(`/admin/${atual.slug}/midia`, "Mídia")}
             {podeAdministrar && item(`/admin/${atual.slug}/configuracoes`, "Configurações")}
             {podeAdministrar && item(`/admin/${atual.slug}/usuarios`, "Usuários")}

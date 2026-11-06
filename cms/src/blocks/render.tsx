@@ -3,7 +3,7 @@
 // mesmas da versão estática, para o visual e as animações serem idênticos.
 import type { ReactNode } from "react";
 import { Icone, Img, Linhas, propsLink, type MapaMidias } from "@/components/site/ui";
-import { urlMidia } from "@/lib/media-shared";
+import { srcSetMidia, urlMidia } from "@/lib/media-shared";
 import { CardNoticia, type NoticiaResumo } from "@/components/site/noticias";
 
 export type Ctx = {
@@ -31,6 +31,7 @@ const Slants = () => (
 
 // ---------------------------------------------------------------- cabeçalho
 export function Cabecalho({ d, ctx, nomeOrgao }: { d: D; ctx: Ctx; nomeOrgao: string }) {
+  const denso = (d.menu as D[]).map((m) => m.rotulo).join("").length > 45; // menu longo: logomarca e itens se ajustam
   return (
     <>
       {d.mostrarFonte && (
@@ -43,7 +44,7 @@ export function Cabecalho({ d, ctx, nomeOrgao }: { d: D; ctx: Ctx; nomeOrgao: st
           </div>
         </div>
       )}
-      <header className="site-header" id="topo">
+      <header className={`site-header${denso ? " site-header--denso" : ""}`} id="topo">
         <div className="container site-header__inner">
           <a className="brand" href={`/${ctx.orgaoSlug}`} aria-label={`${nomeOrgao}, página inicial`}>
             {d.logo?.id && ctx.midias[d.logo.id]
@@ -60,7 +61,7 @@ export function Cabecalho({ d, ctx, nomeOrgao }: { d: D; ctx: Ctx; nomeOrgao: st
               ))}
             </ul>
             {d.botaoAtendimento && (
-              <a className="btn btn--pill btn--sm" data-whatsapp href="#">
+              <a className="btn btn--pill btn--sm" data-whatsapp href="#" aria-label={denso ? d.botaoAtendimento : undefined}>
                 <Icone id="whatsapp" />
                 {d.botaoAtendimento}
               </a>
@@ -463,15 +464,189 @@ export function Rodape({ d, ctx, nomeOrgao }: { d: D; ctx: Ctx; nomeOrgao: strin
   );
 }
 
+// ---------------------------------------------------------------- banners
+export function Banners({ d, ctx }: { d: D; ctx: Ctx }) {
+  const slides = d.slides as D[];
+  const palavras = String(d.titulo || "").split(/\s+/).filter(Boolean);
+  return (
+    <section className="banners" aria-roledescription="carrossel" aria-label={d.tituloAcessivel} data-banners data-intervalo={d.intervalo || 6}>
+      <div className="banners__fundo" aria-hidden="true">
+        <span className="banners__fita banners__fita--1" />
+        <span className="banners__fita banners__fita--2" />
+        <span className="banners__fita banners__fita--3" />
+        <span className="banners__fita banners__fita--4" />
+        <span className="banners__luz" />
+      </div>
+      <div className="container banners__grade">
+        {palavras.length > 0
+          ? (
+            <div className="banners__intro">
+              {d.sobretitulo && <p className="banners__sobre">{d.sobretitulo}</p>}
+              <h1 aria-label={d.titulo}>
+                {palavras.map((p, i) => (
+                  <span key={i} className="banners__palavra" aria-hidden="true"><span style={{ "--i": i } as React.CSSProperties}>{p}</span></span>
+                ))}
+              </h1>
+              {d.texto && <p className="banners__texto">{d.texto}</p>}
+              {(d.botao1Texto || d.botao2Texto) && (
+                <div className="banners__acoes">
+                  {d.botao1Texto && d.botao1Url && <a className="banners__bt banners__bt--pri" {...propsLink(ancora(ctx, d.botao1Url))}>{d.botao1Texto}</a>}
+                  {d.botao2Texto && d.botao2Url && <a className="banners__bt banners__bt--sec" {...propsLink(ancora(ctx, d.botao2Url))}>{d.botao2Texto}</a>}
+                </div>
+              )}
+            </div>
+          )
+          : <h1 className="sr-only">{d.tituloAcessivel}</h1>}
+        <div className="banners__cena">
+          <div className="banners__palco">
+            {slides.map((s, i) => {
+              const conteudo = (
+                <picture>
+                  {s.imagemMobile?.id && ctx.midias[s.imagemMobile.id] && (
+                    <source media="(max-width: 767px)" srcSet={srcSetMidia(s.imagemMobile.id, "livre", [480, 800, 1280])} sizes="100vw" />
+                  )}
+                  <Img valor={{ id: s.imagem?.id, alt: s.descricao }} midias={ctx.midias} proporcao="livre" larguras={[800, 1280, 1920]} sizes="(min-width: 960px) 720px, 100vw" altPadrao={s.descricao} prioridade={i === 0} />
+                </picture>
+              );
+              const cls = `banners__slide${i === 0 ? " is-active" : ""}`;
+              return s.url
+                ? <a key={i} className={cls} {...propsLink(ancora(ctx, s.url))}>{conteudo}</a>
+                : <div key={i} className={cls}>{conteudo}</div>;
+            })}
+          </div>
+          {slides.length > 1 && (
+            <div className="banners__controles">
+              <button className="banners__seta" type="button" data-banner="prev" aria-label="Banner anterior"><Icone id="arrow" /></button>
+              <div className="banners__pontos" role="group" aria-label="Escolher banner">
+                {slides.map((s, i) => (
+                  <button key={i} type="button" className={`banners__ponto${i === 0 ? " is-active" : ""}`} data-banner-ir={i} aria-label={`Banner ${i + 1} de ${slides.length}`} aria-current={i === 0 ? "true" : undefined} />
+                ))}
+              </div>
+              <button className="banners__seta" type="button" data-banner="pause" aria-label="Pausar banners" aria-pressed="false"><Icone id="pause" /></button>
+              <button className="banners__seta" type="button" data-banner="next" aria-label="Próximo banner"><Icone id="arrow" /></button>
+            </div>
+          )}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ---------------------------------------------------------------- cartões
+export function Cartoes({ d, ctx, id }: { d: D; ctx: Ctx; id: string }) {
+  return (
+    <section className="section" id={id}>
+      <div className="container">
+        <CabecalhoSecao d={d} />
+        <div className="cartoes">
+          {(d.itens as D[]).map((c, i) => {
+            const miolo = (
+              <>
+                <div className="cartao__midia">
+                  <Img valor={c.imagem} midias={ctx.midias} proporcao="3x2" larguras={[480, 800]} sizes="(max-width: 700px) 100vw, 400px" altPadrao={c.titulo} />
+                </div>
+                <div className="cartao__corpo">
+                  <h3>{c.titulo}</h3>
+                  {c.texto && <p><Linhas texto={c.texto} /></p>}
+                  {c.url && c.botao && <span className="cartao__link">{c.botao} <Icone id="arrow" /></span>}
+                </div>
+              </>
+            );
+            return c.url
+              ? <a key={i} className="cartao reveal" {...propsLink(ancora(ctx, c.url))}>{miolo}</a>
+              : <article key={i} className="cartao reveal">{miolo}</article>;
+          })}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ---------------------------------------------------------------- organograma com ramos
+function NoOrg({ id, pai, tipo, rota, x, cls, Tag = "li" }: { id: string; pai?: string; tipo?: string; rota?: string; x: D; cls: string; Tag?: "li" | "div" }) {
+  return (
+    <Tag className={`orgr__no ${cls}`} tabIndex={0} data-no={id} data-pai={pai} data-tipo={tipo} data-rota={rota}>
+      {x.sigla && <strong className="orgr__sigla">{x.sigla}</strong>}
+      <span className="orgr__nome">{x.nome}</span>
+    </Tag>
+  );
+}
+
+export function Organograma({ d, id, embutido = false }: { d: D; id: string; embutido?: boolean }) {
+  const esq = d.assessoriaEsquerda as D[], dir = d.assessoriaDireita as D[], cols = d.colegiados as D[], ramos = d.ramos as D[];
+  const cadeia = (l: D[], p: string) => l.map((a, i) => (
+    <NoOrg key={i} id={`${p}${i}`} pai={i === 0 ? "t" : `${p}${i - 1}`} tipo={i === 0 ? "ass" : "sub"} rota={i === 0 ? "lado" : ""} x={a} cls="orgr__no--assessoria" />
+  ));
+  const leg = d.legenda as D;
+  const grafico = (
+        <div className="orgr" data-orgr role="group" aria-label={`Organograma: ${d.titulo}`} id={embutido ? id : undefined}>
+          <div className="orgr__palco">
+            <svg className="orgr__fios" aria-hidden="true" />
+            <div className="orgr__topo">
+              <div />
+              <NoOrg Tag="div" id="t" x={{ nome: d.titular }} cls="orgr__no--titular" />
+              <ul className="orgr__colegiados">
+                {cols.map((c, i) => <NoOrg key={i} id={`c${i}`} pai="t" tipo="col" rota="colegiado" x={c} cls="orgr__no--colegiado" />)}
+              </ul>
+            </div>
+            <div className="orgr__assessoria">
+              <ul className="orgr__lado orgr__lado--esq">{cadeia(esq, "e")}</ul>
+              <span />
+              <ul className="orgr__lado orgr__lado--dir">{cadeia(dir, "d")}</ul>
+            </div>
+            <ul className="orgr__ramos" style={{ "--colunas": ramos.reduce((s, r) => s + Math.max(1, (r.unidades as D[]).length), 0) } as React.CSSProperties}>
+              {ramos.map((r, i) => {
+                const us = r.unidades as D[];
+                return (
+                  <li key={i} className={`orgr__ramo orgr__ramo--${r.cor}`} style={{ "--span": Math.max(1, us.length) } as React.CSSProperties}>
+                    {us.length === 0
+                      ? <div className="orgr__direta"><NoOrg Tag="div" id={`r${i}`} pai="t" tipo="sub" rota="ramo" x={r} cls="orgr__no--unidade" /></div>
+                      : (
+                        <>
+                          <NoOrg Tag="div" id={`r${i}`} pai="t" tipo="sub" rota="ramo" x={r} cls="orgr__no--diretoria" />
+                          <ul className="orgr__unidades">
+                            {us.map((u, j) => <NoOrg key={j} id={`r${i}u${j}`} pai={`r${i}`} tipo="sub" rota="unidade" x={u} cls="orgr__no--unidade" />)}
+                          </ul>
+                        </>
+                      )}
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+          <div className="orgr__pe">
+            <ul className="orgr__legenda" aria-label="Legenda">
+              <li><button type="button" data-legenda="sub"><i className="orgr__amostra" />{leg.subordinacao}</button></li>
+              <li><button type="button" data-legenda="ass"><i className="orgr__amostra orgr__amostra--ass" />{leg.assessoria}</button></li>
+              <li><button type="button" data-legenda="col"><i className="orgr__amostra orgr__amostra--col" />{leg.colegiados}</button></li>
+            </ul>
+            <button className="orgr__repetir" type="button" data-orgr-repetir>Repetir animação</button>
+          </div>
+        </div>
+  );
+  if (embutido) return <div className="orgr-embutido">{grafico}</div>;
+  return (
+    <section className="section section--soft" id={id}>
+      <div className="container">
+        <CabecalhoSecao d={d} />
+        {grafico}
+      </div>
+    </section>
+  );
+}
+
 /** Âncora usada no menu para cada tipo (mantém os links #sobre etc.). */
 export const ANCORA_POR_TIPO: Record<string, string> = {
-  institucional: "sobre", sistemas: "sistemas", servicos: "servicos", noticias: "noticias", contato: "fale-conosco",
+  institucional: "sobre", sistemas: "sistemas", servicos: "servicos", noticias: "noticias", contato: "fale-conosco", cartoes: "destaques", organograma: "organograma",
 };
 
-export function BlocoPrincipal({ tipo, d, ctx, idx }: { tipo: string; d: D; ctx: Ctx; idx: number }) {
+export function BlocoPrincipal({ tipo, d, ctx, idx, embutido }: { tipo: string; d: D; ctx: Ctx; idx: number; embutido?: boolean }) {
   const id = ANCORA_POR_TIPO[tipo] ? (idx === 0 ? ANCORA_POR_TIPO[tipo] : `${ANCORA_POR_TIPO[tipo]}-${idx + 1}`) : `bloco-${idx}`;
   switch (tipo) {
     case "carrossel": return <Carrossel d={d} ctx={ctx} />;
+    case "banners": return <Banners d={d} ctx={ctx} />;
+    case "cartoes": return <Cartoes d={d} ctx={ctx} id={id} />;
+    case "organograma": return <Organograma d={d} id={id} embutido={embutido} />;
     case "institucional": return <Institucional d={d} id={id} />;
     case "sistemas": return <Sistemas d={d} id={id} />;
     case "servicos": return <Servicos d={d} id={id} />;

@@ -83,3 +83,10 @@ NODE_ENV=production npm start  # porta 3000
 - `STORAGE_DIR` precisa ser um **volume persistente** (uploads e cache de imagens).
 - Faça backup do banco e do `STORAGE_DIR`.
 - Troque a senha do usuário inicial no primeiro acesso (*Minha conta*).
+
+## Documentos, processos e páginas de conteúdo
+
+- **Documentos:** PDF, Word, PowerPoint, Excel e TXT, até 40 MB pelo painel. O tipo real do arquivo é conferido, o nome é aleatório e a entrega é feita por `/doc/[id]`, fora da pasta pública.
+- **Páginas públicas por órgão:** `/legislacao`, `/central-de-conteudo` (busca e categoria), `/processos` e páginas de conteúdo em Markdown.
+- **Componentes novos:** abertura com banners, cartões com imagem e organograma animado. Em uma página de conteúdo, `{{organograma}}` no texto coloca o organograma naquele ponto.
+- **SEFAZ:** `npm run importar:sefaz` reconstrói o órgão a partir de `../sefaz-dados` (coleta fora do Git). Apaga e recria só o órgão `sefaz`, descartando edições feitas nele.

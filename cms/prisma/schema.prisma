@@ -30,6 +30,8 @@ model Orgao {
   midias       Midia[]
   usuarios     Usuario[]
   auditorias   Auditoria[]
+  documentos   Documento[]
+  processos    Processo[]
 }
 
 /// Configurações globais do órgão (JSON validado: WhatsApp, SEO, favicon...)
@@ -48,6 +50,8 @@ model Pagina {
   slug         String   // "inicio"
   titulo       String
   descricaoSeo String   @default("")
+  conteudo     String   @default("") // Markdown sem HTML (páginas internas)
+  publicada    Boolean  @default(true)
   blocos       Bloco[]
   alteradoEm   DateTime @updatedAt
 
@@ -164,4 +168,45 @@ model LimiteTaxa {
   chave    String   @id
   contagem Int
   reiniciaEm DateTime
+}
+
+/// Documento público para download (legislação, central de conteúdo...).
+/// O arquivo fica fora da pasta pública, com nome aleatório, e é entregue por /doc/[id].
+model Documento {
+  id          String   @id @default(cuid())
+  orgaoId     String
+  orgao       Orgao    @relation(fields: [orgaoId], references: [id], onDelete: Cascade)
+  tipo        String   // LEGISLACAO | CONTEUDO
+  categoria   String   @default("")
+  titulo      String
+  descricao   String   @default("")
+  busca       String   @default("") // título + descrição sem acentos, em minúsculas
+  arquivo     String?  // nome no armazenamento
+  nomeArquivo String   @default("")
+  mime        String   @default("")
+  bytes       Int      @default(0)
+  linkExterno String   @default("")
+  data        DateTime
+  publicado   Boolean  @default(true)
+  observacao  String   @default("") // uso interno (ex.: origem da importação)
+  criadoEm    DateTime @default(now())
+  alteradoEm  DateTime @updatedAt
+
+  @@index([orgaoId, tipo, publicado, data])
+}
+
+/// Processo digital e os documentos que ele exige
+model Processo {
+  id         String   @id @default(cuid())
+  orgaoId    String
+  orgao      Orgao    @relation(fields: [orgaoId], references: [id], onDelete: Cascade)
+  slug       String
+  titulo     String
+  busca      String   @default("")
+  exigencias String   // JSON: [{ "documento": "...", "obrigatorio": true }]
+  publicado  Boolean  @default(true)
+  alteradoEm DateTime @updatedAt
+
+  @@unique([orgaoId, slug])
+  @@index([orgaoId, publicado])
 }
