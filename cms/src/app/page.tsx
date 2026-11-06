@@ -1,9 +1,13 @@
+import { redirect } from "next/navigation";
 import { db } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
 
 /** Portal central: lista os sites dos órgãos ativos. */
 export default async function Portal() {
+  // instalação de um órgão só: ORGAO_PADRAO=sefaz abre direto o site dele
+  const padrao = process.env.ORGAO_PADRAO;
+  if (padrao && /^[a-z0-9-]{2,40}$/.test(padrao)) redirect(`/${padrao}`);
   const orgaos = await db.orgao.findMany({ where: { ativo: true }, orderBy: { nome: "asc" } });
   return (
     <>
