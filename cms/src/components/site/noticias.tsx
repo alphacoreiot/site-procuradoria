@@ -11,6 +11,9 @@ export type NoticiaResumo = {
   capaId: string | null;
   capaAlt: string;
   publicadaEm: Date | null;
+  tipo?: string;
+  chamada?: string;
+  autorNome?: string;
 };
 
 const fmtData = new Intl.DateTimeFormat("pt-BR", { day: "2-digit", month: "long", year: "numeric", timeZone: "America/Bahia" });
@@ -26,12 +29,28 @@ export function CardNoticia({ n, orgaoSlug, midias }: { n: NoticiaResumo; orgaoS
           : <span className="news-card__placeholder" />}
       </a>
       <div className="news-card__body">
-        <p className="news-card__meta">
-          {n.categoria && <span className="news-card__cat">{n.categoria}</span>}
-          {n.publicadaEm && <time dateTime={n.publicadaEm.toISOString()}>{dataNoticia(n.publicadaEm)}</time>}
-        </p>
+        {n.tipo
+          ? (
+            <p className="news-card__selos">
+              <span className="selo">{n.tipo}</span>
+              {n.categoria && n.categoria !== "Geral" && <span className="selo selo--tema">{n.categoria}</span>}
+            </p>
+          )
+          : (
+            <p className="news-card__meta">
+              {n.categoria && <span className="news-card__cat">{n.categoria}</span>}
+              {n.publicadaEm && <time dateTime={n.publicadaEm.toISOString()}>{dataNoticia(n.publicadaEm)}</time>}
+            </p>
+          )}
+        {n.chamada && <p className="news-card__chamada">{n.chamada}</p>}
         <h3><a href={href}>{n.titulo}</a></h3>
         <p>{n.resumo}</p>
+        {n.tipo && (
+          <p className="news-card__meta--moderna">
+            {n.autorNome && <span>{n.autorNome}</span>}
+            {n.publicadaEm && <time dateTime={n.publicadaEm.toISOString()}>{dataNoticia(n.publicadaEm)}</time>}
+          </p>
+        )}
       </div>
     </article>
   );

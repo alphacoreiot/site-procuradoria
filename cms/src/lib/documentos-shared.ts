@@ -8,6 +8,12 @@ export const LIMITES_PROCESSO = { titulo: 200, documento: 200, itens: 60 } as co
 /** Endereços já usados pelo site do órgão. */
 export const SLUGS_RESERVADOS = new Set(["inicio", "noticias", "legislacao", "central-de-conteudo", "processos", "admin"]);
 
+/** Ano do ato: vem do título ("Decreto 8352/2026"); a data do arquivo é só a de envio ao site. */
+export function anoDoDocumento(titulo: string, data: Date) {
+  const m = titulo.match(/\d{1,4}\s*[/\-_.]\s*((?:19|20)\d{2})\b/) ?? titulo.match(/\bde\s+((?:19|20)\d{2})\b/i) ?? titulo.match(/\b((?:19|20)\d{2})\b/);
+  return m ? Number(m[1]) : data.getFullYear();
+}
+
 /** Texto para busca: sem acentos e em minúsculas (igual em SQLite e PostgreSQL). */
 export function normalizarBusca(s: string) {
   return s.normalize("NFD").replace(/\p{M}/gu, "").toLowerCase().replace(/\s+/g, " ").trim();

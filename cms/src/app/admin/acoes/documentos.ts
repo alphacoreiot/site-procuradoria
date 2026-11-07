@@ -7,7 +7,7 @@ import { auditar } from "@/lib/audit";
 import { executar, ErroUsuario } from "@/lib/acao";
 import { consumirLimite } from "@/lib/ratelimit";
 import { apagarArquivoDoc, salvarArquivoDoc } from "@/lib/documentos-core";
-import { LIMITES_DOC as L, TAMANHO_MAX_DOC, normalizarBusca } from "@/lib/documentos-shared";
+import { LIMITES_DOC as L, TAMANHO_MAX_DOC, anoDoDocumento, normalizarBusca } from "@/lib/documentos-shared";
 
 const schema = z.object({
   tipo: z.enum(["LEGISLACAO", "CONTEUDO"]),
@@ -40,7 +40,7 @@ export async function salvarDocumento(orgao: string, id: string | null, form: Fo
 
     const dados = {
       tipo: d.tipo, titulo: d.titulo, descricao: d.descricao, categoria: d.categoria, linkExterno: d.linkExterno,
-      data: new Date(`${d.data}T12:00:00-03:00`), publicado: d.publicado,
+      data: new Date(`${d.data}T12:00:00-03:00`), ano: anoDoDocumento(d.titulo, new Date(`${d.data}T12:00:00-03:00`)), publicado: d.publicado,
       busca: normalizarBusca(`${d.titulo} ${d.descricao}`),
       ...(novo ?? {}),
     };

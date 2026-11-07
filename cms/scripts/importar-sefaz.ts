@@ -13,12 +13,14 @@ import { gfm } from "turndown-plugin-gfm";
 import { db } from "../src/lib/db";
 import { DIR_UPLOADS, salvarUpload } from "../src/lib/media-core";
 import { DIR_DOCS, copiarArquivoDoc } from "../src/lib/documentos-core";
-import { normalizarBusca, SLUGS_RESERVADOS } from "../src/lib/documentos-shared";
+import { anoDoDocumento, normalizarBusca, SLUGS_RESERVADOS } from "../src/lib/documentos-shared";
+import { ajustarServicos, chamadaDoCorpo, classificar, dadosDoPost, limparCorpo, resumoDe } from "./sefaz-classes";
 import { LIMITES_NOTICIA, gerarSlug } from "../src/lib/noticias-shared";
 import { urlMidia } from "../src/lib/media-shared";
 import { BLOCOS_POR_TIPO, CAMPOS_CONFIG } from "../src/blocks/specs";
 import { schemaObjeto } from "../src/blocks/campos";
 import { ABERTURA_SEFAZ, ORGANOGRAMA_SEFAZ } from "./sefaz-organograma";
+import { SUBTITULOS, TITULOS } from "./sefaz-subtitulos";
 
 const ORIGEM = "https://sefaz.camacari.ba.gov.br";
 const UPLOADS = `${ORIGEM}/wp-content/uploads/`;
@@ -178,7 +180,7 @@ async function paraMarkdown(html: string, onde: string) {
     el.tagName = nivel;
   }
   // perguntas em acordeão viram títulos, para a página poder ser percorrida
-  raiz.find(".elementor-tab-title").each((_, el) => { $(el).replaceWith($("<h3></h3>").text($(el).text().replace(/s+/g, " ").trim())); });
+  raiz.find(".elementor-tab-title").each((_, el) => { $(el).replaceWith($("<h3></h3>").text($(el).text().replace(/\s+/g, " ").trim())); });
   raiz.find("h2 br, h3 br").replaceWith(" ");
 
   // tabelas: a primeira linha vira cabeçalho, células sem blocos internos
@@ -277,7 +279,7 @@ async function importarDocumentos() {
     const doc = await db.documento.create({
       data: {
         orgaoId, tipo: d.tipo, categoria: d.categoria, titulo: d.titulo.slice(0, 300), descricao: d.descricao.slice(0, 1000),
-        busca: normalizarBusca(`${d.titulo} ${d.descricao}`), data: d.data,
+        busca: normalizarBusca(`${d.titulo} ${d.descricao}`), data: d.data, ano: anoDoDocumento(d.titulo, d.data),
         publicado: d.publicado && !!arq, observacao: d.observacao, ...(arq ?? {}),
       },
     });
@@ -369,9 +371,10 @@ async function importarPaginas() {
     if (IGNORAR_PAGINAS.has(p.slug)) continue;
     const slug = slugPagina(p.slug);
     if (SLUGS_RESERVADOS.has(slug)) throw new Error(`Endereço reservado: ${slug}`);
-    const conteudo = await paraMarkdown(p.content.rendered, `Página ${slug}`);
+    let conteudo = await paraMarkdown(p.content.rendered, `Página ${slug}`);
+    if (slug === "servicos") conteudo = ajustarServicos(conteudo);
     if (conteudo.length > 60_000) rel.limites.push(`Página ${slug}: ${conteudo.length} caracteres (limite do painel: 60.000)`);
-    const criada = await db.pagina.create({ data: { orgaoId, slug, titulo: titulo(p).slice(0, 120), conteudo, publicada: true } });
+    const criada = await db.pagina.create({ data: { orgaoId, slug, titulo: TITULOS[slug] ?? titulo(p).slice(0, 120), descricaoSeo: SUBTITULOS[slug] ?? "", conteudo, publicada: true } });
     if (slug === "secretaria") await db.bloco.create({ data: { paginaId: criada.id, tipo: "organograma", area: "principal", ordem: 0, dados: JSON.stringify(validar("organograma", ORGANOGRAMA_SEFAZ)) } });
     n++;
   }
@@ -381,19 +384,21 @@ async function importarPaginas() {
 async function importarNoticias() {
   let n = 0;
   for (const p of posts) {
-    const conteudo = await paraMarkdown(p.content.rendered, `Notícia ${p.slug}`);
+    const dadosPost = dadosDoPost(p.content.rendered);
+    const inicio = chamadaDoCorpo(limparCorpo(await paraMarkdown(p.content.rendered, `Notícia ${p.slug}`), titulo(p), dadosPost));
+    const conteudo = inicio.md;
+    dadosPost.chamada = dadosPost.chamada || inicio.chamada;
     const fonteCapa = midiaPorId.get(p.featured_media)?.source_url || p.featured_image_src || "";
     const capaId = fonteCapa ? await imagem(fonteCapa, titulo(p).slice(0, 160)) : null;
-    let resumo = texto(p.excerpt?.rendered ?? "").replace(/\s*(\[…\]|\[\.\.\.\]|…|Leia mais.*)$/i, "");
-    if (resumo.length > LIMITES_NOTICIA.resumo) resumo = `${resumo.slice(0, LIMITES_NOTICIA.resumo - 1).replace(/\s+\S*$/, "")}…`;
+    const resumo = resumoDe(conteudo, LIMITES_NOTICIA.resumo);
     const t = titulo(p);
     if (t.length > LIMITES_NOTICIA.titulo) rel.limites.push(`Notícia com título acima de ${LIMITES_NOTICIA.titulo} caracteres (editar exigirá encurtar): ${t}`);
     if (conteudo.length > LIMITES_NOTICIA.conteudo) rel.limites.push(`Notícia ${p.slug}: ${conteudo.length} caracteres`);
-    const c = p.categories?.[0];
+    const classe = classificar(t, dadosPost.chamada, resumo);
     await db.noticia.create({
       data: {
         orgaoId, slug: p.slug.slice(0, 120).replace(/-+$/, "") || gerarSlug(t), titulo: t, resumo, conteudo, capaId,
-        capaAlt: t.slice(0, 160), categoria: c === 3 ? "Notícia" : "SEFAZ", status: "PUBLICADA", publicadaEm: new Date(p.date),
+        capaAlt: t.slice(0, 160), categoria: classe.tema, tipo: classe.tipo, chamada: dadosPost.chamada, autorNome: dadosPost.autor, busca: normalizarBusca(`${t} ${dadosPost.chamada} ${resumo}`), status: "PUBLICADA", publicadaEm: dadosPost.data ? new Date(`${dadosPost.data}T12:00:00-03:00`) : new Date(p.date),
       },
     });
     n++;
@@ -512,7 +517,7 @@ async function montarInicio() {
 
   const cfg = schemaObjeto(CAMPOS_CONFIG).parse({
     tituloSite: "SEFAZ Camaçari | Secretaria da Fazenda", descricaoSeo: "Portal da Secretaria da Fazenda de Camaçari: tributos, legislação, processos digitais e serviços ao contribuinte.",
-    favicon: { id: brasao, alt: "" }, whatsappNumero: "5571987969856", whatsappMensagem: "Olá! Vim pelo portal da SEFAZ e gostaria de atendimento.", whatsappFlutuante: true, voltarTopo: true,
+    favicon: { id: brasao, alt: "" }, whatsappNumero: "5571987969856", whatsappMensagem: "Olá! Vim pelo portal da SEFAZ e gostaria de atendimento.", whatsappFlutuante: true, voltarTopo: true, visualModerno: true, linkSistema: "https://sefazweb.camacari.ba.gov.br/prefeituras/loginb.tela", rotuloSistema: "Acessar o Sistema Tributário",
   });
   await db.configuracao.create({ data: { orgaoId, dados: JSON.stringify(cfg) } });
 }

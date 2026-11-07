@@ -398,4 +398,7 @@ export const CAMPOS_CONFIG: Campo[] = [
   { tipo: "texto", nome: "whatsappMensagem", rotulo: "Mensagem inicial do WhatsApp", max: 200 },
   { tipo: "booleano", nome: "whatsappFlutuante", rotulo: "Mostrar botão flutuante do WhatsApp" },
   { tipo: "booleano", nome: "voltarTopo", rotulo: "Mostrar seta \"voltar ao topo\"" },
+  { tipo: "booleano", nome: "visualModerno", rotulo: "Usar o visual moderno nas páginas internas e notícias" },
+  { tipo: "url", nome: "linkSistema", rotulo: "Sistema principal: link", ajuda: "Vira botão nas páginas de processos." },
+  { tipo: "texto", nome: "rotuloSistema", rotulo: "Sistema principal: texto do botão", max: 40 },
 ];

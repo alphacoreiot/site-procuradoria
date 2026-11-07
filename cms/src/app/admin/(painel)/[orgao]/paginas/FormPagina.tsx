@@ -48,7 +48,7 @@ export function FormPagina({ orgao, id, inicial, podeExcluir }: { orgao: string;
         <p className="campo__ajuda">Deixe vazio para gerar a partir do título.</p>
       </div>
       <div className="campo">
-        <label htmlFor="p-seo">Descrição para buscadores</label>
+        <label htmlFor="p-seo">Subtítulo (aparece no topo e nos buscadores)</label>
         <textarea id="p-seo" rows={2} maxLength={L.seo} value={d.descricaoSeo} onChange={(e) => set("descricaoSeo", e.target.value)} />
       </div>
       <div className="campo">

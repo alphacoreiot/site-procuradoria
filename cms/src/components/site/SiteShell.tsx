@@ -43,7 +43,7 @@ export async function SiteShell({
     <>
       <a className="skip-link" href="#conteudo">Pular para o conteúdo</a>
       {cab && <Cabecalho d={cab.dados} ctx={ctx} nomeOrgao={nomeOrgao} />}
-      <main id="conteudo">{children}</main>
+      <main id="conteudo" className={config.visualModerno ? "pag-moderna" : undefined}>{children}</main>
       {rod && <Rodape d={rod.dados} ctx={ctx} nomeOrgao={nomeOrgao} />}
 
       {config.whatsappFlutuante && (

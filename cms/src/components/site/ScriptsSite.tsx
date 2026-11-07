@@ -3,7 +3,7 @@ import { useEffect } from "react";
 
 const SCRIPTS = ["/assets/js/organograma.js", "/assets/js/quemsomos.js", "/assets/js/main.js", "/assets/js/motion.js"];
 /** Scripts carregados só nas páginas que têm o componente correspondente. */
-const OPCIONAIS: [string, string][] = [["[data-banners]", "/assets/js/banners.js"], ["[data-orgr]", "/assets/js/organograma-ramos.js"]];
+const OPCIONAIS: [string, string][] = [["[data-banners]", "/assets/js/banners.js"], ["[data-orgr]", "/assets/js/organograma-ramos.js"], ["[data-pagina]", "/assets/js/paginas.js"], [".pag-moderna", "/assets/js/interacoes.js"]];
 
 /**
  * Carrega os scripts de animação DEPOIS da hidratação do React. Eles alteram

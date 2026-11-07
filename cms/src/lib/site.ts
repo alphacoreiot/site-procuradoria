@@ -38,7 +38,7 @@ export const carregarSite = cache(async (slug: string, incluirOcultos = false) =
     where: { orgaoId: orgao.id, status: "PUBLICADA", publicadaEm: { lte: new Date() } },
     orderBy: [{ destaque: "desc" }, { publicadaEm: "desc" }],
     take: 6,
-    select: { id: true, slug: true, titulo: true, resumo: true, categoria: true, capaId: true, capaAlt: true, publicadaEm: true },
+    select: { id: true, slug: true, titulo: true, resumo: true, categoria: true, tipo: true, chamada: true, autorNome: true, capaId: true, capaAlt: true, publicadaEm: true },
   });
 
   // todas as imagens usadas, num mapa id -> dimensões

@@ -27,7 +27,7 @@ export default async function EditarNoticia({ params }: Props) {
         orgao={orgao.slug}
         id={n.id}
         inicial={{
-          titulo: n.titulo, slug: n.slug, resumo: n.resumo, conteudo: n.conteudo, categoria: n.categoria,
+          titulo: n.titulo, slug: n.slug, resumo: n.resumo, conteudo: n.conteudo, categoria: n.categoria, tipo: n.tipo, chamada: n.chamada, autorNome: n.autorNome,
           capaId: n.capaId ?? "", capaAlt: n.capaAlt, destaque: n.destaque, status: n.status as "RASCUNHO" | "PUBLICADA",
           publicadaEm: paraCampo(n.publicadaEm),
         }}

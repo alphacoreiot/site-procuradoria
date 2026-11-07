@@ -20,6 +20,7 @@ export default async function CentralDeConteudo({ params, searchParams }: Props)
       titulo="Central de Conteúdo"
       introducao="Modelos de documentos, manuais, guias, formulários, publicações e materiais de apoio."
       filtros={await searchParams}
+      organizada
     />
   );
 }

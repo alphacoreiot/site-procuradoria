@@ -85,7 +85,11 @@ model Noticia {
   capaId      String?
   capa        Midia?    @relation(fields: [capaId], references: [id], onDelete: SetNull)
   capaAlt     String    @default("")
-  categoria   String    @default("")
+  categoria   String    @default("") // assunto
+  tipo        String    @default("") // Orientação, Legislação, Alerta...
+  chamada     String    @default("") // texto curto acima do título
+  autorNome   String    @default("") // assinatura exibida no site
+  busca       String    @default("") // título + resumo sem acentos
   destaque    Boolean   @default(false)
   status      String    @default("RASCUNHO") // RASCUNHO | PUBLICADA
   publicadaEm DateTime?
@@ -187,6 +191,7 @@ model Documento {
   bytes       Int      @default(0)
   linkExterno String   @default("")
   data        DateTime
+  ano         Int?     // ano do ato, tirado do título
   publicado   Boolean  @default(true)
   observacao  String   @default("") // uso interno (ex.: origem da importação)
   criadoEm    DateTime @default(now())

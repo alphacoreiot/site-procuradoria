@@ -3,11 +3,12 @@ import { notFound } from "next/navigation";
 import { cache } from "react";
 import { db } from "@/lib/db";
 import { carregarSite } from "@/lib/site";
+import { analisarConteudo } from "@/lib/conteudo";
 import { BLOCOS_POR_TIPO } from "@/blocks/specs";
 import { completar } from "@/blocks/campos";
 import { BlocoPrincipal, type Ctx } from "@/blocks/render";
 import { MolduraTexto } from "@/components/site/documentos";
-import { CorpoNoticia } from "@/components/site/noticias";
+import { Segmentos } from "@/components/site/pagina";
 
 export const dynamic = "force-dynamic";
 const MARCADOR = "{{organograma}}";
@@ -47,14 +48,26 @@ export default async function PaginaInterna({ params }: Props) {
   // {{organograma}} no texto coloca o componente naquele ponto, sem seção própria
   const org = blocos.find((b) => b.tipo === "organograma");
   const partes = org ? r.p.conteudo.split(MARCADOR) : [r.p.conteudo];
-  if (org && partes.length > 1) {
-    return (
-      <MolduraTexto orgaoSlug={orgao} titulo={r.p.titulo} alteradaEm={r.p.alteradoEm} depois={blocos.filter((b) => b !== org).map((b) => montar(b, false))}>
-        <CorpoNoticia markdown={partes[0]} />
-        {montar(org, true)}
-        <CorpoNoticia markdown={partes.slice(1).join("")} />
-      </MolduraTexto>
-    );
-  }
-  return <MolduraTexto orgaoSlug={orgao} titulo={r.p.titulo} markdown={r.p.conteudo} alteradaEm={r.p.alteradoEm} depois={blocos.map((b) => montar(b, false))} />;
+  const embutir = Boolean(org) && partes.length > 1;
+  const a = analisarConteudo(partes[0], "a");
+  const b = embutir ? analisarConteudo(partes.slice(1).join(""), "b", false) : null;
+  const comAbas = a.segs.some((s) => s.t === "grupos");
+
+  return (
+    <MolduraTexto
+      orgaoSlug={orgao}
+      titulo={r.p.titulo}
+      texto={r.p.descricaoSeo || undefined}
+      capa={a.capa}
+      cta={a.cta}
+      indice={[...a.indice, ...(b?.indice ?? [])]}
+      lateral={!embutir && !comAbas}
+      larga={comAbas || embutir}
+      depois={blocos.filter((x) => !(embutir && x === org)).map((x) => montar(x, false))}
+    >
+      <Segmentos segs={a.segs} />
+      {embutir && org && montar(org, true)}
+      {b && <Segmentos segs={b.segs} />}
+    </MolduraTexto>
+  );
 }

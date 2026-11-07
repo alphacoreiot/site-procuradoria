@@ -6,7 +6,11 @@ import { carregarSite, mapaMidias } from "@/lib/site";
 import type { Ctx } from "@/blocks/render";
 import { SiteShell } from "@/components/site/SiteShell";
 import { CorpoNoticia, dataNoticia } from "@/components/site/noticias";
-import { Img } from "@/components/site/ui";
+import { Icone, Img } from "@/components/site/ui";
+import { CabecalhoPagina, AcoesCompartilhar, LateralPagina } from "@/components/site/pagina";
+import { noticiasRelacionadas, vizinhas } from "@/lib/noticias";
+import { CardNoticia } from "@/components/site/noticias";
+import { tempoLeitura } from "@/lib/noticias-shared";
 import { urlMidia } from "@/lib/media-shared";
 
 export const dynamic = "force-dynamic";
@@ -46,6 +50,65 @@ export default async function PaginaNoticia({ params }: Props) {
   const { site, noticia: n } = r;
   const midias = { ...site.midias, ...(await mapaMidias(n.capaId ? [n.capaId] : [], site.orgao.id)) };
   const ctx: Ctx = { orgaoSlug: site.orgao.slug, midias, noticias: site.noticias };
+
+  if (site.config.visualModerno) {
+    const base = `/${site.orgao.slug}/noticias`;
+    const rel = await noticiasRelacionadas(n);
+    const viz = await vizinhas(site.orgao.id, n.publicadaEm!);
+    const midiasRel = { ...midias, ...(await mapaMidias(rel.flatMap((x) => (x.capaId ? [x.capaId] : [])), site.orgao.id)) };
+    const temTema = n.categoria && n.categoria !== "Geral";
+    const contato = site.blocos.find((b) => b.tipo === "contato")?.dados;
+    return (
+      <SiteShell ctx={ctx} nomeOrgao={site.orgao.nome} config={site.config} blocos={site.blocos}>
+        <div className="leitura-barra" data-leitura-barra aria-hidden="true" />
+        <CabecalhoPagina trilha={[{ href: `/${site.orgao.slug}`, texto: "Início" }, { href: base, texto: "Notícias" }, { texto: n.tipo || "Notícia" }]} titulo={n.titulo} chamada={n.chamada}>
+          <p className="noticia-selos">
+            {n.tipo && <a className="selo" href={`${base}?tipo=${encodeURIComponent(n.tipo)}`}>{n.tipo}</a>}
+            {temTema && <a className="selo selo--tema" href={`${base}?tema=${encodeURIComponent(n.categoria)}`}>{n.categoria}</a>}
+          </p>
+          <p className="noticia-meta">
+            {n.autorNome && <a href={`${base}?autor=${encodeURIComponent(n.autorNome)}`}>Por <strong>{n.autorNome}</strong></a>}
+            {n.publicadaEm && <time dateTime={n.publicadaEm.toISOString()}>{dataNoticia(n.publicadaEm)}</time>}
+            <span>{tempoLeitura(n.conteudo)} min de leitura</span>
+          </p>
+        </CabecalhoPagina>
+        <section className="pag-corpo" data-pagina>
+          <div className="container pag-grade">
+            <article className="pag-texto" data-leitura>
+              {n.capaId && (
+                <figure className="noticia-capa">
+                  <Img valor={{ id: n.capaId, alt: n.capaAlt }} midias={midias} proporcao="16x9" larguras={[800, 1280, 1920]} sizes="(max-width: 900px) 100vw, 800px" prioridade />
+                </figure>
+              )}
+              <CorpoNoticia markdown={n.conteudo} />
+              <div className="noticia-rodape">
+                <p>Compartilhe esta notícia</p>
+                <AcoesCompartilhar />
+              </div>
+              {(viz.anterior || viz.proxima) && (
+                <nav className="noticia-nav" aria-label="Outras notícias">
+                  {viz.anterior && <a href={`${base}/${viz.anterior.slug}`}><small>← Anterior</small><span>{viz.anterior.titulo}</span></a>}
+                  {viz.proxima && <a className="proxima" href={`${base}/${viz.proxima.slug}`}><small>Próxima →</small><span>{viz.proxima.titulo}</span></a>}
+                </nav>
+              )}
+            </article>
+            <LateralPagina contato={contato} whatsapp={Boolean(site.config.whatsappNumero)} atendimento={`/${site.orgao.slug}#fale-conosco`} />
+          </div>
+        </section>
+        {rel.length > 0 && (
+          <section className="rel" aria-labelledby="rel-titulo">
+            <div className="container">
+              <div className="rel__topo">
+                <h2 id="rel-titulo">Notícias relacionadas</h2>
+                <a className="pag-bt pag-bt--mudo" href={temTema ? `${base}?tema=${encodeURIComponent(n.categoria)}` : base}>{temTema ? `Mais sobre ${n.categoria}` : "Todas as notícias"}<Icone id="arrow" /></a>
+              </div>
+              <div className="rel-grade">{rel.map((x) => <CardNoticia key={x.id} n={x} orgaoSlug={site.orgao.slug} midias={midiasRel} />)}</div>
+            </div>
+          </section>
+        )}
+      </SiteShell>
+    );
+  }
 
   return (
     <SiteShell ctx={ctx} nomeOrgao={site.orgao.nome} config={site.config} blocos={site.blocos}>

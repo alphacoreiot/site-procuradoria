@@ -1,12 +1,12 @@
 "use client";
 import { useState, useTransition } from "react";
 import { excluirNoticia, salvarNoticia } from "../../../acoes/noticias";
-import { LIMITES_NOTICIA as L, gerarSlug } from "@/lib/noticias-shared";
+import { LIMITES_NOTICIA as L, TIPOS_NOTICIA, gerarSlug } from "@/lib/noticias-shared";
 import { SeletorImagem } from "@/components/admin/SeletorImagem";
 import { CorpoNoticia } from "@/components/site/noticias";
 
 type Dados = {
-  titulo: string; slug: string; resumo: string; conteudo: string; categoria: string;
+  titulo: string; slug: string; resumo: string; conteudo: string; categoria: string; tipo: string; chamada: string; autorNome: string;
   capaId: string; capaAlt: string; destaque: boolean; status: "RASCUNHO" | "PUBLICADA"; publicadaEm: string;
 };
 
@@ -53,8 +53,23 @@ export function FormNoticia({ orgao, id, inicial }: { orgao: string; id: string 
       </div>
       <div className="grade">
         <div className="campo">
-          <div className="campo__linha"><label htmlFor="n-cat">Categoria</label><Cont n={d.categoria.length} max={L.categoria} /></div>
+          <div className="campo__linha"><label htmlFor="n-cat">Assunto</label><Cont n={d.categoria.length} max={L.categoria} /></div>
           <input id="n-cat" type="text" maxLength={L.categoria} value={d.categoria} placeholder="Institucional, Dívida Ativa…" onChange={(e) => set("categoria", e.target.value)} />
+        </div>
+        <div className="campo">
+          <div className="campo__linha"><label htmlFor="n-chamada">Chamada</label><Cont n={d.chamada.length} max={L.chamada} /></div>
+          <input id="n-chamada" type="text" maxLength={L.chamada} value={d.chamada} placeholder="Texto curto acima do título" onChange={(e) => set("chamada", e.target.value)} />
+        </div>
+        <div className="campo">
+          <label htmlFor="n-tipo">Tipo</label>
+          <select id="n-tipo" value={d.tipo} onChange={(e) => set("tipo", e.target.value)}>
+            <option value="">Sem tipo</option>
+            {TIPOS_NOTICIA.map((t) => <option key={t} value={t}>{t}</option>)}
+          </select>
+        </div>
+        <div className="campo">
+          <div className="campo__linha"><label htmlFor="n-autor">Autor (assinatura)</label><Cont n={d.autorNome.length} max={L.autorNome} /></div>
+          <input id="n-autor" type="text" maxLength={L.autorNome} value={d.autorNome} placeholder="Ascom, nome de quem escreveu…" onChange={(e) => set("autorNome", e.target.value)} />
         </div>
         <div className="campo">
           <label htmlFor="n-data">Data de publicação</label>

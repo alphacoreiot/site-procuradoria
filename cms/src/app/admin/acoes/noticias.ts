@@ -6,6 +6,7 @@ import { exigirOrgao } from "@/lib/auth";
 import { auditar } from "@/lib/audit";
 import { executar, ErroUsuario } from "@/lib/acao";
 import { LIMITES_NOTICIA, gerarSlug } from "@/lib/noticias-shared";
+import { normalizarBusca } from "@/lib/documentos-shared";
 
 const schema = z.object({
   titulo: z.string().trim().min(5, "Título: mínimo de 5 caracteres.").max(LIMITES_NOTICIA.titulo, `Título: no máximo ${LIMITES_NOTICIA.titulo} caracteres.`),
@@ -13,6 +14,9 @@ const schema = z.object({
   resumo: z.string().trim().min(10, "Resumo: mínimo de 10 caracteres.").max(LIMITES_NOTICIA.resumo, `Resumo: no máximo ${LIMITES_NOTICIA.resumo} caracteres.`),
   conteudo: z.string().max(LIMITES_NOTICIA.conteudo, `Conteúdo: no máximo ${LIMITES_NOTICIA.conteudo} caracteres.`),
   categoria: z.string().trim().max(LIMITES_NOTICIA.categoria),
+  tipo: z.string().trim().max(LIMITES_NOTICIA.tipo),
+  chamada: z.string().trim().max(LIMITES_NOTICIA.chamada),
+  autorNome: z.string().trim().max(LIMITES_NOTICIA.autorNome),
   capaId: z.string().regex(/^[a-z0-9]{10,40}$/).or(z.literal("")),
   capaAlt: z.string().trim().max(LIMITES_NOTICIA.capaAlt),
   destaque: z.boolean(),
@@ -40,7 +44,8 @@ export async function salvarNoticia(orgao: string, id: string | null, entrada: u
       if (isNaN(publicadaEm.getTime())) throw new ErroUsuario("Data de publicação inválida.");
     }
     const dados = {
-      titulo: d.titulo, slug, resumo: d.resumo, conteudo: d.conteudo, categoria: d.categoria,
+      titulo: d.titulo, slug, resumo: d.resumo, conteudo: d.conteudo, categoria: d.categoria, tipo: d.tipo, chamada: d.chamada, autorNome: d.autorNome,
+      busca: normalizarBusca(`${d.titulo} ${d.chamada} ${d.resumo}`),
       capaId: d.capaId || null, capaAlt: d.capaAlt, destaque: d.destaque, status: d.status, publicadaEm,
     };
 

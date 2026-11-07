@@ -20,6 +20,7 @@ export default async function Legislacao({ params, searchParams }: Props) {
       titulo="Legislação"
       introducao="Código tributário, leis, decretos, portarias, instruções normativas e demais atos."
       filtros={await searchParams}
+      destaque="Código Tributário"
     />
   );
 }
