@@ -517,7 +517,7 @@ async function montarInicio() {
 
   const cfg = schemaObjeto(CAMPOS_CONFIG).parse({
     tituloSite: "SEFAZ Camaçari | Secretaria da Fazenda", descricaoSeo: "Portal da Secretaria da Fazenda de Camaçari: tributos, legislação, processos digitais e serviços ao contribuinte.",
-    favicon: { id: brasao, alt: "" }, whatsappNumero: "5571987969856", whatsappMensagem: "Olá! Vim pelo portal da SEFAZ e gostaria de atendimento.", whatsappFlutuante: true, voltarTopo: true, visualModerno: true, linkSistema: "https://sefazweb.camacari.ba.gov.br/prefeituras/loginb.tela", rotuloSistema: "Acessar o Sistema Tributário",
+    favicon: { id: brasao, alt: "" }, whatsappNumero: "5571987969856", whatsappMensagem: "Olá! Vim pelo portal da SEFAZ e gostaria de atendimento.", whatsappFlutuante: true, voltarTopo: true, visualModerno: true, chatAtivo: true, linkSistema: "https://sefazweb.camacari.ba.gov.br/prefeituras/loginb.tela", rotuloSistema: "Acessar o Sistema Tributário",
   });
   await db.configuracao.create({ data: { orgaoId, dados: JSON.stringify(cfg) } });
 }

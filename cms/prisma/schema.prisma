@@ -194,6 +194,7 @@ model Documento {
   ano         Int?     // ano do ato, tirado do título
   publicado   Boolean  @default(true)
   observacao  String   @default("") // uso interno (ex.: origem da importação)
+  trechos     Trecho[]
   criadoEm    DateTime @default(now())
   alteradoEm  DateTime @updatedAt
 
@@ -214,4 +215,17 @@ model Processo {
 
   @@unique([orgaoId, slug])
   @@index([orgaoId, publicado])
+}
+
+/// Pedaço de um documento (artigo de lei ou bloco de texto) usado pelo assistente virtual
+model Trecho {
+  id          String    @id @default(cuid())
+  documentoId String
+  documento   Documento @relation(fields: [documentoId], references: [id], onDelete: Cascade)
+  pagina      Int
+  rotulo      String    @default("") // "Art. 45", "p. 3"
+  secao       String    @default("") // capítulo ou seção da lei
+  texto       String
+
+  @@index([documentoId])
 }

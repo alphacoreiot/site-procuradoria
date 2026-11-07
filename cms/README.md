@@ -90,3 +90,11 @@ NODE_ENV=production npm start  # porta 3000
 - **Páginas públicas por órgão:** `/legislacao`, `/central-de-conteudo` (busca e categoria), `/processos` e páginas de conteúdo em Markdown.
 - **Componentes novos:** abertura com banners, cartões com imagem e organograma animado. Em uma página de conteúdo, `{{organograma}}` no texto coloca o organograma naquele ponto.
 - **SEFAZ:** `npm run importar:sefaz` reconstrói o órgão a partir de `../sefaz-dados` (coleta fora do Git). Apaga e recria só o órgão `sefaz`, descartando edições feitas nele.
+
+## Assistente virtual (versão de teste)
+
+- Só aparece no órgão com "Mostrar o assistente virtual" ligado em Configurações e com `GROQ_API_KEY` no servidor. **A chave nunca vai para o repositório.**
+- Antes de chamar o modelo, a busca seleciona os trechos da base (`Trecho`, artigos e blocos dos documentos), páginas, processos e notícias. O modelo responde só com base neles e cita a fonte.
+- Atualizar a base depois de trocar um documento: extrair o texto e rodar `scripts/sefaz-base.ts`.
+- Avaliar a qualidade: `npx tsx --env-file=.env scripts/testar-assistente.ts`.
+- A conversa não é gravada. Limites: 30 perguntas por IP a cada 10 minutos e teto diário por órgão.

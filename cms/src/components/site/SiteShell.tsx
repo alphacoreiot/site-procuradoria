@@ -5,6 +5,7 @@ import { Cabecalho, Rodape, jsonSeguro, type Ctx } from "@/blocks/render";
 import { Icone } from "./ui";
 import { SPRITE } from "./sprite";
 import { ScriptsSite } from "./ScriptsSite";
+import { Assistente } from "./Assistente";
 import type { BlocoCarregado } from "@/lib/site";
 
 /**
@@ -51,6 +52,7 @@ export async function SiteShell({
           <Icone id="whatsapp" />
         </a>
       )}
+      {config.chatAtivo && process.env.GROQ_API_KEY && <Assistente orgao={ctx.orgaoSlug} sigla={nomeOrgao.includes("Fazenda") ? "SEFAZ" : "do órgão"} />}
       {config.voltarTopo && (
         <a className="to-top" href="#topo" aria-label="Voltar ao topo" title="Voltar ao topo"><Icone id="chevron" /></a>
       )}

@@ -25,7 +25,7 @@ async function main() {
 
   const atual = completar(CAMPOS_CONFIG, JSON.parse(o.configuracao!.dados));
   const cfg = schemaObjeto(CAMPOS_CONFIG).parse({
-    ...atual, visualModerno: true,
+    ...atual, visualModerno: true, chatAtivo: true,
     linkSistema: atual.linkSistema || "https://sefazweb.camacari.ba.gov.br/prefeituras/loginb.tela",
     rotuloSistema: atual.rotuloSistema || "Acessar o Sistema Tributário",
   });
