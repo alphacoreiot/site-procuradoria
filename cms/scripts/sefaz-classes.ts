@@ -85,7 +85,8 @@ export function limparCorpo(md: string, titulo: string, d: DadosPost) {
     const avatar = b.match(/^!\[([^\]]*)\]\(\/media\/[^)]+\)$/);
     if (avatar && nomes.has(normalizarBusca(avatar[1]))) continue;
     if (nomes.has(n)) continue;
-    if (/^(publicado em\s*)?\d{2}\/\d{2}\/\d{4}$/i.test(t)) continue;
+    const linha = t.match(/^(?:publicado em\s*)?\d{2}\/\d{2}\/\d{4}(?:\s+\d{2}:\d{2})?(?:\s*-\s*(foto:.*))?$/i);
+    if (linha) { if (linha[1]) saida.push(linha[1]); continue; } // mantém só o crédito da foto
     if (RE_FIM.test(t)) continue;
     if (iguais.has(n)) continue;
     saida.push(b);
