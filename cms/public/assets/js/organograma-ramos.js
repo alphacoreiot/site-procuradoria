@@ -253,5 +253,6 @@
     else raiz.classList.add("orgr--animado");
     desenhar();
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { if (!raf) desenhar(); });
+    raiz.classList.add("orgr--pronto"); // chegou até aqui: o texto de reserva não é necessário
   });
 })();

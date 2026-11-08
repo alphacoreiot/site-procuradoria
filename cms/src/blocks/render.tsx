@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // Renderização pública de cada componente. A marcação e as classes são as
 // mesmas da versão estática, para o visual e as animações serem idênticos.
+import ReactMarkdown from "react-markdown";
 import type { ReactNode } from "react";
 import { Icone, Img, Linhas, propsLink, type MapaMidias } from "@/components/site/ui";
 import { srcSetMidia, urlMidia } from "@/lib/media-shared";
@@ -578,8 +579,10 @@ export function Organograma({ d, id, embutido = false }: { d: D; id: string; emb
     <NoOrg key={i} id={`${p}${i}`} pai={i === 0 ? "t" : `${p}${i - 1}`} tipo={i === 0 ? "ass" : "sub"} rota={i === 0 ? "lado" : ""} x={a} cls="orgr__no--assessoria" />
   ));
   const leg = d.legenda as D;
+  const reserva = String(d.textoReserva ?? "").trim();
   const grafico = (
-        <div className="orgr" data-orgr role="group" aria-label={`Organograma: ${d.titulo}`} id={embutido ? id : undefined}>
+      <>
+        <div className={`orgr${reserva ? " orgr--com-reserva" : ""}`} data-orgr role="group" aria-label={`Organograma: ${d.titulo}`} id={embutido ? id : undefined}>
           <div className="orgr__palco">
             <svg className="orgr__fios" aria-hidden="true" />
             <div className="orgr__topo">
@@ -623,6 +626,8 @@ export function Organograma({ d, id, embutido = false }: { d: D; id: string; emb
             <button className="orgr__repetir" type="button" data-orgr-repetir>Repetir animação</button>
           </div>
         </div>
+        {reserva && <div className="orgr-reserva"><div className="orgr-reserva__corpo"><ReactMarkdown>{reserva}</ReactMarkdown></div></div>}
+      </>
   );
   if (embutido) return <div className="orgr-embutido">{grafico}</div>;
   return (
@@ -635,9 +640,135 @@ export function Organograma({ d, id, embutido = false }: { d: D; id: string; emb
   );
 }
 
+// ---------------------------------------------------------------- competências em trilha
+const ROMANOS = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII"];
+const CORES_TRILHA = ["roxo", "vermelho", "laranja", "verde"];
+
+export function Competencias({ d, id, embutido = false }: { d: D; id: string; embutido?: boolean }) {
+  const itens = d.itens as D[];
+  const noCartao = (t: string) => { const s = t.trim().replace(/[;.,]$/, ""); return s.charAt(0).toUpperCase() + s.slice(1); };
+  const grafico = (
+    <>
+      <div className="cmp orgr--com-reserva" data-cmp id={embutido ? id : undefined}>
+        <div className="cmp__palco">
+          <svg className="cmp__fios" aria-hidden="true" />
+          <ol className="cmp__lista" aria-label={String(d.titulo)}>
+            {itens.map((x, i) => (
+              <li key={i} className={`cmp__item cmp__item--${CORES_TRILHA[i % CORES_TRILHA.length]}`}>
+                <span className="cmp__num" aria-hidden="true">{ROMANOS[i]}</span>
+                <p className="cmp__txt">{noCartao(String(x.texto))}</p>
+              </li>
+            ))}
+          </ol>
+        </div>
+        <div className="cmp__pe"><button className="orgr__repetir" type="button" data-cmp-repetir>Repetir animação</button></div>
+      </div>
+      <div className="orgr-reserva">
+        <div className="orgr-reserva__corpo"><ul>{itens.map((x, i) => <li key={i}>{ROMANOS[i]}. {String(x.texto)}</li>)}</ul></div>
+      </div>
+    </>
+  );
+  if (embutido) return <div className="orgr-embutido">{grafico}</div>;
+  return (
+    <section className="section section--soft" id={id}>
+      <div className="container">
+        <CabecalhoSecao d={d} />
+        {grafico}
+      </div>
+    </section>
+  );
+}
+
+// ---------------------------------------------------------------- canais de atendimento
+const Destaques = ({ t }: { t: string }) => <>{t.split(/\*\*(.+?)\*\*/).map((p, i) => (i % 2 ? <strong key={i}>{p}</strong> : p))}</>;
+
+export function Atendimento({ d, id }: { d: D; id: string }) {
+  const so = (t: unknown) => String(t ?? "").replace(/\D/g, "");
+  const demandas = d.demandas as D[];
+  return (
+    <div className="orgr-embutido atd" data-atd id={id}>
+      <section className="atd__bloco">
+        <div className="atd__topo">
+          <div>
+            <h2 className="pag-h2">{d.titulo}</h2>
+            {d.texto && <p className="atd__apoio">{d.texto}</p>}
+          </div>
+          <p className="atd__status" role="status" hidden data-atd-status data-abre={d.horaAbre} data-fecha={d.horaFecha}><i aria-hidden="true" /><b /></p>
+        </div>
+        <div className="atd__canais">
+          <article className="atd-canal atd-canal--fone">
+            <div className="atd-canal__ico" aria-hidden="true"><span className="atd-canal__onda" /><span className="atd-canal__onda" /><Icone id="phone" /></div>
+            <h3>Call Center</h3>
+            <a className="atd-canal__num" href={`tel:+55${so(d.telefone)}`}>{d.telefone}</a>
+            <p className="atd-canal__txt">{d.telefoneTexto}</p>
+            <a className="pag-bt pag-bt--pri atd-canal__acao" href={`tel:+55${so(d.telefone)}`}>Ligar agora<Icone id="phone" /></a>
+          </article>
+          <article className="atd-canal atd-canal--whats">
+            <div className="atd-canal__ico" aria-hidden="true"><Icone id="whatsapp" /><span className="atd-canal__digita"><span /><span /><span /></span></div>
+            <h3>WhatsApp SEFAZ</h3>
+            <a className="atd-canal__num" href={`https://api.whatsapp.com/send?phone=55${so(d.whatsapp)}`} target="_blank" rel="noopener noreferrer">{d.whatsapp}</a>
+            <p className="atd-canal__txt">{d.whatsappTexto}</p>
+            <a className="pag-bt pag-bt--pri atd-canal__acao" href={`https://api.whatsapp.com/send?phone=55${so(d.whatsapp)}`} target="_blank" rel="noopener noreferrer">Enviar mensagem<Icone id="whatsapp" /></a>
+          </article>
+          <article className="atd-canal atd-canal--ia" hidden data-ast-canal>
+            <div className="atd-canal__ico" aria-hidden="true"><span className="atd-canal__onda" /><span className="atd-canal__onda" /><Icone id="chat" /></div>
+            <h3>Assistente virtual <span className="atd-canal__tag">Versão de teste</span></h3>
+            <p className="atd-canal__txt">{d.chatTexto}</p>
+            <div className="atd-canal__sug">
+              {(d.chatSugestoes as D[]).map((x, i) => <button key={i} type="button" data-ast-perguntar={String(x.texto)}>{String(x.texto)}</button>)}
+            </div>
+            <button className="pag-bt pag-bt--pri atd-canal__acao" type="button" data-ast-chamar>Conversar agora<Icone id="chat" /></button>
+          </article>
+        </div>
+      </section>
+      <section className="atd__bloco">
+        <div>
+          <h2 className="pag-h2">{d.demandasTitulo}</h2>
+          <p className="atd__apoio" hidden data-ast-canal>Clique em um tema para ver perguntas prontas no Assistente SEFAZ.</p>
+        </div>
+        <ul className="atd__servicos">
+          {demandas.map((x, i) => {
+            const perguntas = (x.perguntas as D[]).map((p) => String(p.texto));
+            const miolo = (
+              <>
+                <span className="atd-servico__ico" aria-hidden="true"><Icone id={String(x.icone)} /></span>
+                <span><Destaques t={String(x.texto)} /></span>
+              </>
+            );
+            return (
+              <li key={i} className="atd-servico">
+                {perguntas.length && x.tema
+                  ? (
+                    <button type="button" className="atd-servico__bt" disabled data-ast-tema={String(x.tema)} data-ast-perguntas={JSON.stringify(perguntas)}>
+                      {miolo}
+                      <span className="atd-servico__mais"><Icone id="chat" /><span className="sr-only">Ver perguntas sobre este tema no assistente</span></span>
+                    </button>
+                  )
+                  : <div className="atd-servico__bt">{miolo}</div>}
+              </li>
+            );
+          })}
+        </ul>
+      </section>
+      <section className="atd-sobre">
+        <div className="atd-sobre__txt">
+          <h2 className="pag-h2">{d.sobreTitulo}</h2>
+          <div className="atd-sobre__corpo"><ReactMarkdown>{String(d.sobreTexto ?? "")}</ReactMarkdown></div>
+        </div>
+        {d.imagem?.id && (
+          <figure className="atd-sobre__foto">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={urlMidia(d.imagem.id, 1000, "livre")} alt={d.imagem.alt || ""} loading="lazy" decoding="async" />
+          </figure>
+        )}
+      </section>
+    </div>
+  );
+}
+
 /** Âncora usada no menu para cada tipo (mantém os links #sobre etc.). */
 export const ANCORA_POR_TIPO: Record<string, string> = {
-  institucional: "sobre", sistemas: "sistemas", servicos: "servicos", noticias: "noticias", contato: "fale-conosco", cartoes: "destaques", organograma: "organograma",
+  institucional: "sobre", sistemas: "sistemas", servicos: "servicos", noticias: "noticias", contato: "fale-conosco", cartoes: "destaques", organograma: "organograma", competencias: "competencias", atendimento: "canais",
 };
 
 export function BlocoPrincipal({ tipo, d, ctx, idx, embutido }: { tipo: string; d: D; ctx: Ctx; idx: number; embutido?: boolean }) {
@@ -647,6 +778,8 @@ export function BlocoPrincipal({ tipo, d, ctx, idx, embutido }: { tipo: string; 
     case "banners": return <Banners d={d} ctx={ctx} />;
     case "cartoes": return <Cartoes d={d} ctx={ctx} id={id} />;
     case "organograma": return <Organograma d={d} id={id} embutido={embutido} />;
+    case "competencias": return <Competencias d={d} id={id} embutido={embutido} />;
+    case "atendimento": return <Atendimento d={d} id={id} />;
     case "institucional": return <Institucional d={d} id={id} />;
     case "sistemas": return <Sistemas d={d} id={id} />;
     case "servicos": return <Servicos d={d} id={id} />;

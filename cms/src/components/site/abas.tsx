@@ -10,7 +10,25 @@ export const Separador = () => (
   <div className="separador" aria-hidden="true"><span /><span /><span /><span /></div>
 );
 
-/** Categorias sempre todas à vista: quebram em linhas. O marcador deslizante vem do script. */
+const ICONES_CATEGORIA: [RegExp, string][] = [
+  [/^tod[ao]s/, "grid"],
+  [/codigo|integracao/, "layers"],
+  [/calendario|prazo/, "clock"],
+  [/decreto|portaria|resolucao|deliberac|instrucao|lei|legislacao|norma/, "doc"],
+  [/formulario|inscricao|cadastro/, "id"],
+  [/manual|orientacao|consulta|verificacao/, "search"],
+  [/tabela|tff|cosip/, "layers"],
+  [/audiencia|prestacao|institucional/, "chat"],
+  [/alerta/, "ticket"],
+  [/modernizacao|sistema/, "grid"],
+  [/itiv|iptu/, "pin"],
+  [/iss|contribuinte|certidao/, "handshake"],
+  [/isencao|cancelamento/, "ticket"],
+  [/links/, "send"],
+];
+const iconeCategoria = (t: string) => { const n = normalizarBusca(t); return ICONES_CATEGORIA.find(([re]) => re.test(n))?.[1] ?? "inbox"; };
+
+/** Categorias em blocos, sempre todas à vista. O marcador deslizante vem do script. */
 export function Abas({ rotulo, itens, separador = true, ancoras = false }: { rotulo: string; itens: ItemAba[]; separador?: boolean; ancoras?: boolean }) {
   return (
     <>
@@ -19,6 +37,7 @@ export function Abas({ rotulo, itens, separador = true, ancoras = false }: { rot
           <span className="abas__marca" aria-hidden="true" />
           {itens.map((i) => (
             <a key={i.href} href={i.href} aria-current={i.ativo ? "true" : undefined}>
+              <Icone id={iconeCategoria(i.texto)} />
               <b>{i.texto}</b>{i.total !== undefined && <span>{i.total}</span>}
             </a>
           ))}
@@ -29,19 +48,23 @@ export function Abas({ rotulo, itens, separador = true, ancoras = false }: { rot
   );
 }
 
-/** Conjunto de opções de filtro, todas visíveis. */
+/** Filtro em dropdown. As opções são links: funciona mesmo sem JavaScript. */
 export function LinhaFiltro({ rotulo, itens }: { rotulo: string; itens: ItemAba[] }) {
+  const atual = itens.find((i) => i.ativo) ?? itens[0];
   return (
-    <div className="flt" role="group" aria-label={rotulo}>
-      <span className="flt__rotulo">{rotulo}</span>
-      <div className="flt__itens">
+    <details className={`flt${atual !== itens[0] ? " flt--marcado" : ""}`}>
+      <summary>
+        <span className="flt__rotulo">{rotulo}</span>
+        <b className="flt__valor">{atual?.texto}</b>
+      </summary>
+      <div className="flt__menu">
         {itens.map((i) => (
           <a key={i.href} href={i.href} aria-current={i.ativo ? "true" : undefined}>
             {i.texto}{i.total !== undefined && <span>{i.total}</span>}
           </a>
         ))}
       </div>
-    </div>
+    </details>
   );
 }
 

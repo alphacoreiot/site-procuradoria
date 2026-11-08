@@ -10,7 +10,7 @@
 
   // entrada suave: só quem ainda está abaixo da dobra espera a rolagem
   if (!reduzir && "IntersectionObserver" in window) {
-    var itens = raiz.querySelectorAll(".doc-lista > li, .proc-lista > li, .pag-links > li, .pag-faq__item, .news-card, .check-grupo li, .pag-h2, .pag-proximos a, .rel-grade > *, .doc-destaque, .cartao, .service, .separador, .doc-cards > li, .serie, .aud li");
+    var itens = raiz.querySelectorAll(".doc-lista > li, .proc-lista > li, .pag-links > li, .pag-faq__item, .news-card, .check-grupo li, .pag-h2, .pag-proximos a, .rel-grade > *, .doc-destaque, .cartao, .service, .separador, .doc-cards > li, .serie, .aud li, .atd-canal, .atd-servico, .atd-sobre__txt, .atd-sobre__foto");
     var obs = new IntersectionObserver(function (es) {
       es.forEach(function (e) {
         if (!e.isIntersecting) return;
@@ -194,4 +194,44 @@
       vazio.textContent = !q ? "" : total === 0 ? "Nenhum serviço encontrado. Tente outra palavra." : total + (total === 1 ? " serviço encontrado" : " serviços encontrados");
     });
   });
+})();
+
+/* Filtros em dropdown: um aberto por vez; fecha ao clicar fora ou com Esc */
+(function () {
+  var filtros = document.querySelectorAll("details.flt");
+  if (!filtros.length) return;
+  filtros.forEach(function (d) {
+    d.addEventListener("toggle", function () {
+      if (d.open) filtros.forEach(function (o) { if (o !== d) o.open = false; });
+    });
+  });
+  document.addEventListener("click", function (e) {
+    filtros.forEach(function (d) { if (d.open && !d.contains(e.target)) d.open = false; });
+  });
+  document.addEventListener("keydown", function (e) {
+    if (e.key !== "Escape") return;
+    filtros.forEach(function (d) {
+      if (d.open) { d.open = false; d.querySelector("summary").focus(); }
+    });
+  });
+})();
+
+/* Sefaz Atende: indica se é horário de atendimento e pausa as animações fora da tela */
+(function () {
+  var atd = document.querySelector("[data-atd]");
+  if (!atd) return;
+  var st = atd.querySelector("[data-atd-status]");
+  if (st) {
+    var partes = {};
+    new Intl.DateTimeFormat("en-GB", { timeZone: "America/Bahia", weekday: "short", hour: "numeric", hourCycle: "h23" })
+      .formatToParts(new Date()).forEach(function (p) { partes[p.type] = p.value; });
+    var hora = parseInt(partes.hour, 10);
+    var aberto = !/Sat|Sun/.test(partes.weekday) && hora >= Number(st.getAttribute("data-abre")) && hora < Number(st.getAttribute("data-fecha"));
+    st.querySelector("b").textContent = aberto ? "Dentro do horário de atendimento" : "Fora do horário de atendimento";
+    st.classList.toggle("atd__status--aberto", aberto);
+    st.hidden = false;
+  }
+  if ("IntersectionObserver" in window) {
+    new IntersectionObserver(function (e) { atd.classList.toggle("is-ativo", e[0].isIntersecting); }, { threshold: 0 }).observe(atd.querySelector(".atd__canais"));
+  }
 })();

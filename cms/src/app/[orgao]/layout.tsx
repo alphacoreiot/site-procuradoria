@@ -9,12 +9,13 @@ export async function generateMetadata({ params }: { params: Promise<{ orgao: st
 }
 
 export default function LayoutOrgao({ children }: { children: React.ReactNode }) {
+  const v = process.env.VERSAO_ATIVOS ? `?v=${process.env.VERSAO_ATIVOS}` : "";
   return (
     <>
       <link rel="stylesheet" href="/assets/vendor/leaflet/leaflet.css" precedence="default" />
-      <link rel="stylesheet" href="/assets/css/design-system.css" precedence="default" />
-      <link rel="stylesheet" href="/assets/css/portal.css" precedence="default" />
-      <link rel="stylesheet" href="/assets/css/cms.css" precedence="default" />
+      <link rel="stylesheet" href={`/assets/css/design-system.css${v}`} precedence="default" />
+      <link rel="stylesheet" href={`/assets/css/portal.css${v}`} precedence="default" />
+      <link rel="stylesheet" href={`/assets/css/cms.css${v}`} precedence="default" />
       {children}
     </>
   );

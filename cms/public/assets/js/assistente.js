@@ -17,12 +17,12 @@
   function ler() { try { return JSON.parse(sessionStorage.getItem(CHAVE) || "null"); } catch (e) { return null; } }
   function gravar(v) { try { if (v) sessionStorage.setItem(CHAVE, JSON.stringify(v)); else sessionStorage.removeItem(CHAVE); } catch (e) { /* sem armazenamento */ } }
 
-  function mostrar(sim) {
+  function mostrar(sim, foco) {
     painel.hidden = !sim;
     abrir.setAttribute("aria-expanded", sim ? "true" : "false");
     raiz.classList.toggle("is-aberto", sim);
     document.documentElement.classList.toggle("ast-aberto", sim);
-    if (sim) { campo.focus(); rolar(); } else { abrir.focus(); }
+    if (sim) { (foco || campo).focus(); rolar(); } else { abrir.focus(); }
   }
   function rolar() { msgs.scrollTop = msgs.scrollHeight; }
 
@@ -165,6 +165,53 @@
       if (rolarDepois >= 0) msgs.scrollTop = rolarDepois; else rolar();
     });
   }
+
+  // canais em outras partes da página (ex.: Sefaz Atende) abrem este mesmo chat
+  document.querySelectorAll("[data-ast-canal]").forEach(function (c) { c.hidden = false; });
+  document.querySelectorAll("[data-ast-tema]").forEach(function (c) { c.disabled = false; });
+
+  /* Tema clicado: as perguntas são fixas, definidas no painel. O foco vai para o
+     primeiro botão, e não para o campo, para o teclado do celular não cobrir as opções. */
+  var bolhaTema = null;
+  function abrirTema(tema, perguntas) {
+    tirarSugestoes();
+    if (bolhaTema && msgs.lastElementChild === bolhaTema) bolhaTema.remove();
+    bolhaTema = bolha("bot");
+    var p = document.createElement("p"), b = document.createElement("strong");
+    b.textContent = tema;
+    p.appendChild(document.createTextNode("Sobre "));
+    p.appendChild(b);
+    p.appendChild(document.createTextNode(", escolha uma pergunta ou digite a sua:"));
+    bolhaTema.appendChild(p);
+    var caixa = document.createElement("div");
+    caixa.className = "ast__sugestoes ast__sugestoes--tema";
+    caixa.setAttribute("data-ast-sugestoes", "");
+    perguntas.forEach(function (q, i) {
+      var bt = document.createElement("button");
+      bt.type = "button";
+      bt.setAttribute("data-ast-sugestao", q);
+      bt.style.setProperty("--i", i);
+      bt.textContent = q;
+      caixa.appendChild(bt);
+    });
+    msgs.appendChild(caixa);
+    var primeiro = caixa.querySelector("button");
+    if (painel.hidden) mostrar(true, primeiro); else { primeiro.focus(); rolar(); }
+  }
+
+  document.addEventListener("click", function (e) {
+    var t = e.target.closest("[data-ast-tema]");
+    if (t) {
+      var lista = [];
+      try { lista = JSON.parse(t.getAttribute("data-ast-perguntas") || "[]"); } catch (x) { /* sem perguntas */ }
+      if (lista.length) abrirTema(t.getAttribute("data-ast-tema"), lista);
+      return;
+    }
+    var b = e.target.closest("[data-ast-chamar], [data-ast-perguntar]");
+    if (!b) return;
+    if (painel.hidden) mostrar(true);
+    if (b.hasAttribute("data-ast-perguntar")) perguntar(b.getAttribute("data-ast-perguntar"));
+  });
 
   abrir.addEventListener("click", function () { mostrar(painel.hidden); });
   raiz.querySelector("[data-ast-fechar]").addEventListener("click", function () { mostrar(false); });

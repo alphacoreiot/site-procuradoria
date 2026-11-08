@@ -3,7 +3,7 @@ import { useEffect } from "react";
 
 const SCRIPTS = ["/assets/js/organograma.js", "/assets/js/quemsomos.js", "/assets/js/main.js", "/assets/js/motion.js"];
 /** Scripts carregados só nas páginas que têm o componente correspondente. */
-const OPCIONAIS: [string, string][] = [["[data-banners]", "/assets/js/banners.js"], ["[data-orgr]", "/assets/js/organograma-ramos.js"], ["[data-pagina]", "/assets/js/paginas.js"], [".pag-moderna", "/assets/js/interacoes.js"], ["[data-assistente]", "/assets/js/assistente.js"]];
+const OPCIONAIS: [string, string][] = [["[data-banners]", "/assets/js/banners.js"], ["[data-orgr]", "/assets/js/organograma-ramos.js"], ["[data-cmp]", "/assets/js/competencias.js"], ["[data-pagina]", "/assets/js/paginas.js"], [".pag-moderna", "/assets/js/interacoes.js"], ["[data-assistente]", "/assets/js/assistente.js"]];
 
 /**
  * Carrega os scripts de animação DEPOIS da hidratação do React. Eles alteram
@@ -19,7 +19,7 @@ export function ScriptsSite({ nonce }: { nonce?: string }) {
     const lista = [...SCRIPTS, ...OPCIONAIS.filter(([sel]) => document.querySelector(sel)).map(([, src]) => src)];
     for (const src of lista) {
       const s = document.createElement("script");
-      s.src = src;
+      s.src = process.env.VERSAO_ATIVOS ? `${src}?v=${process.env.VERSAO_ATIVOS}` : src;
       s.async = false;
       if (nonce) s.nonce = nonce;
       document.body.appendChild(s);

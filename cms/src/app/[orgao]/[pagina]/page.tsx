@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { cache } from "react";
+import { cache, Fragment } from "react";
 import { db } from "@/lib/db";
 import { carregarSite } from "@/lib/site";
 import { analisarConteudo } from "@/lib/conteudo";
@@ -11,7 +11,7 @@ import { MolduraTexto } from "@/components/site/documentos";
 import { Segmentos } from "@/components/site/pagina";
 
 export const dynamic = "force-dynamic";
-const MARCADOR = "{{organograma}}";
+const EMBUTIVEIS = ["organograma", "competencias", "atendimento"];
 
 type Props = { params: Promise<{ orgao: string; pagina: string }> };
 
@@ -45,12 +45,16 @@ export default async function PaginaInterna({ params }: Props) {
   };
   const blocos = r.p.blocos.filter((b) => BLOCOS_POR_TIPO[b.tipo]);
 
-  // {{organograma}} no texto coloca o componente naquele ponto, sem seção própria
-  const org = blocos.find((b) => b.tipo === "organograma");
-  const partes = org ? r.p.conteudo.split(MARCADOR) : [r.p.conteudo];
-  const embutir = Boolean(org) && partes.length > 1;
+  // {{organograma}} ou {{competencias}} no texto colocam o componente naquele ponto, sem seção própria
+  const tipos = blocos.filter((x) => EMBUTIVEIS.includes(x.tipo)).map((x) => x.tipo);
+  const partes = tipos.length ? r.p.conteudo.split(new RegExp(`\\{\\{(${tipos.join("|")})\\}\\}`)) : [r.p.conteudo];
   const a = analisarConteudo(partes[0], "a");
-  const b = embutir ? analisarConteudo(partes.slice(1).join(""), "b", false) : null;
+  const trechos: { bloco: (typeof blocos)[number]; conteudo: ReturnType<typeof analisarConteudo> }[] = [];
+  for (let i = 1; i < partes.length; i += 2) {
+    trechos.push({ bloco: blocos.find((x) => x.tipo === partes[i])!, conteudo: analisarConteudo(partes[i + 1], String.fromCharCode(97 + (i + 1) / 2), false) });
+  }
+  const embutidos = trechos.map((t) => t.bloco);
+  const embutir = trechos.length > 0;
   const comAbas = a.segs.some((s) => s.t === "grupos");
 
   return (
@@ -60,14 +64,18 @@ export default async function PaginaInterna({ params }: Props) {
       texto={r.p.descricaoSeo || undefined}
       capa={a.capa}
       cta={a.cta}
-      indice={[...a.indice, ...(b?.indice ?? [])]}
+      indice={[...a.indice, ...trechos.flatMap((t) => t.conteudo.indice)]}
       lateral={!embutir && !comAbas}
       larga={comAbas || embutir}
-      depois={blocos.filter((x) => !(embutir && x === org)).map((x) => montar(x, false))}
+      depois={blocos.filter((x) => !embutidos.includes(x)).map((x) => montar(x, false))}
     >
       <Segmentos segs={a.segs} />
-      {embutir && org && montar(org, true)}
-      {b && <Segmentos segs={b.segs} />}
+      {trechos.map((t) => (
+        <Fragment key={t.bloco.id}>
+          {montar(t.bloco, true)}
+          <Segmentos segs={t.conteudo.segs} />
+        </Fragment>
+      ))}
     </MolduraTexto>
   );
 }

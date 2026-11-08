@@ -1,6 +1,26 @@
 // Estrutura oficial da SEFAZ (organograma enviado pela equipe).
 const u = (nome: string, sigla: string) => ({ nome, sigla });
 
+/** Aparece somente se a animação do organograma não carregar. */
+export const TEXTO_RESERVA_SEFAZ = `### I. Órgãos Colegiados
+
+- a. Conselho Municipal de Contribuintes – CMC;
+- b. Junta de Julgamento.
+
+### II. Órgãos da Administração Direta
+
+- a. Gabinete – GAB;
+- b. Assessoria Técnica – ASTEC:
+  - Núcleo de Tecnologia da Informação Fazendária – NTIF;
+- c. Coordenadoria de Planejamento, Gestão e Finanças – CPLAN;
+- d. Diretoria do Tesouro Municipal – DTM:
+  - Coordenadoria de Finanças – CFI;
+  - Coordenadoria de Captação de Recursos e Operações Financeiras – CCROF.
+- e. Diretoria da Receita Municipal – DRM:
+  - Coordenadoria de Tributação – CTRIB;
+  - Coordenadoria de Fiscalização – CFIS;
+  - Coordenadoria de Informações Fiscais – CINF.`;
+
 export const ORGANOGRAMA_SEFAZ = {
   sobretitulo: "Secretaria da Fazenda",
   titulo: "Estrutura organizacional",
@@ -21,6 +41,7 @@ export const ORGANOGRAMA_SEFAZ = {
     },
   ],
   legenda: { subordinacao: "Subordinação administrativa", assessoria: "Assessoria", colegiados: "Órgãos colegiados" },
+  textoReserva: TEXTO_RESERVA_SEFAZ,
 };
 
 /** Textos da abertura da página inicial. */

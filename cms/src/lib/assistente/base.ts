@@ -32,7 +32,7 @@ export async function indiceDoOrgao(orgaoId: string, slug: string) {
   const [docs, trechos, paginas, processos, noticias] = await Promise.all([
     db.documento.findMany({ where: { orgaoId, publicado: true }, select: { id: true, titulo: true, categoria: true, ano: true, descricao: true, tipo: true, arquivo: true, linkExterno: true } }),
     db.trecho.findMany({ where: { documento: { orgaoId, publicado: true } }, select: { documentoId: true, pagina: true, rotulo: true, secao: true, texto: true } }),
-    db.pagina.findMany({ where: { orgaoId, publicada: true, slug: { not: "inicio" } }, select: { slug: true, titulo: true, conteudo: true } }),
+    db.pagina.findMany({ where: { orgaoId, publicada: true, slug: { not: "inicio" } }, select: { slug: true, titulo: true, conteudo: true, blocos: { where: { tipo: { in: ["organograma", "competencias", "atendimento"] } }, select: { dados: true } } } }),
     db.processo.findMany({ where: { orgaoId, publicado: true }, select: { slug: true, titulo: true, exigencias: true } }),
     db.noticia.findMany({ where: { orgaoId, status: "PUBLICADA", publicadaEm: { lte: new Date() } }, orderBy: { publicadaEm: "desc" }, take: 40, select: { slug: true, titulo: true, resumo: true, categoria: true, publicadaEm: true } }),
   ]);
@@ -62,7 +62,15 @@ export async function indiceDoOrgao(orgaoId: string, slug: string) {
     if (!href) continue;
     itens.push({ tipo: "documento", titulo: fraseAmigavel(d.titulo), rotulo: d.ano ? String(d.ano) : "", texto: `Documento da categoria ${d.categoria || "geral"}. ${d.descricao}`.trim(), url: href, peso: 1.1 });
   }
-  for (const p of paginas) itens.push(...trechosDaPagina(p.titulo, `/${slug}/${p.slug}`, p.conteudo));
+  // o que está nos blocos animados não fica no corpo da página, mas o assistente precisa conhecer
+  const textoDoBloco = (dados: string) => {
+    try {
+      const d = JSON.parse(dados) as { titulo?: string; textoReserva?: string; itens?: { texto: string }[]; telefone?: string; telefoneTexto?: string; whatsapp?: string; whatsappTexto?: string; texto?: string; demandasTitulo?: string; demandas?: { texto: string }[]; sobreTexto?: string };
+      if (d.demandas) return [d.texto, `Call Center: telefone ${d.telefone}. ${d.telefoneTexto}`, `WhatsApp SEFAZ: ${d.whatsapp}. ${d.whatsappTexto}`, d.demandasTitulo, ...d.demandas.map((x) => x.texto), d.sobreTexto].filter(Boolean).join("\n\n");
+      return d.itens ? [d.titulo, ...d.itens.map((x) => x.texto)].join("\n\n") : String(d.textoReserva ?? "");
+    } catch { return ""; }
+  };
+  for (const p of paginas) itens.push(...trechosDaPagina(p.titulo, `/${slug}/${p.slug}`, [p.conteudo, ...p.blocos.map((b) => textoDoBloco(b.dados))].filter(Boolean).join("\n\n")));
   for (const p of processos) {
     let lista = "";
     try {

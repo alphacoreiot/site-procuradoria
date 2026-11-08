@@ -13,6 +13,9 @@ const cabecalhosSeguranca = [
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
+  // instalação de um órgão só: cada build ganha endereços novos de CSS e JS,
+  // porque a hospedagem serve esses arquivos sem regra de cache
+  env: { VERSAO_ATIVOS: process.env.ORGAO_PADRAO ? Date.now().toString(36) : "" },
   serverExternalPackages: ["@node-rs/argon2", "sharp"],
   experimental: {
     serverActions: {
