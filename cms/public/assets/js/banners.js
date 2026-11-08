@@ -13,11 +13,16 @@
     var btnPausa = raiz.querySelector('[data-banner="pause"]');
     var cena = raiz.querySelector(".banners__cena");
     var total = slides.length;
+    // SEFAZ no celular: faixa nativa que acompanha o dedo. Outros órgãos seguem como antes.
+    var moderno = !!raiz.closest(".pag-moderna");
+    var palco = raiz.querySelector(".banners__palco");
+    var telaEstreita = window.matchMedia("(max-width: 959px)");
+    var trilho = function () { return moderno && telaEstreita.matches; };
 
     requestAnimationFrame(function () { raiz.classList.add("is-pronto"); });
 
     if (total > 1) {
-      var atual = 0, timer = null, pausado = reduzir, sobre = false;
+      var atual = 0, timer = null, pausado = reduzir, sobre = false, foraDaTela = false, guiado = 0, rafFaixa = 0;
       var intervalo = (Number(raiz.getAttribute("data-intervalo")) || 6) * 1000;
       raiz.style.setProperty("--tempo", intervalo + "ms");
 
@@ -52,11 +57,17 @@
       };
       var agendar = function () {
         parar();
-        if (pausado || sobre || document.hidden) return;
+        if (pausado || sobre || foraDaTela || document.hidden) return;
         reiniciarBarra();
-        timer = setTimeout(function () { ativar((atual + 1) % total); agendar(); }, intervalo);
+        timer = setTimeout(function () { var prox = (atual + 1) % total; ativar(prox); rolarPara(prox, true); agendar(); }, intervalo);
       };
-      var ir = function (i) { ativar((i + total) % total); agendar(); };
+      var rolarPara = function (i, suave) {
+        if (!trilho()) return;
+        clearTimeout(guiado);
+        guiado = setTimeout(function () { guiado = 0; }, 850); // ignora a própria rolagem enquanto ela anda
+        palco.scrollTo({ left: slides[i].offsetLeft - slides[0].offsetLeft, behavior: suave && !reduzir ? "smooth" : "auto" });
+      };
+      var ir = function (i) { i = (i + total) % total; ativar(i); rolarPara(i, true); agendar(); };
       var marcarPausa = function () {
         if (!btnPausa) return;
         btnPausa.classList.toggle("is-paused", pausado);
@@ -65,6 +76,10 @@
       };
 
       raiz.addEventListener("click", function (e) {
+        if (trilho()) { // tocar no cartão seguinte traz ele para o centro em vez de abrir o link
+          var cartao = e.target.closest(".banners__slide");
+          if (cartao && !cartao.classList.contains("is-active")) { e.preventDefault(); ir(slides.indexOf(cartao)); return; }
+        }
         var alvo = e.target.closest("[data-banner],[data-banner-ir]");
         if (!alvo) return;
         var acao = alvo.getAttribute("data-banner");
@@ -77,20 +92,53 @@
         if (e.key === "ArrowLeft") ir(atual - 1);
         if (e.key === "ArrowRight") ir(atual + 1);
       });
-      cena.addEventListener("mouseenter", function () { sobre = true; parar(); });
-      cena.addEventListener("mouseleave", function () { sobre = false; agendar(); });
-      cena.addEventListener("focusin", function () { sobre = true; parar(); });
-      cena.addEventListener("focusout", function () { sobre = false; agendar(); });
+      // no toque, o navegador simula mouse e foco: sem este filtro a troca automática pararia de vez
+      cena.addEventListener("mouseenter", function () { if (moderno && !temMouse) return; sobre = true; parar(); });
+      cena.addEventListener("mouseleave", function () { if (moderno && !temMouse) return; sobre = false; agendar(); });
+      cena.addEventListener("focusin", function (e) { if (moderno && !e.target.matches(":focus-visible")) return; sobre = true; parar(); });
+      cena.addEventListener("focusout", function (e) { if (moderno && !e.target.matches(":focus-visible")) return; sobre = false; agendar(); });
       document.addEventListener("visibilitychange", agendar);
 
       var xIni = null;
-      cena.addEventListener("touchstart", function (e) { xIni = e.touches[0].clientX; }, { passive: true });
+      var soltou = function () { sobre = false; agendar(); };
+      cena.addEventListener("touchstart", function (e) {
+        if (trilho()) { clearTimeout(guiado); guiado = 0; sobre = true; parar(); return; }
+        xIni = e.touches[0].clientX;
+      }, { passive: true });
+      cena.addEventListener("touchcancel", function () { if (trilho()) soltou(); }, { passive: true });
       cena.addEventListener("touchend", function (e) {
+        if (trilho()) { soltou(); return; }
         if (xIni === null) return;
         var dx = e.changedTouches[0].clientX - xIni;
         xIni = null;
         if (Math.abs(dx) > 45) ir(atual + (dx < 0 ? 1 : -1));
       }, { passive: true });
+
+      if (moderno) {
+        palco.addEventListener("scroll", function () {
+          if (!trilho() || guiado || rafFaixa) return;
+          rafFaixa = requestAnimationFrame(function () {
+            rafFaixa = 0;
+            var base = slides[0].offsetLeft, melhor = 0, menor = Infinity;
+            slides.forEach(function (s, n) {
+              var d = Math.abs(s.offsetLeft - base - palco.scrollLeft);
+              if (d < menor) { menor = d; melhor = n; }
+            });
+            // no fim da faixa o último cartão não chega à esquerda, mas é ele que está em foco
+            if (palco.scrollLeft >= palco.scrollWidth - palco.clientWidth - 2) melhor = total - 1;
+            if (melhor !== atual) { ativar(melhor); agendar(); }
+          });
+        }, { passive: true });
+        var larguraJanela = window.innerWidth;
+        window.addEventListener("resize", function () { // a barra do navegador muda só a altura
+          if (window.innerWidth === larguraJanela) return;
+          larguraJanela = window.innerWidth;
+          rolarPara(atual, false);
+        });
+        if ("IntersectionObserver" in window) {
+          new IntersectionObserver(function (es) { foraDaTela = !es[0].isIntersecting; agendar(); }, { threshold: 0.2 }).observe(raiz);
+        }
+      }
 
       ativar(0);
       marcarPausa();

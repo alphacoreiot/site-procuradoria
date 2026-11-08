@@ -334,7 +334,9 @@
     if (!window.L || !mapEl || local.lat == null) return;
     mapEl.innerHTML = "";
     var pos = [local.lat, local.lng];
-    var map = L.map(mapEl, { scrollWheelZoom: false, zoomControl: true }).setView(pos, local.zoom || 17);
+    var sefaz = !!document.querySelector(".pag-moderna");
+    // SEFAZ no celular: um dedo rola a página; o mapa aproxima com os botões ou com dois dedos
+    var map = L.map(mapEl, { scrollWheelZoom: false, zoomControl: true, dragging: !(sefaz && L.Browser.mobile) }).setView(pos, local.zoom || 17);
     L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
       maxZoom: 19,
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>'
@@ -352,9 +354,9 @@
       icon: icon,
       keyboard: true,
       title: "Abrir trajeto no aplicativo de mapas",
-      alt: "Procuradoria Geral do Município"
+      alt: sefaz ? (cfg.localNome || "Localização") : "Procuradoria Geral do Município"
     }).addTo(map);
-    marker.bindTooltip(cfg.localNome ? "PGM · Anexo PMC" : "Procuradoria", {
+    marker.bindTooltip(sefaz ? "SEFAZ" : cfg.localNome ? "PGM · Anexo PMC" : "Procuradoria", {
       permanent: true, direction: "top", className: "map-label"
     });
     marker.on("click", openMaps);

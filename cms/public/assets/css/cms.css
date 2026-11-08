@@ -1136,3 +1136,71 @@ html:not(.js-ok) .abas__trilho > a[aria-current="true"] { background: var(--bran
 .atd-servico:hover .atd-servico__mais { opacity: 1; transform: scale(1.14); }
 .ast__sugestoes--tema { flex-direction: column; align-items: stretch; }
 .ast__sugestoes--tema button { text-align: left; animation: astMsg .24s ease both; animation-delay: calc(var(--i, 0) * 60ms); }
+
+/* ==== SEFAZ no celular: carrossel que acompanha o dedo e telas mais curtas ==== */
+@media (max-width: 959px) {
+  .pag-moderna .banners { padding: 14px 0 18px; background: linear-gradient(150deg, var(--brand-roxo-escuro) 0%, #6E2A84 58%, var(--brand-roxo) 100%); }
+  .pag-moderna .banners__grade { display: flex; flex-direction: column; gap: 8px; }
+  .pag-moderna .banners__intro { position: static; order: 2; width: auto; height: auto; margin: 0; padding: 0 16px; overflow: visible; clip: auto; white-space: normal; }
+  .pag-moderna .banners__intro > :not(.banners__acoes) { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+  .pag-moderna .banners__acoes { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin: 0; }
+  .pag-moderna .banners__bt { min-height: 48px; padding: 10px 12px; font-size: 14.5px; line-height: 1.2; text-align: center; }
+  .pag-moderna .banners__palco { position: relative; display: flex; gap: 10px; padding: 0 16px; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; scroll-padding: 0 16px; scrollbar-width: none; }
+  .pag-moderna .banners__palco::-webkit-scrollbar { display: none; }
+  .pag-moderna .banners__slide, .pag-moderna .banners__slide[data-pos] { flex: 0 0 calc(100% - 48px); grid-area: auto; z-index: auto; opacity: .62; visibility: visible; scroll-snap-align: start; scroll-snap-stop: always; border-radius: 16px; box-shadow: 0 16px 28px -18px rgba(0, 0, 0, .7); transition: opacity .3s ease; }
+  .pag-moderna .banners__slide.is-active, .pag-moderna .banners__slide.is-active[data-pos] { opacity: 1; }
+  .pag-moderna .banners__slide img { width: 100%; height: auto; aspect-ratio: 1667 / 783; }
+  .pag-moderna .banners__slide.is-active img { animation: none; }
+  .pag-moderna .banners__controles { gap: 4px; margin: 6px 16px 0; padding: 0; }
+  .pag-moderna .banners__pontos { padding: 0 2px; }
+  .pag-moderna .banners__ponto { max-width: none; }
+  .pag-moderna .banners__seta { background: rgba(255, 255, 255, .16); }
+  .pag-moderna .banners.is-pronto .banners__cena { animation: sefazDeslizaEntra .6s cubic-bezier(.22, 1, .36, 1) both; }
+  @keyframes sefazDeslizaEntra { from { opacity: 0; transform: translate3d(28px, 0, 0); } }
+}
+@media (max-width: 767px) {
+  /* imagem vertical: limita a largura para o banner não passar da altura da tela */
+  .pag-moderna .banners__slide, .pag-moderna .banners__slide[data-pos] { flex-basis: min(calc(100% - 48px), 420px); }
+  .pag-moderna .banners__slide img { aspect-ratio: 800 / 904; }
+}
+@media (max-width: 959px) and (hover: none) {
+  /* no toque o gesto de deslizar substitui as setas; pausar continua disponível */
+  .pag-moderna .banners__seta[data-banner="prev"], .pag-moderna .banners__seta[data-banner="next"] { display: none; }
+}
+
+@media (max-width: 600px) {
+  body:has(main.pag-moderna) .topbar__btn { min-width: 44px; min-height: 36px; }
+  .pag-moderna .section { padding: 40px 0; }
+  .pag-moderna .section__head { margin-bottom: 20px; }
+
+  /* Mais acessados: todos à vista em duas colunas, cartão inteiro clicável */
+  .pag-moderna .services { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .pag-moderna .service { position: relative; gap: 6px; padding: 14px; }
+  .pag-moderna .service__icon { width: 44px; height: 44px; border-radius: 12px; }
+  .pag-moderna .service h3 { margin: 4px 0 0; font-size: 15px; line-height: 1.25; overflow-wrap: anywhere; }
+  .pag-moderna .service p { font-size: 13.5px; line-height: 1.45; }
+  .pag-moderna .service .btn--ghost { min-height: 0; margin-top: auto; font-size: 13.5px; }
+  .pag-moderna .service .btn--ghost::after { content: ""; position: absolute; inset: 0; }
+
+  /* Cartões com foto: imagem ao lado do texto */
+  .pag-moderna .cartoes { gap: 12px; }
+  .pag-moderna .cartao { flex-direction: row; align-items: stretch; }
+  .pag-moderna .cartao__midia { position: relative; flex: 0 0 36%; min-height: 124px; aspect-ratio: auto; }
+  .pag-moderna .cartao__midia img { position: absolute; inset: 0; }
+  .pag-moderna .cartao__corpo { flex: 1; align-self: center; min-width: 0; padding: 12px 14px; }
+  .pag-moderna .cartao__corpo h3 { margin-bottom: 4px; font-size: 16px; line-height: 1.25; }
+  .pag-moderna .cartao__corpo p { font-size: 13.5px; line-height: 1.45; }
+  .pag-moderna .cartao__link { margin-top: 6px; font-size: 13.5px; }
+
+  /* Contato: ícone ao lado e links fáceis de tocar */
+  .pag-moderna .contact-info { gap: 10px; }
+  .pag-moderna .contact-info__item { display: flex; flex-direction: row; align-items: flex-start; gap: 12px; padding: 14px; }
+  .pag-moderna .contact-info__item p a, .pag-moderna .contact-info__link { display: inline-block; padding: 8px 0; }
+  .pag-moderna .contact-info__item p:has(a) { margin: -6px 0; }
+
+  /* Trilha e rodapé: mesma aparência, área de toque maior */
+  .pag-moderna .pag-trilha a { display: inline-block; margin: -12px 0; padding: 12px 0; }
+  body:has(main.pag-moderna) .footer-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 12px; }
+  body:has(main.pag-moderna) .footer-list a { display: inline-flex; align-items: center; min-height: 40px; }
+  body:has(main.pag-moderna) .footer-list li { margin: 0; }
+}
